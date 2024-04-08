@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div class="navbar">
+    <!-- Link around the name leading to the homepage -->
+    <div class="navbar-name">
+        <a href="/" style="color: inherit; text-decoration: none;">Giordano De Marzo</a>
+    </div>
+    <div class="dropdown">
+        <span>Menu</span> <!-- Text added before the icon -->
+        <i class="fas fa-bars dropdown-toggle" onclick="toggleDropdown()"></i>
+        <div class="dropdown-content">
+            <a href="/">Homepage</a>
+            <a href="/research">Research</a>
+            <a href="/publications">Publications</a>
+            <div class="submenu-container">
+                <a href="/teaching" onclick="toggleSubmenu(event)">Teaching &#9662;</a>
+                <div class="submenu-content">
+                    <a href="/computational-modeling">Computational Modeling of Social Systems</a>
+                    <a href="/deep-learning">Deep Learning for Social Sciences</a>
+                </div>
+            </div>
+            <a href="/contact">Contact</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {{ content }}
+</div>
+
+
+
+<footer>
+    © {{ 'now' | date: '%Y' }} Giordano De Marzo. All rights reserved.
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+
+    // Toggle the main dropdown menu
+    dropdownToggle.addEventListener('click', function() {
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.addEventListener('click', function(event) {
+        if (!dropdownContent.contains(event.target) && !dropdownToggle.contains(event.target)) {
+            dropdownContent.style.display = 'none';
+        }
+    });
+
+    // Function to toggle submenu with a click, allowing direct navigation on a subsequent click
+    document.querySelectorAll('.submenu-container > a').forEach(function(teachingLink) {
+        teachingLink.addEventListener('click', function(event) {
+            var submenu = this.nextElementSibling;
+
+            // Check if the submenu is already open
+            if (submenu && submenu.style.maxHeight) {
+                submenu.style.maxHeight = null;
+
+                // If the submenu was open and it's a mobile view, navigate to the link's href
+                if (window.innerWidth <= 768) {
+                    window.location.href = this.getAttribute('href');
+                }
+            } else {
+                // Prevent default link behavior only if it's not yet open to allow submenu expansion
+                event.preventDefault();
+                event.stopPropagation(); // Stop click from closing the dropdown
+
+                // Open the submenu and set its max height for expansion
+                if (submenu) {
+                    submenu.style.maxHeight = submenu.scrollHeight + "px";
+                }
+            }
+        });
+    });
+
+    // Close submenu if the user clicks outside of it
+    window.addEventListener('click', function(event) {
+        if (!event.target.matches('.submenu-container') && !event.target.closest('.submenu-content')) {
+            var submenus = document.querySelectorAll('.submenu-content');
+            submenus.forEach(function(submenu) {
+                submenu.style.maxHeight = null;
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var isMobile = window.innerWidth <= 768; // Define what you consider 'mobile' width
+
+    // Toggle function for accordions
+    function toggleAccordionContent(button) {
+        var content = button.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            button.classList.remove('active');
+        } else {
+            content.style.display = "block";
+            button.classList.add('active');
+        }
+    }
+
+    // Initialize accordions based on the device type
+    function initializeAccordions() {
+        document.querySelectorAll('.accordion-content').forEach(function(content) {
+            if (isMobile) {
+                // If it's a mobile device, start with accordions closed
+                content.style.display = "none";
+            } else {
+                // For wider screens, you can adjust as needed. Here, keeping them open.
+                content.style.display = "block";
+                var button = content.previousElementSibling;
+                button.classList.add('active');
+            }
+        });
+    }
+
+    // Attach click event listeners for main and nested accordion buttons
+    document.querySelectorAll('.accordion-button, .nested-accordion-button').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            // Prevents the parent accordion from toggling when a nested accordion is clicked
+            event.stopPropagation();
+            toggleAccordionContent(this);
+        });
+    });
+
+    initializeAccordions(); // Call to set the initial state of accordions
+});
+    
+</script>
+
+
+
+</body>
+</html>
+

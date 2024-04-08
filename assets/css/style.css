@@ -1,0 +1,781 @@
+/* assets/css/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333333;
+}
+
+body {
+    /* Sets the background image, ensuring it covers the entire background and remains fixed */
+    background: url('/images/background.webp') no-repeat center center fixed; 
+    background-size: cover;
+    
+    /* Adds an overlay to the background image to manage opacity */
+    position: relative;
+    z-index: 1;
+}
+
+body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure your text content is wrapped in a container for additional styling if needed */
+.content {
+    position: relative;
+    z-index: 2; /* Ensures text appears above the background and its overlay */
+    color: white; /* Adjust text color for readability */
+    padding: 20px; /* Adjust padding as needed */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: #024064;
+}
+
+/* Container holding the image and text */
+.intro-container {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    margin-bottom: 20px; /* Adds some space below the container */
+}
+
+/* Style for the profile photo */
+.profile-photo {
+    flex-shrink: 0; /* Prevents the image from shrinking */
+    width: 200px; /* Adjust based on your preference */
+    height: 200px; /* Makes the image square */
+    border-radius: 10px; /* Rounded corners for the image */
+    margin-right: 20px; /* Adds some space between the image and the text */
+    object-fit: cover; /* Ensures the image covers the area, might crop */
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .intro-container {
+        flex-direction: column; /* Stacks items vertically */
+        align-items: center; /* Centers items horizontally */
+    }
+    .profile-photo {
+        margin-right: 0; /* Removes the right margin on mobile */
+        margin-bottom: 20px; /* Adds space below the image */
+    }
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    background-color: #0056b3;
+    overflow: hidden;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 14px 16px;
+    display: inline-block;
+}
+
+nav ul li a:hover, nav ul li a:focus {
+    background-color: #003d7a;
+}
+
+/*SUBMENUS FOR NAVIGATION BAR MENU*/
+.submenu-container {
+    position: relative;
+}
+
+.submenu-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 2s ease-out;
+    background-color: #f9f9f9; /* Submenu background color */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+
+
+.submenu-container:hover .submenu-content {
+    max-height: 500px; /* Adjust based on your content */
+}
+
+footer {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.intro-text {
+    text-align: center;
+    max-width: 600px; /* Adjust this value based on your preference */
+    margin: 20px auto; /* Centers the div and adds some vertical spacing */
+    padding: 0 20px; /* Adds padding inside the div */
+}
+
+/* SECTION HEADING STYLE */
+.section-heading {
+    font-size: 1.75em;
+    font-weight: bold;
+    color: #333;
+    position: relative;
+    padding-left: 40px; /* Adjusted for icon width */
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.section-heading::before {
+    font-family: "Font Awesome 5 Free"; /* This is important for FontAwesome */
+    content: '\f061'; /* This is the unicode for fa-book-open */
+    color: #0056b3;
+    font-size: 1.2em; /* Adjust based on your preference */
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 900; /* Required for FontAwesome solid icons */
+}
+
+.section-content {
+    margin-left: 150px; /* Space under the section title */
+    margin-right: 80px; /* Increased space on the right */
+    text-align: justify;
+}
+
+.section-heading::after {
+    content: '';
+    display: block;
+    height: 1.5px; /* Line thickness */
+    width: 100%; /* Line width */
+    background-color: #ccc; /* Line color */
+    position: absolute;
+    bottom: -5px; /* Position the line below the text */
+    left: 0;
+}
+
+@media (max-width: 768px) {
+    .section-content {
+        margin-left: 10px; /* Small space on the left */
+        margin-right: 10px; /* Small space on the right */
+    }
+}
+
+/*NAVIGATION BAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar-name {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown span {
+    margin-right: 10px; /* Adjust the space between the text and the icon */
+    font-weight: bold; /* Optional: makes the text stand out */
+    cursor: pointer; /* Changes the cursor to indicate the text is interactive */
+}
+
+/* Ensure the icon and the text are vertically aligned */
+.dropdown-toggle {
+    vertical-align: middle;
+}
+
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.fas.fa-bars {cursor: pointer;}
+
+/* General text color or link color */
+a, .section-heading::before {
+    color: #024064;
+}
+
+/* Underline or decorative elements */
+.section-heading::after {
+    background-color: #024064;
+}
+
+/* Profile photo border (if previously blue) */
+.profile-photo {
+    border: 4px solid #024064;
+}
+
+/* Any other specific elements where the blue was applied */
+.navbar, .dropdown-content a:hover {
+    background-color: #024064;
+}
+
+/* Style for the name/title within the intro text */
+.intro-text > h1 {
+    color: #024064; /* New blue color */
+    /* Any additional styling for the heading goes here */
+}
+
+/* NEWS SECTION */
+.news-section {
+    margin: 20px 0;
+}
+
+.news-item {
+    display: flex;
+    justify-content: start;
+    align-items: left;
+    border-bottom: 1px solid #ccc; /* Visual separator */
+    padding: 10px 0;
+}
+
+.news-date {
+    margin-right: -80px; /* Space between date and title */
+    font-weight: bold;
+    flex-basis: 20%; /* Adjusts the base size of the date column */
+    text-align: left;
+}
+
+.news-title {
+    flex-grow: 1; /* Allows the title to fill the remaining space */
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .news-item {
+        flex-direction: column; /* Stacks date and title vertically */
+        align-items: flex-start; /* Aligns items to the start of the container */
+    }
+    .news-date {
+        margin-right: 0; /* Removes negative margin on mobile */
+        margin-bottom: 5px; /* Adds space below the date for clarity */
+    }
+}
+
+/*DOWNLOAD BUTTON FOR CV*/
+.download-cv-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px; /* Adjust spacing above the button as needed */
+    background-color: #3282A6; /* Use the color scheme of your site */
+    color: white;
+    text-decoration: none; /* Removes the underline */
+    border-radius: 5px; /* Gives the button rounded corners */
+    font-weight: bold;
+}
+
+.download-cv-btn:hover {
+    background-color: #256D85; /* Darker shade for hover effect */
+}
+
+/*RESEARCH PAGE*/
+
+/* Base styles for research areas */
+.research-areas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content)); /* 2-column layout */
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.research-item {
+    position: relative;
+    width: 420px; /* Adjust based on your preference for larger screens */
+    margin: 0 auto;
+    text-align: center;
+}
+
+.research-item img {
+    width: 100%; /* Image stretches to cover the width of its container */
+    height: auto; /* Maintains image aspect ratio */
+    border-radius: 10px; /* Rounded corners for aesthetics */
+    display: block; /* Ensures images display correctly without inline spacing */
+    opacity: 0.7; /* Semi-transparent images for a subtle overlay effect */
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for the hover effect */
+}
+
+.research-item:hover img {
+    opacity: 1; /* Removes the semi-transparent effect on hover */
+}
+
+.research-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns text to the top with some padding */
+    align-items: center; /* Centers text horizontally */
+    padding: 20px; /* Padding inside the overlay for spacing */
+    text-align: center; /* Centers text lines */
+    background: rgba(0, 0, 0, 0.4); /* Darkens the overlay for text contrast */
+    color: white; /* Sets text color to white, including titles */
+    border-radius: 10px; /* Ensures the overlay matches the rounded corners of the images */
+    opacity: 1; /* Keeps the overlay visible */
+}
+
+/* Adjusting layout and visibility for mobile devices */
+@media (max-width: 768px) {
+    .research-overlay p {
+        display: none; /* Hides the paragraph text on mobile devices */
+    }
+
+    .research-overlay {
+        justify-content: center; /* Centers the title vertically and horizontally */
+    }
+    
+    .research-areas {
+        grid-template-columns: 1fr; /* Single column layout for narrow screens */
+    }
+
+    .research-item {
+        width: auto; /* Allows items to adjust based on screen size */
+        max-width: 420px; /* Adjust based on your preference */
+    }
+}
+
+.research-overlay h2 {
+    color: white; /* Explicitly setting title color to white */
+    margin-bottom: 10px; /* Spacing between title and text */
+}
+
+/* Hides paragraph text on smaller screens */
+@media (max-width: 768px) {
+    .research-overlay p {
+        display: none; /* Hides the paragraph text on mobile devices */
+    }
+    
+    .research-areas {
+        grid-template-columns: 1fr; /* Adjusts to a single column layout */
+    }
+
+    .research-item {
+        width: 90%; /* Adjusts item width for mobile, if needed */
+    }
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 480px) {
+    .research-areas {
+        grid-template-columns: 1fr; /* Switches to a single column for mobile devices */
+    }
+
+    .research-item {
+        width: 90%; /* Allows items to take up more screen space on smaller devices */
+        max-width: 420px; /* Prevents items from becoming too large */
+    }
+}
+
+
+/*PUBLICATIONS*/
+
+.publications-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between cards */
+  justify-content: center; /* Center cards within the container */
+}
+
+.publication-card {
+  width: calc(33.333% - 20px); /* Three cards per row, minus the gap */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Adds a subtle shadow for depth */
+  background: #fff; /* Card background */
+  padding: 15px;
+  box-sizing: border-box; /* Includes padding in the width calculation */
+  position: relative; /* For absolute positioning of icons and links */
+}
+
+.publication-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.publication-details {
+  margin-left: 40px; /* Make room for icon */
+}
+
+.publication-date {
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.publication-title {
+  font-weight: bold; /* Makes the title bold */
+  margin-bottom: 15px; /* Increased space below the title */
+  text-decoration: none; /* Removes underline from links */
+  color: #000; /* Changes the color to black */
+  display: block;
+}
+
+.publication-title:hover {
+  text-decoration: underline; /* Adds underline on hover */
+}
+
+.publication-authors {
+  margin-bottom: 5px;
+}
+
+.publication-source {
+  margin-bottom: 10px; /* More space before the category */
+}
+
+.publication-category {
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* ArXiv Link Style */
+.arxiv-link {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #eee; /* Light background for the link */
+  padding: 5px; /* Padding inside the link */
+  border-radius: 5px; /* Rounded corners for the link */
+  font-size: 0.8em; /* Smaller font size for the link */
+  text-decoration: none; /* Removes underline */
+  color: #0056b3; /* Color for the arXiv link */
+}
+
+.arxiv-link:hover {
+  background-color: #ddd; /* Darkens the background on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .publication-card {
+    width: 100%; /* Full width for mobile */
+    margin: 0;
+    padding: 15px; /* Adjusted padding */
+  }
+
+  .publication-icon {
+    position: static; /* Stack icon above text on mobile */
+    display: block;
+    margin: 0 auto 10px; /* Center icon and add space below */
+  }
+
+  .publication-details {
+    margin-left: 0; /* Reset margin */
+  }
+
+  .arxiv-link {
+    position: static; /* Stack arXiv link below text on mobile */
+    display: block;
+    width: max-content;
+    margin: 10px auto 0; /* Center link and add space above */
+  }
+}
+
+
+/* TEACHING PAGE */
+/* Reusing the styles from research areas */
+.teaching-areas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content)); /* 2-column layout */
+    justify-content: start; /* Aligns grid items to the start (left) */
+    gap: 50px;
+    padding: 20px 10px;
+}
+
+.teaching-item {
+    position: relative;
+    width: 300px; /* Adjust based on your preference for larger screens */
+    text-align: left; /* Aligns text to the left */
+}
+
+.teaching-item-background {
+    width: 100%;
+    height: 200px; /* Set a specific height for the background image */
+    background: url('/images/konstanz_lake.jpg') no-repeat center center; 
+    background-size: cover;
+    border-radius: 10px; /* Rounded corners */
+    display: flex;
+    align-items: flex-end; /* Aligns title to the bottom */
+    justify-content: center; /* Centers title horizontally */
+}
+
+.teaching-item-link {
+    display: block; /* Make the link fill the container */
+    text-decoration: none; /* Removes underline from all states */
+    color: inherit; /* Inherits text color from parent */
+}
+
+.teaching-item-title {
+    /* Remove the left and right properties */
+    bottom: 20px; /* Adjust as necessary for bottom space */
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    position: absolute; /* Absolute position within the parent */
+    transform: translateX(-50%); /* Centers the title box on the x-axis */
+    left: 50%; /* Aligns the left edge of the title box with the center of the parent */
+    width: calc(100% - 40px); /* Full width minus the desired padding */
+}
+
+.teaching-item-link:hover .teaching-item-title {
+    background: rgba(0, 0, 0, 0.7); /* Darkens the title background on hover */
+}
+
+@media (max-width: 768px) {
+    .teaching-areas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .teaching-item {
+        width: 90%; /* Take up most of the screen width */
+        margin: 0 auto; /* Center the item horizontally */
+    }
+
+    .teaching-item-background {
+        height: 200px; /* Fixed height for the background */
+        position: relative;
+    }
+
+    .teaching-item-title {
+        position: absolute;
+        bottom: 10px; /* Distance from the bottom */
+        left: 50%; /* Set left to 50% of the parent element */
+        transform: translateX(-50%); /* Center the element with CSS transform */
+        width: calc(100% - 40px); /* Width is 100% of the parent minus the margin */
+        padding: 10px; /* Padding inside the box */
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        color: white; /* White text for contrast */
+        box-sizing: border-box; /* Includes padding and border in width */
+    }
+}
+
+/* CONTACT */
+.contact-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.contact-container h1 {
+  margin-bottom: 20px;
+}
+
+address {
+  font-style: normal;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.email-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Allow the email info to wrap on small screens */
+  margin-bottom: 20px;
+}
+
+.email-icon {
+  font-size: 24px; /* Set the size of the icon */
+  vertical-align: middle; /* Aligns the icon vertically with the text */
+}
+
+.social-follow-button {
+  display: inline-block;
+  background-color: #AB0E14; /* X's brand color or any color you choose */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.social-follow-button:hover {
+  background-color: #92060E; /* Darker shade for the hover state */
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 768px) {
+  .email-container {
+    flex-direction: column; /* Stack the elements vertically */
+  }
+  
+  .email-icon {
+    margin-bottom: 5px; /* Reduce space below the icon */
+  }
+  
+  .email-container > *:not(:last-child) {
+    margin-bottom: -10px; /* Reduce space between email addresses */
+  }
+  
+  .social-follow-button {
+    padding: 8px 16px; /* Slightly reduce padding for smaller screens */
+    border-radius: 15px; /* Adjust border-radius for smaller screens */
+  }
+}
+
+
+/*COURSE PAGE*/
+
+.course-page-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: left;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.accordion {
+    margin-top: 20px;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+}
+
+.accordion-button {
+    background-color: #024064; /* Original background color */
+    color: white;
+    padding: 10px 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Change the background color when the accordion is open */
+.accordion-button.active {
+    background-color: #035184; /* Slightly darker shade to indicate active/open state */
+}
+
+.accordion-content {
+    display: block; /* Changed from none to block */
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+    margin-bottom: 10px;
+}
+
+.course-date {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.date {
+    font-weight: bold;
+}
+
+.lecture-slides-link {
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #000;
+}
+
+.lecture-slides-link:hover {
+    background: #e0e0e0;
+}
+
+/* Style for nested accordion buttons */
+/* Style for nested accordion buttons */
+.nested-accordion-button {
+    font-size: 0.9em; /* Keeps the smaller font size */
+    font-weight: bold; /* Keeps the text bold */
+    padding: 8px; /* Keeps padding for vertical space */
+    width: 80%; /* Makes the button shorter than before */
+    margin-left: 0; /* Aligns the button to the left */
+    margin-bottom: 5px; /* Provides spacing between buttons */
+    display: block; /* Ensures the button takes up the full width specified */
+    border-radius: 5px; /* Rounds the corners */
+    background-color: #035184; /* Background color for the button */
+    color: white; /* Color for the text */
+    cursor: pointer; /* Indicates the element is clickable */
+    border: none; /* Removes the border */
+    transition: background-color 0.3s ease-in-out; /* Animation for the background color */
+    text-align: left; /* Aligns the text inside the button to the left */
+}
+
+.nested-accordion-button:hover {
+    background-color: #024064; /* Darker shade for the hover effect */
+}
+
+/* Adjusts the container to make nested buttons visually distinguished and aligned */
+.nested-accordion {
+    padding-left: 20px; /* Adds padding to the left to indent nested buttons for clear hierarchy */
+}
+/* Style for nested accordion content */
+.nested-accordion-content {
+    display: none; /* Initially hidden */
+    font-size: 0.9em; /* Smaller font size */
+    width: 80%;
+    padding: 5px 10px; /* Padding inside content */
+    margin-bottom: 10px; /* Space below for separation */
+    background-color: #f8f8f8; /* Optional: background color to distinguish content area */
+    border-radius: 5px; /* Optional: rounds the corners */
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .course-date {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
