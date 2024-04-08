@@ -8,8 +8,7 @@ permalink: /research/
 <h1>Research</h1>
 
 <!-- Short Introductory Paragraph -->
-Here is a brief overview of my research interests and areas. My work explores various facets of complex systems, economic models, and digital technologies, aiming to uncover underlying patterns and principles.
-
+Trained as a physicist, my research can be placed in the landscape of Complex Systems, where I delve into phenomena that exhibit emergent properties beyond the sum of their parts. An importat part of my research is represented by power laws and scaling laws, as for instance Zipf's Law and Heaps' Law, which are often considered the footprint of Complexity. I'm also interested in Economic Complexity, where my approach harnesses network theory, machine learning, with a particular emphasis on analyzing the job market through the lens of online job advertisement platforms. Neural Networks are another area of active research, specifically the Hopfield Model. Finally, my ivestigation extends into Complex Digital Systems, focusing on the impact of recommendation algorithms on online platforms and communities. This includes using Large Language Models to simulate these environments, offering a new perspective on digital complexity and Agent Based Models. 
 <div class="research-areas">
     <div class="research-item">
         <a href="/research/power-laws">
