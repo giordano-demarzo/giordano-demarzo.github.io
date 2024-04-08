@@ -1,5 +1,6 @@
 ---
-layout: page
+layout: default
+title: Computational Modeling
 permalink: /teaching/computational-modeling/
 ---
 

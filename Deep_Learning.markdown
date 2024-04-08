@@ -1,5 +1,6 @@
 ---
-layout: page
+layout: default
+title: Deep Learning
 permalink: /teaching/deep-learning/
 ---
 
