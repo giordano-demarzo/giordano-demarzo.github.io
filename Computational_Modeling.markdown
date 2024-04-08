@@ -1,6 +1,6 @@
 ---
 layout: page
-permalink: /computational-modeling/
+permalink: /teaching/computational-modeling/
 ---
 
 <div class="course-page-container">

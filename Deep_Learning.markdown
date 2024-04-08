@@ -1,6 +1,6 @@
 ---
 layout: page
-permalink: /deep-learning/
+permalink: /teaching/deep-learning/
 ---
 
 <div class="course-page-container">
