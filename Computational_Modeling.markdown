@@ -80,7 +80,7 @@ permalink: /teaching/computational-modeling/
            <div class="nested-accordion-content">
            <h4>Readings and Slides</h4>
                <ul>
-                   <li><a href="link-to-material-1">Slides</a></li>
+                   <li><a href="/files/CMSS_Seminar1.pdf">Slides</a></li>
                    <li><a href="https://journals.sagepub.com/doi/abs/10.1177/1088868306294789">Agent-Based Modeling: A New Approach for Theory Building in Social Psychology. Eliot Smith and Frederica Conrey. Personality and Social Psychology Review, 2007.</a></li>
                    <li><a href="https://psycnet.apa.org/record/1987-04005-001">The matching hypothesis reexamined. Michael Kalick and Thomas Hamilton. Journal of Personality and Social Psychology, 1986.</a></li>
                </ul>
