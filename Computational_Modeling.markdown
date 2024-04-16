@@ -97,13 +97,12 @@ permalink: /teaching/computational-modeling/
            <h4>Readings and Slides</h4>
                <ul>
                    <li><a href="/files/CMSS_Seminar2.pdf">Slides</a></li>
-                   <li><a href="https://journals.sagepub.com/doi/abs/10.1177/1088868306294789">Agent-Based Modeling: A New Approach for Theory Building in Social Psychology. Eliot Smith and Frederica Conrey. Personality and Social Psychology Review, 2007.</a></li>
-                   <li><a href="https://psycnet.apa.org/record/1987-04005-001">The matching hypothesis reexamined. Michael Kalick and Thomas Hamilton. Journal of Personality and Social Psychology, 1986.</a></li>
+                   <li><a href="https://www.uzh.ch/cmsssl/suz/dam/jcr:00000000-68cb-72db-ffff-ffffff8071db/04.02%7B_%7Dschelling%7B_%7D71.pdf">Dynamic Models of Segregation. Thomas Schelling. Journal of Mathematical Sociology, 1971 (pages 143 to 166).</a></li>
+                   <li><a href="https://web.stanford.edu/class/sts145/Library/life.pdf">The fantastic combinations of John Conway’s new solitaire game “life”. Martin Gardner. Scientific American, 1970.</a></li>
                </ul>
            <h4>Additional Readings</h4>
                <ul>
-                   <li><a href="https://www.annualreviews.org/doi/abs/10.1146/annurev.soc.012809.102632">Causal Mechanisms in the Social Sciences. Peter Hedström and Petri Ylikoski. Annual Review of Sociology, 2010.</a></li>
-                   <li><a href="https://www.annualreviews.org/doi/abs/10.1146/annurev.soc.28.110601.141117">From factors to actors: Computational Sociology and Agent-Based Modeling. Michael Macy and Robert Willer. Annual Review of Sociology, 2002.</a></li>
+                   <li><a href="https://www.jasss.org/15/1/6.html">The Schelling Model of Ethnic Residential Dynamics: Beyond the Integrated - Segregated Dichotomy of Patterns. Erez Hatnaa and Itzhak Benenson. Journal of Artificial Societies and Social Simulation, 2012.</a></li>
                </ul>
            </div>
        </div>
