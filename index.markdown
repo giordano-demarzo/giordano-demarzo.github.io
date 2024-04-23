@@ -1,6 +1,3 @@
-<head>
-<meta name="google-site-verification" content="0WrGvvpdwqWMgXzXQLt8mH_1Z_n_631R7IebHkg3YA4" />
-</head>
 ---
 layout: default
 title: Home
