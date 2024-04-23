@@ -107,6 +107,21 @@ permalink: /teaching/computational-modeling/
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/CMSS_Seminar3.pdf">Slides</a></li>
+                       <li><a href="https://journals.sagepub.com/doi/pdf/10.1177/0022002797041002001">The Dissemination of Culture: A Model with Local Convergence and Global Polarization. Robert Axelrod, Journal of Conflict Resolution 41(20), 1997.</a></li>
+                   </ul>
+               <h4>Additional Readings</h4>
+                   <ul>
+                       <li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525913500379">Measuring cultural dynamics through the Eurovision song contest. David Garcia and Dorian Tanase. Advances in Complex Systems, 16 (2013).</a></li>
+                       <li><a href="https://arxiv.org/pdf/1701.07419.pdf">A gentle introduction to the minimal Naming Game. Andrea Baronchelli (2017).</a></li>                       
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
       	<div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
