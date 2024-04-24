@@ -83,10 +83,7 @@ permalink: /teaching/computational-modeling/
         <div class="course-date">
             <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
         </div>
-        <div class="course-date">
-            <span class="date">May 14, 2024</span> - <span class="lecture-title">Power Laws</span>
-        </div>
-        <par>Swaps are possible if both students agree. Also, there can be up to 4 seminars per day, so if there are less than 4 people on a given day, you can ask me to be moved to that date by email (first come first served).</par>
+        <par>Swaps are possible if both students agree. There can be up to 4 seminars per day, so you can ask me by email to be moved to a non-full date (first come first served). I will update this calendar when changes are made, so be sure to check it once in a while.</par>
         <!-- Additional dates can be added here -->
     </div>
     <!-- Material Section -->
