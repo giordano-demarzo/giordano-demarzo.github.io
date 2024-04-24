@@ -67,6 +67,27 @@ permalink: /teaching/computational-modeling/
         <div class="course-date">
             <span class="date">June 4, 2024 </span> - <span class="lecture-title">Spreading in networks</span>
         </div>
+        <h3>Students Seminars</h3>
+        <div class="course-date">
+            <span class="date">June 19, 2024</span> - <span class="lecture-title">Stroligo Alisea, Saleth Peer ​​</span>
+        </div>
+        <div class="course-date">
+            <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
+        </div>
+        <div class="course-date">
+            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
+        </div>
+        <div class="course-date">
+            <span class="date">July 2, 2024</span> - <span class="lecture-title">Gießing Lennart, Wagner Theresa, Jones Katrina</span>
+        </div>
+        <div class="course-date">
+            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
+        </div>
+        <div class="course-date">
+            <span class="date">May 14, 2024</span> - <span class="lecture-title">Power Laws</span>
+        </div>
+        <par>Swaps are possible if both students agree. Also, there can be up to 4 seminars per day, so if there are less than 4 people on a given day, you can ask me to be moved to that date by email (first come first served).</par>
+        <!-- Additional dates can be added here -->
     </div>
     <!-- Material Section -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Material &#9662;</button>
