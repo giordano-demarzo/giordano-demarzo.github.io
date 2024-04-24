@@ -47,29 +47,50 @@ permalink: /teaching/computational-modeling/
             <span class="date">April 16, 2024</span> - <span class="lecture-title">Modelling segregation: Schelling's model</span>
         </div>
         <div class="course-date">
-            <span class="date">April 23, 2024</span> - <span class="lecture-title">Modelling cultures: Axelrod's model</span>
+            <span class="date">April 23, 2024</span> - <span class="lecture-title">Modelling Culture and Language</span>
         </div>
         <div class="course-date">
-            <span class="date">April 30, 2024</span> - <span class="lecture-title">Basics of spreading: Granovetter's threshold model</span>
+            <span class="date">April 30, 2024</span> - <span class="lecture-title">Diversity, Minorities and Granovetter’s Model</span>
         </div>
         <div class="course-date">
             <span class="date">May 7, 2024</span> - <span class="lecture-title">Opinion dynamics</span>
         </div>
         <div class="course-date">
-            <span class="date">May 14, 2024</span> - <span class="lecture-title">Modelling small worlds </span>
+            <span class="date">May 14, 2024</span> - <span class="lecture-title">Power Laws</span>
         </div>
         <div class="course-date">
-            <span class="date">May 21, 2024</span> - <span class="lecture-title">Scale-free networks</span>
+            <span class="date">May 15, 2024</span> - <span class="lecture-title">Network Theory</span>
         </div>
         <div class="course-date">
-            <span class="date">June 4, 2024</span> - <span class="lecture-title">Resilience in social networks</span>
+            <span class="date">May 21, 2024</span> - <span class="lecture-title">Resilience in social networks</span>
         </div>
         <div class="course-date">
-            <span class="date">June 11, 2024 (?)</span> - <span class="lecture-title">Growth processes and spreading in networks</span>
+            <span class="date">June 4, 2024 </span> - <span class="lecture-title">Spreading in networks</span>
         </div>
         <!-- Additional dates can be added here -->
     </div>
-
+    <h3>Students Seminars</h3>
+    Swaps are possible if both students agree. Also, there can be up to 4 seminars per day, so if there are less than 4 people on a given day, you can ask me to be moved to that date by email (first come first served).
+        <div class="course-date">
+            <span class="date">June 19, 2024</span> - <span class="lecture-title">Stroligo Alisea, Saleth Peer ​​</span>
+        </div>
+        <div class="course-date">
+            <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
+        </div>
+        <div class="course-date">
+            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
+        </div>
+        <div class="course-date">
+            <span class="date">July 2, 2024</span> - <span class="lecture-title">Gießing Lennart, Wagner Theresa, Jones Katrina</span>
+        </div>
+        <div class="course-date">
+            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
+        </div>
+        <div class="course-date">
+            <span class="date">May 14, 2024</span> - <span class="lecture-title">Power Laws</span>
+        </div>
+        <!-- Additional dates can be added here -->
+    </div>
     <!-- Material Section -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Material &#9662;</button>
     <div class="accordion-content" id="material-section">
