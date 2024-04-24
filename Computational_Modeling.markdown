@@ -150,6 +150,11 @@ permalink: /teaching/computational-modeling/
         <div class="nested-accordion-content">
             <a href="/files/ex_01_schelling.zip">Schelling's Model</a>
         </div>
+        <div class="nested-accordion">
+        <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
+        <div class="nested-accordion-content">
+            <a href="/files/ex_02_granovetter.zip">Granovetter's Model</a>
+        </div>
     </div>  
     </div>
     
