@@ -68,9 +68,9 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 4, 2024 </span> - <span class="lecture-title">Spreading in networks</span>
         </div>
         <!-- Additional dates can be added here -->
-    </div>
-    <h3>Students Seminars</h3>
-    Swaps are possible if both students agree. Also, there can be up to 4 seminars per day, so if there are less than 4 people on a given day, you can ask me to be moved to that date by email (first come first served).
+
+    	<h3>Students Seminars</h3>
+    	<h5>Swaps are possible if both students agree. Also, there can be up to 4 seminars per day, so if there are less than 4 people on a given day, you can ask me to be moved to that date by email (first come first served).</h5>
         <div class="course-date">
             <span class="date">June 19, 2024</span> - <span class="lecture-title">Stroligo Alisea, Saleth Peer ​​</span>
         </div>
