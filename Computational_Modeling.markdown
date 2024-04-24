@@ -146,16 +146,17 @@ permalink: /teaching/computational-modeling/
            </div>
        </div>  
        <div class="nested-accordion">
-        <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
-        <div class="nested-accordion-content">
-            <a href="/files/ex_01_schelling.zip">Schelling's Model</a>
-        </div>
-        <div class="nested-accordion">
-        <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
-        <div class="nested-accordion-content">
-            <a href="/files/ex_02_granovetter.zip">Granovetter's Model</a>
-        </div>
-    </div>  
+       	   <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
+           <div class="nested-accordion-content">
+               <a href="/files/ex_01_schelling.zip">Schelling's Model</a>
+           </div>
+       </div>  
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <a href="/files/ex_02_granovetter.zip">Granovetter's Model</a>
+           </div>
+       </div>  
     </div>
     
    <!-- Papers for Students Presentations -->
