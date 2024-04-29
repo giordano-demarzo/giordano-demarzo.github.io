@@ -69,7 +69,7 @@ permalink: /teaching/computational-modeling/
         </div>
         <h3>Students Seminars</h3>
         <div class="course-date">
-            <span class="date">June 19, 2024</span> - <span class="lecture-title">Stroligo Alisea, Saleth Peer ​​</span>
+            <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer ​​</span>
         </div>
         <div class="course-date">
             <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
@@ -135,6 +135,20 @@ permalink: /teaching/computational-modeling/
                    <ul>
                        <li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525913500379">Measuring cultural dynamics through the Eurovision song contest. David Garcia and Dorian Tanase. Advances in Complex Systems, 16 (2013).</a></li>
                        <li><a href="https://arxiv.org/pdf/1701.07419.pdf">A gentle introduction to the minimal Naming Game. Andrea Baronchelli (2017).</a></li>                       
+                   </ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/CMSS_Seminar4.pdf">Slides</a></li>
+                       <li><a href="https://www.jstor.org/stable/2778111">Threshold Models of Collective Behavior. Mark Granovetter. American Journal of Sociology (1978).</a></li>
+                   </ul>
+               <h4>Additional Readings</h4>
+                   <ul>
+                       <li><a href="https://www.science.org/doi/10.1126/science.aas8827">Experimental evidence for tipping points in social convention. Science, 360 (2018).</a></li>                       
                    </ul>
            </div>
        </div>
