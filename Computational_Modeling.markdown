@@ -78,7 +78,7 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
         </div>
         <div class="course-date">
-            <span class="date">July 2, 2024</span> - <span class="lecture-title">Gießing Lennart, Jones Katrina</span>
+            <span class="date">July 2, 2024</span> - <span class="lecture-title">Jones Katrina</span>
         </div>
         <div class="course-date">
             <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
