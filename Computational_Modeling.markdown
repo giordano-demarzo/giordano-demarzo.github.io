@@ -69,7 +69,7 @@ permalink: /teaching/computational-modeling/
         </div>
         <h3>Students Seminars</h3>
         <div class="course-date">
-            <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer (Emergence of Polarized Ideological Opinions in Multidimensional Topic Spaces) ​​</span>
+            <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer</span>
         </div>
         <div class="course-date">
             <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
