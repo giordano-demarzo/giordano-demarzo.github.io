@@ -69,7 +69,7 @@ permalink: /teaching/computational-modeling/
         </div>
         <h3>Students Seminars</h3>
         <div class="course-date">
-            <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer ​​</span>
+            <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer (Emergence of Polarized Ideological Opinions in Multidimensional Topic Spaces) ​​</span>
         </div>
         <div class="course-date">
             <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
@@ -78,7 +78,7 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
         </div>
         <div class="course-date">
-            <span class="date">July 2, 2024</span> - <span class="lecture-title">Gießing Lennart, Wagner Theresa, Jones Katrina</span>
+            <span class="date">July 2, 2024</span> - <span class="lecture-title">Gießing Lennart, Jones Katrina</span>
         </div>
         <div class="course-date">
             <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
@@ -179,8 +179,6 @@ permalink: /teaching/computational-modeling/
     <div class="accordion-content" id="material-section">
     	<ul dir="auto">
     	<li><a href="https://www.jasss.org/23/3/5.html" rel="nofollow">A Weighted Balance Model of Opinion Hyperpolarization. Simon Schweighofer, Frank Schweitzer, David Garcia (2020)</a></li>
-<li><a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.2.043117" rel="nofollow">Emergence of polarization in a voter model with personalized information. Giordano De Marzo, Andrea Zaccaria, Claudio Castellano (2020)</a></li>
-<li><a href="https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011012" rel="nofollow">Emergence of Polarized Ideological Opinions in Multidimensional Topic Spaces. Fabian Baumann, Philipp Lorenz-Spreen, Igor M. Sokolov, and Michele Starnini (2021)</a></li>
 <li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0074516" rel="nofollow">Differentiation without Distancing. Explaining Bi-Polarization of Opinions without Negative Influence. Michael Mäs, Andreas Flache (2013)</a></li>
 <li><a href="https://www.science.org/doi/full/10.1126/science.1210280" rel="nofollow">Uninformed Individuals Promote Democratic Consensus in Animal Groups. Iain Couzin et al. (2011)</a></li>
 <li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525918500145" rel="nofollow">Talent versus luck: The role of randomness in success and failure. Alessandro Pluchino, Alessio Biondo, Andrea Rapisarda (2018)</a></li>
