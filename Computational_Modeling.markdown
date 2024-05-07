@@ -152,6 +152,22 @@ permalink: /teaching/computational-modeling/
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 5 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/CMSS_Seminar5.pdf">Slides</a></li>
+                       <li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525900000078">Mixing beliefs among interacting agents. Advances in Complex Systems (2000).</a></li>
+                   </ul>
+               <h4>Additional Readings</h4>
+                   <ul>
+                       <li><a href="https://journals.aps.org/rmp/pdf/10.1103/RevModPhys.81.591">Statistical physics of social dynamics. Reviews Of Modern Physics (2009).</a></li>                      
+                       <li><a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.2.043117">Emergence of polarization in a voter model with personalized information. Physical Review Research (2020).</a></li>     
+                       <li><a href="/files/lezioni_socialdynamics.pdf">Notes on Opinion Dyanmics by Claudio Castellano.</a></li>                       
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
       	<div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
