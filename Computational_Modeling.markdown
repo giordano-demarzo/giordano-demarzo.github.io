@@ -187,7 +187,15 @@ permalink: /teaching/computational-modeling/
                <a href="/files/ex_02_granovetter.zip">Granovetter's Model</a>
            </div>
        </div>  
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <a href="/files/ex_03_bounded_confidence.zip">Bounded Confidence</a>
+           </div>
+       </div> 
     </div>
+    
+    
     
    <!-- Papers for Students Presentations -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present
