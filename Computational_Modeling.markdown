@@ -168,6 +168,16 @@ permalink: /teaching/computational-modeling/
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 6 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/CMSS_Seminar6.pdf">Slides</a></li>
+                   </ul>
+               <h4>Additional Readings</h4>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
       	<div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
