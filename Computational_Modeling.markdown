@@ -178,6 +178,21 @@ permalink: /teaching/computational-modeling/
                <h4>Additional Readings</h4>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 7 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/CMSS_Seminar7.pdf">Slides</a></li>
+                   </ul>
+               <h4>Additional Readings</h4>
+                   <ul>
+                       <li><a href="/files/LLM_NetsciX2024.pdf">Slides on LLMs networks.</a></li>                             
+                   </ul>
+           </div>
+       </div>
+       
+       
        <h3> Coding Sessions </h3>
       	<div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
