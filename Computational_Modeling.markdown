@@ -219,7 +219,7 @@ permalink: /teaching/computational-modeling/
            </div>
        </div> 
        <div class="nested-accordion">
-           <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
+           <button class="nested-accordion-button">Coding Session 5 &#9662;</button>
            <div class="nested-accordion-content">
                <a href="/files/ex_04_scale_free.zip">Scale-Free Networks</a>
            </div>
