@@ -218,6 +218,12 @@ permalink: /teaching/computational-modeling/
                <a href="/files/ex_03_bounded_confidence.zip">Bounded Confidence</a>
            </div>
        </div> 
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <a href="/files/ex_04_scale_free.zip">Scale-Free Networks</a>
+           </div>
+       </div> 
     </div>
     
     
