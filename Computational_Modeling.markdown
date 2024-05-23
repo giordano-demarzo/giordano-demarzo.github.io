@@ -72,13 +72,10 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 19, 2024</span> - <span class="lecture-title">Saleth Peer</span>
         </div>
         <div class="course-date">
-            <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas</span>
+            <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas, Jones Katrina</span>
         </div>
         <div class="course-date">
             <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
-        </div>
-        <div class="course-date">
-            <span class="date">July 2, 2024</span> - <span class="lecture-title">Jones Katrina</span>
         </div>
         <div class="course-date">
             <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
@@ -235,7 +232,6 @@ permalink: /teaching/computational-modeling/
     	<ul dir="auto">
     	<li><a href="https://www.jasss.org/23/3/5.html" rel="nofollow">A Weighted Balance Model of Opinion Hyperpolarization. Simon Schweighofer, Frank Schweitzer, David Garcia (2020)</a></li>
 <li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0074516" rel="nofollow">Differentiation without Distancing. Explaining Bi-Polarization of Opinions without Negative Influence. Michael Mäs, Andreas Flache (2013)</a></li>
-<li><a href="https://www.science.org/doi/full/10.1126/science.1210280" rel="nofollow">Uninformed Individuals Promote Democratic Consensus in Animal Groups. Iain Couzin et al. (2011)</a></li>
 <li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525918500145" rel="nofollow">Talent versus luck: The role of randomness in success and failure. Alessandro Pluchino, Alessio Biondo, Andrea Rapisarda (2018)</a></li>
 <li><a href="https://psycnet.apa.org/buy/1990-28235-001" rel="nofollow">From Private Attitude to Public Opinion: A Dynamic Theory of Social Impact. Andrey Nowak, Jacek Szamrej, Bibb Latané (1990)</a></li>
 <li><a href="https://www.pnas.org/doi/abs/10.1073/pnas.1217220110" rel="nofollow">Biased assimilation, homophily, and the dynamics of polarization. Pranav Dandekar, Ashish Goel, and David Lee (2013)</a></li>
