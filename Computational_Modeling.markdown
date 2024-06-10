@@ -253,7 +253,6 @@ permalink: /teaching/computational-modeling/
 <li><a href="https://arxiv.org/pdf/2112.11001.pdf" rel="nofollow">Friend of a friend models of network growth. Watson Levens, Alex Szorkovszky, and David J. T. Sumpter (2022)</a></li>
 <li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
 <li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
-<li><a href="https://arxiv.org/abs/2003.10222" rel="nofollow">Proximity: a recipe to break the outbreak. Marco Faggian, Michele Urbani, Luca Zanotto (2020)</a></li>
 <li><a href="https://www.sciencedirect.com/science/article/pii/S0378437113009904" rel="nofollow">The Simmel effect and babies' names. M.J.Krawczyk, A.Dydejczyk, K.Kułakowski (2014)</a></li>
 <li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
 </ul>
