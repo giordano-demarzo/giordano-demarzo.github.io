@@ -75,10 +75,10 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas, Jones Katrina</span>
         </div>
         <div class="course-date">
-            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Keßler Raphaela, Helten Marius</span>
+            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Helten Marius</span>
         </div>
         <div class="course-date">
-            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Tiedemann Leonard, Strauch Liane, Wiederspohn Jens</span>
+            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Keßler Raphaela, Strauch Liane, Wiederspohn Jens</span>
         </div>
         <par>Swaps are possible if both students agree. There can be up to 4 seminars per day, so you can ask me by email to be moved to a non-full date (first come first served). I will update this calendar when changes are made, so be sure to check it once in a while.</par>
         <!-- Additional dates can be added here -->
@@ -241,15 +241,12 @@ permalink: /teaching/computational-modeling/
     <div class="accordion-content" id="material-section">
     	<ul dir="auto">
     	<li><a href="https://www.jasss.org/23/3/5.html" rel="nofollow">A Weighted Balance Model of Opinion Hyperpolarization. Simon Schweighofer, Frank Schweitzer, David Garcia (2020)</a></li>
-<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0074516" rel="nofollow">Differentiation without Distancing. Explaining Bi-Polarization of Opinions without Negative Influence. Michael Mäs, Andreas Flache (2013)</a></li>
-<li><a href="https://www.worldscientific.com/doi/abs/10.1142/S0219525918500145" rel="nofollow">Talent versus luck: The role of randomness in success and failure. Alessandro Pluchino, Alessio Biondo, Andrea Rapisarda (2018)</a></li>
 <li><a href="https://psycnet.apa.org/buy/1990-28235-001" rel="nofollow">From Private Attitude to Public Opinion: A Dynamic Theory of Social Impact. Andrey Nowak, Jacek Szamrej, Bibb Latané (1990)</a></li>
 <li><a href="https://www.pnas.org/doi/abs/10.1073/pnas.1217220110" rel="nofollow">Biased assimilation, homophily, and the dynamics of polarization. Pranav Dandekar, Ashish Goel, and David Lee (2013)</a></li>
 <li><a href="https://www.pnas.org/doi/full/10.1073/pnas.082090499" rel="nofollow">A simple model of global cascades on random networks. Duncan Watts (2002)</a></li>
 <li><a href="https://www.nature.com/articles/s41467-022-28170-6" rel="nofollow">Assessing the impact of SARS-CoV-2 prevention measures in Austrian schools using agent-based simulations and cluster tracing data. Lasser et al. (2022)</a></li>
 <li><a href="https://www.nature.com/articles/s41467-022-31766-7" rel="nofollow">Stress-testing the resilience of the Austrian healthcare system using agent-based simulation. Kaleta et al. (2022)</a></li>
 <li><a href="https://royalsocietypublishing.org/doi/pdf/10.1098/rsif.2015.0712" rel="nofollow">Coupled catastrophes: sudden shifts cascade and hop among interdependent systems. Charles D. Brummitt, George Barnett, Raissa M. D'Souza (2015)</a></li>
-<li><a href="https://iopscience.iop.org/article/10.1088/1742-5468/aa7a3f" rel="nofollow">Emergent network modularity. Pavel Krapivsky and Sidney Redner (2017)</a></li>
 <li><a href="https://arxiv.org/pdf/2112.11001.pdf" rel="nofollow">Friend of a friend models of network growth. Watson Levens, Alex Szorkovszky, and David J. T. Sumpter (2022)</a></li>
 <li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
 <li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
