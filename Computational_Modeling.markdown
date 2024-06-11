@@ -32,6 +32,10 @@ permalink: /teaching/computational-modeling/
     
     <p>Students select a published article from a set of readings to present in the second part and to write a short review of the article. The course grade is based on the student presentation (50%), participation in discussions after each presentation (20%), and on the report (30%).</p>
     
+    <p>
+    Students will have 15 minutes for the presentation, followed by 5/10 minutes for questions. The report should be around 5 pages. If you want to include more details (for instance more information about the dataset or mathematical methods) you can use an appendix (up to 3 pages). 
+    </p>
+    
     <h4>Exercises</h4>
     <p>A practical part of exercises connected to the lectures will be offered. It is highly recommended to participate in this exercise part because it will help to acquire the skills that are important for the final project. The exercises will not be graded.</p>
     </div>
