@@ -33,7 +33,7 @@ permalink: /teaching/computational-modeling/
     <p>Students select a published article from a set of readings to present in the second part and to write a short review of the article. The course grade is based on the student presentation (50%), participation in discussions after each presentation (20%), and on the report (30%).</p>
     
     <p>
-    Students will have 15 minutes for the presentation, followed by 5/10 minutes for questions. The report should be around 5 pages. If you want to include more details (for instance more information about the dataset or mathematical methods) you can use an appendix (up to 3 pages). 
+    Students will have 15 for the presentation, followed by 5 to 10 minutes for questions. The report should be around 5 pages. If you want to include more details (for instance more information about the dataset or mathematical methods) you can use an appendix (up to 3 pages). 
     </p>
     
     <h4>Exercises</h4>
@@ -79,10 +79,10 @@ permalink: /teaching/computational-modeling/
             <span class="date">June 25, 2024</span> - <span class="lecture-title">Hennig Dajana, Amann Jakob, Fröhlich Nicolas, Jones Katrina</span>
         </div>
         <div class="course-date">
-            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin, Helten Marius</span>
+            <span class="date">June 26, 2024</span> - <span class="lecture-title">King Julia, Aytac Robin</span>
         </div>
         <div class="course-date">
-            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Keßler Raphaela, Strauch Liane, Wiederspohn Jens</span>
+            <span class="date">July 3, 2024</span> - <span class="lecture-title"> Froitzheim Lea, Keßler Raphaela, Strauch Liane</span>
         </div>
         <par>Swaps are possible if both students agree. There can be up to 4 seminars per day, so you can ask me by email to be moved to a non-full date (first come first served). I will update this calendar when changes are made, so be sure to check it once in a while.</par>
         <!-- Additional dates can be added here -->
