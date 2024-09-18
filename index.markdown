@@ -16,7 +16,7 @@ title: Home
 <div class="section-heading">Bio</div>
 <div class="section-content">
 <p>
-I'm a Postdoc at the Political Science Department at the University of Konstanz, and my current research involves developing Agent Based Simulations based on Large Language Models such as ChatGPT.
+I'm a Postdoc at the Political Science Department at the University of Konstanz, and my current research involves studying emergent collective behaviors in societies of Large Language Models such as ChatGPT.
 </p>
 <p>
 Before my employment in Konstanz, I was a doctoral student at Enrico Fermi Research Center, at the Physics department of Sapienza University and at Sapienza School for Advanced Studies. During my PhD, I focused on the modeling of Complex Digital Systems, leveraging numerical simulations, analitical computations and machine learning. I'm also a Junior Research Fellow of the Complexity Science Hub Vienna and consultant for the International Labour Office. I got a MSc in Theoretical Physics and a BSc in Physics from Sapienza University. Additionaly to my background in Physics, I have experience in Machine Learning, Natural Language Processing and Data Analysis. 
@@ -24,6 +24,10 @@ Before my employment in Konstanz, I was a doctoral student at Enrico Fermi Resea
 </div>
 <div class="section-heading">News</div>
 <div class="news-section">
+    <div class="news-item">
+        <div class="news-date">05/09/2024</div>
+        <div class="news-title">New preprint out! <a href="https://arxiv.org/abs/2409.02822">"Language Understanding as a Constraint on Consensus Size in LLM Societies"</a>. </div>
+    </div>
     <div class="news-item">
         <div class="news-date">08/04/2024</div>
         <div class="news-title">Deep Learning for Social Sciences and Computation Modeling of Social Systems starting soon, enroll! </div>
