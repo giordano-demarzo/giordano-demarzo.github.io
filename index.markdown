@@ -37,7 +37,7 @@ Before my employment in Konstanz, I was a doctoral student at Enrico Fermi Resea
 
     <div class="news-item">
         <div class="news-date">19/10/2024</div>
-        <div class="news-title">Our work on LLM Societies has been covered on NewScientist! We are in this week magazine and also online at <a href="https://www.newscientist.com/article/2447192-ais-can-work-together-in-much-larger-groups-than-humans-ever-could/">"AIs can work together in much larger groups than humans ever could"</a>. </div>
+        <div class="news-title">Our work on LLM Societies is in print on the NewScientist! <a href="https://www.newscientist.com/article/2447192-ais-can-work-together-in-much-larger-groups-than-humans-ever-could/">"AIs can work together in much larger groups than humans ever could"</a>. </div>
     </div>
     
     <div class="news-item">
