@@ -135,6 +135,16 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 2 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/Network_Science_2.pdf">Slides</a></li>
+                       <li><a href="https://www.nature.com/articles/s41598-022-26961-x">The explosive value of the networks. A. Scala, M. Del Mastro (2023) </a></li>
+                   </ul>
+           </div>
+       </div>
     </div>
     
     
