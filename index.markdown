@@ -24,10 +24,27 @@ Before my employment in Konstanz, I was a doctoral student at Enrico Fermi Resea
 </div>
 <div class="section-heading">News</div>
 <div class="news-section">
+
+    <div class="news-item">
+        <div class="news-date">25/10/2024</div>
+        <div class="news-title">Today I gave a talk at Complexity Science Vienna on Large Language Model populated societies. You can donwload here the <a href="files/slides/LLMs_CSH.pdf">slides.</a> </div>
+    </div>
+
+    <div class="news-item">
+        <div class="news-date">21/10/2024</div>
+        <div class="news-title">Network Science for Socio-Economic Systems is starting today! </div>
+    </div>
+
+    <div class="news-item">
+        <div class="news-date">19/10/2024</div>
+        <div class="news-title">Our work on LLM Societies has been covered on NewScientist! We are in this week magazine and also online at <a href="https://www.newscientist.com/article/2447192-ais-can-work-together-in-much-larger-groups-than-humans-ever-could/">"AIs can work together in much larger groups than humans ever could"</a>. </div>
+    </div>
+    
     <div class="news-item">
         <div class="news-date">05/09/2024</div>
         <div class="news-title">New preprint out! <a href="https://arxiv.org/abs/2409.02822">"Language Understanding as a Constraint on Consensus Size in LLM Societies"</a>. </div>
     </div>
+    
     <div class="news-item">
         <div class="news-date">08/04/2024</div>
         <div class="news-title">Deep Learning for Social Sciences and Computation Modeling of Social Systems starting soon, enroll! </div>

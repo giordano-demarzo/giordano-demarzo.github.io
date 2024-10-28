@@ -154,17 +154,17 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Data</h4>
                    <ul>
-                       <li><a href="files/network_science/datasets/airlines/airports.csv">Airports data</a></li>
-                       <li><a href="files/network_science/datasets/airlines/routes.csv">Routes data</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/airports.csv">Airports data</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/routes.csv">Routes data</a></li>
                    </ul>
                <h4>Guides</h4>
                    <ul>
-                       <li><a href="files/network_science/exercises/Network Analysis of Airport Routes.pdf">Exercise: Network Analysis of Airport Routes</a></li>
-                       <li><a href="files/network_science/exercises/Essential networkx Functions for Network Analysis.pdf">Main NetworkX functions</a></li>
+                       <li><a href="/files/network_science/exercises/Network Analysis of Airport Routes.pdf">Exercise: Network Analysis of Airport Routes</a></li>
+                       <li><a href="/files/network_science/exercises/Essential networkx Functions for Network Analysis.pdf">Main NetworkX functions</a></li>
                    </ul>
                <h4>Code</h4>
                    <ul>
-                       <li><a href="files/network_science/exercises/airlines_analysis.py">Code</a></li>
+                       <li><a href="/files/network_science/exercises/airlines_analysis.py">Code</a></li>
                    </ul>
                <h4>Guides</h4>
            </div>
