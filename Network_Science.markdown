@@ -160,7 +160,7 @@ economic systems. </p>
                <h4>Guides</h4>
                    <ul>
                        <li><a href="/files/network_science/exercises/exercise_routes.pdf">Exercise: Network Analysis of Airport Routes</a></li>
-                       <li><a href="/files/network_science/exercises/Essential networkx Functions for Network Analysis.pdf">Main NetworkX functions</a></li>
+                       <li><a href="/files/network_science/exercises/nx_functions.pdf">Main NetworkX functions</a></li>
                    </ul>
                <h4>Code</h4>
                    <ul>
