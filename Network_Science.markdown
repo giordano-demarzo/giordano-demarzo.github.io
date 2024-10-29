@@ -166,6 +166,11 @@ economic systems. </p>
                    <ul>
                        <li><a href="/files/network_science/exercises/airlines_analysis.py">Code</a></li>
                    </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/datasets/airlines/airports_network_geo.png">Network visualization with geographical coordinates</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/airports_network_spring.png">Network visualization with force algorithm (spring layout)</a></li>
+                   </ul>
            </div>
        </div>
     
