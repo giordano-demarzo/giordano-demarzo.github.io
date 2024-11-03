@@ -82,6 +82,9 @@ legend_elements = [Line2D([0], [0], marker='o', color='w', label=G.nodes[node]['
                           markersize=10, markerfacecolor=top_10_colors[idx])
                    for idx, node in enumerate(top_10_airports)]
 
+#%%
+
+
 #%%Plot 1: Geographical Coordinates
 
 plt.figure(figsize=(12, 8))
@@ -95,9 +98,10 @@ nx.draw_networkx_edges(G_sub, pos_geo, edge_color='gray', alpha=0.5, width=0.5)
 
 # Add legend
 plt.legend(handles=legend_elements, loc='lower left', title="Top 10 Airports")
-plt.title("Top 500 Most Connected Airports and Routes (Geographical Coordinates)")
+plt.title("Top 200 Most Connected Airports and Routes (Geographical Coordinates)")
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
+plt.savefig('airports_network_geo.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 #%%Plot 2: Force-Directed Layout with Reduced Node Size
@@ -114,8 +118,9 @@ nx.draw_networkx_edges(G_sub, pos_spring, edge_color='gray', alpha=0.5)
 
 # Add legend
 plt.legend(handles=legend_elements, loc='upper left', title="Top 10 Airports")
-plt.title("Top 500 Most Connected Airports and Routes (Force-Directed Layout)")
+plt.title("Top 200 Most Connected Airports and Routes (Force-Directed Layout)")
 plt.axis("off")
+plt.savefig('airports_network_spring.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 #%% Analyze Weakly Connected Components

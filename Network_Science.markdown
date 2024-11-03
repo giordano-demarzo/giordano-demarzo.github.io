@@ -145,6 +145,20 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/Network_Science_3.pdf">Slides</a></li>
+                       <li><a href="https://networksciencebook.com/chapter/3">Network Science. Chapter 3. AL Barabasi</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                       <li><a href="https://networksciencebook.com/chapter/8#robustness">Network Science. Section 8.3. AL Barabasi</a></li>
+                   </ul>
+           </div>
+       </div>
     </div>
     
     <h3> Coding Sessions </h3>
