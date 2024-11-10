@@ -151,11 +151,26 @@ economic systems. </p>
                <h4>Readings and Slides</h4>
                    <ul>
                        <li><a href="/files/network_science/Network_Science_3.pdf">Slides</a></li>
-                       <li><a href="https://networksciencebook.com/chapter/3">Network Science. Chapter 3. AL Barabasi</a></li>
+                       <li><a href="https://networksciencebook.com/chapter/3">Network Science. Chapter 3. A.L. Barabasi</a></li>
                    </ul>
                <h4>Additional Reading</h4>
                    <ul>
                        <li><a href="https://networksciencebook.com/chapter/8#robustness">Network Science. Section 8.3. AL Barabasi</a></li>
+                   </ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/Network_Science_4.pdf">Slides</a></li>
+                       <li><a href="https://networksciencebook.com/chapter/4">Network Science. Chapter 4. A.L. Barabasi</a></li>
+                       <li><a href="https://networksciencebook.com/chapter/5">Network Science. Chapter 5. A.L. Barabasi</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                       <li><a href="https://www.nature.com/articles/s41467-019-08746-5">Scale-free networks are rare. Broido, A.D., Clauset, A. (2019)</a></li>
                    </ul>
            </div>
        </div>
@@ -199,6 +214,9 @@ economic systems. </p>
 		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
 		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023)</a></li>
 		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
+		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000)</a></li>
+		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
+		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 	</ul>
     </div>
        

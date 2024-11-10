@@ -82,8 +82,6 @@ legend_elements = [Line2D([0], [0], marker='o', color='w', label=G.nodes[node]['
                           markersize=10, markerfacecolor=top_10_colors[idx])
                    for idx, node in enumerate(top_10_airports)]
 
-#%%
-
 
 #%%Plot 1: Geographical Coordinates
 
