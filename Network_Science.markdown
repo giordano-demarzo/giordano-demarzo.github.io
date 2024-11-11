@@ -133,74 +133,10 @@ economic systems. </p>
                    <ul>
                        <li><a href="/files/network_science/Network_Science_1.pdf">Slides</a></li>
                    </ul>
-           </div>
-       	</div>
-       	<div class="nested-accordion">
-           <button class="nested-accordion-button">Seminar 2 &#9662;</button>
-           <div class="nested-accordion-content">
-               <h4>Readings and Slides</h4>
-                   <ul>
-                       <li><a href="/files/network_science/Network_Science_2.pdf">Slides</a></li>
-                       <li><a href="https://www.nature.com/articles/s41598-022-26961-x">The explosive value of the networks. A. Scala, M. Del Mastro (2023) </a></li>
-                   </ul>
-           </div>
-       </div>
-       <div class="nested-accordion">
-           <button class="nested-accordion-button">Seminar 3 &#9662;</button>
-           <div class="nested-accordion-content">
-               <h4>Readings and Slides</h4>
-                   <ul>
-                       <li><a href="/files/network_science/Network_Science_3.pdf">Slides</a></li>
-                       <li><a href="https://networksciencebook.com/chapter/3">Network Science. Chapter 3. A.L. Barabasi</a></li>
-                   </ul>
-               <h4>Additional Reading</h4>
-                   <ul>
-                       <li><a href="https://networksciencebook.com/chapter/8#robustness">Network Science. Section 8.3. AL Barabasi</a></li>
-                   </ul>
-           </div>
-       </div>
-       <div class="nested-accordion">
-           <button class="nested-accordion-button">Seminar 4 &#9662;</button>
-           <div class="nested-accordion-content">
-               <h4>Readings and Slides</h4>
-                   <ul>
-                       <li><a href="/files/network_science/Network_Science_4.pdf">Slides</a></li>
-                       <li><a href="https://networksciencebook.com/chapter/4">Network Science. Chapter 4. A.L. Barabasi</a></li>
-                       <li><a href="https://networksciencebook.com/chapter/5">Network Science. Chapter 5. A.L. Barabasi</a></li>
-                   </ul>
-               <h4>Additional Reading</h4>
-                   <ul>
-                       <li><a href="https://www.nature.com/articles/s41467-019-08746-5">Scale-free networks are rare. Broido, A.D., Clauset, A. (2019)</a></li>
-                   </ul>
-           </div>
-       </div>
-    
+          </div>
+       </div>  
        <h3> Coding Sessions </h3>
        <h5> </h5>
-       <div class="nested-accordion">
-           <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
-           <div class="nested-accordion-content">
-               <h4>Data</h4>
-                   <ul>
-                       <li><a href="/files/network_science/datasets/airlines/airports.csv">Airports data</a></li>
-                       <li><a href="/files/network_science/datasets/airlines/routes.csv">Routes data</a></li>
-                   </ul>
-               <h4>Guides</h4>
-                   <ul>
-                       <li><a href="/files/network_science/exercises/exercise_routes.pdf">Exercise: Network Analysis of Airport Routes</a></li>
-                       <li><a href="/files/network_science/exercises/nx_functions.pdf">Main NetworkX functions</a></li>
-                   </ul>
-               <h4>Code</h4>
-                   <ul>
-                       <li><a href="/files/network_science/exercises/airlines_analysis.py">Code</a></li>
-                   </ul>
-               <h4>Plots</h4>
-                   <ul>
-                       <li><a href="/files/network_science/datasets/airlines/airports_network_geo.png">Network visualization with geographical coordinates</a></li>
-                       <li><a href="/files/network_science/datasets/airlines/airports_network_spring.png">Network visualization with force algorithm (spring layout)</a></li>
-                   </ul>
-           </div>
-       </div>
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
            <div class="nested-accordion-content">
@@ -213,10 +149,12 @@ economic systems. </p>
                    </ul>
                <h4>Plots</h4>
                    <ul>
-                       <li><a href="/files/network_science/datasets/airlines/barabasi_albert_m=2_various_N.png">Network visualization of Barabasi-Albert networks with different node sizes and m=2.</a></li>
-                       <li><a href="/files/network_science/datasets/airlines/barabasi_albert_nonlinear_various_exponents.png">Network visualization of Barabasi-Albert networks with different preferential attachment exponents, N=2000 and m=3.</a></li>
+                       <li><a href="/files/network_science/exercises/barabasi_albert_m=2_various_N.png">Network visualization of Barabasi-Albert networks with different node sizes and m=2.</a></li>
+                       <li><a href="/files/network_science/exercises/barabasi_albert_nonlinear_various_exponents.png">Network visualization of Barabasi-Albert networks with different preferential attachment exponents, N=2000 and m=3.</a></li>
                    </ul>
-
+          </div>
+       </div>  
+   </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
    <div class="accordion-content" id="material-section">
@@ -232,3 +170,5 @@ economic systems. </p>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 	</ul>
     </div>
+   </div>
+   </div>
