@@ -174,11 +174,10 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
-    </div>
     
-    <h3> Coding Sessions </h3>
-    	<h5> </h5>
-        <div class="nested-accordion">
+       <h3> Coding Sessions </h3>
+       <h5> </h5>
+       <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Data</h4>
@@ -202,7 +201,24 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
-    
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_barabasi_albert.pdf">Exercise: Simulating and analyzing the Barabasi-Albert model.</a></li>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/barabasi_albert.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/datasets/airlines/airports_network_geo.png">Network visualization of Barabasi-Albert networks with different node sizes and m=2.</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/airports_network_spring.png">Network visualization of Barabasi-Albert networks with different preferential attachment exponents, N=2000 and m=3.</a></li>
+                   </ul>
+           </div>
+       </div>
+    </div>
    <!-- Papers for Students Presentations -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present
  &#9662;</button>
