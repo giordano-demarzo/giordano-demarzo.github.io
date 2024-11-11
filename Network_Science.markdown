@@ -218,7 +218,6 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
-    </div>
    <!-- Papers for Students Presentations -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present
  &#9662;</button>
