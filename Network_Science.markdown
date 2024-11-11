@@ -124,9 +124,9 @@ economic systems. </p>
     <!-- Material Section -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Material &#9662;</button>
     <div class="accordion-content" id="material-section">
-     	<h3> Seminars </h3>
-    	<h5> </h5>
-        <div class="nested-accordion">
+       <h3> Seminars </h3>
+       <h5> </h5>
+       <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 1 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
@@ -134,8 +134,8 @@ economic systems. </p>
                        <li><a href="/files/network_science/Network_Science_1.pdf">Slides</a></li>
                    </ul>
            </div>
-       </div>
-       <div class="nested-accordion">
+       	</div>
+       	<div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 2 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
@@ -218,9 +218,10 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+    </div>
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
-    <div class="accordion-content" id="material-section">
+   <div class="accordion-content" id="material-section">
      	<ul dir="auto">
 		<li><a href="https://arxiv.org/pdf/2112.11001.pdf" rel="nofollow">Friend of a friend models of network growth. Watson Levens, Alex Szorkovszky, and David J. T. Sumpter (2022)</a></li>
 		<li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
@@ -233,19 +234,3 @@ economic systems. </p>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 	</ul>
     </div>
-</div>
-    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
-    <div class="accordion-content" id="material-section">
-    	<ul dir="auto">
-		<li><a href="https://arxiv.org/pdf/2112.11001.pdf" rel="nofollow">Friend of a friend models of network growth. Watson Levens, Alex Szorkovszky, and David J. T. Sumpter (2022)</a></li>
-		<li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
-		<li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
-		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023)</a></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
-		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000)</a></li>
-		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
-		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
-	</ul>
-    </div> 
-</div>
