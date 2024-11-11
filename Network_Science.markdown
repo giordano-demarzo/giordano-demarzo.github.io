@@ -213,12 +213,10 @@ economic systems. </p>
                    </ul>
                <h4>Plots</h4>
                    <ul>
-                       <li><a href="/files/network_science/datasets/airlines/airports_network_geo.png">Network visualization of Barabasi-Albert networks with different node sizes and m=2.</a></li>
-                       <li><a href="/files/network_science/datasets/airlines/airports_network_spring.png">Network visualization of Barabasi-Albert networks with different preferential attachment exponents, N=2000 and m=3.</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/barabasi_albert_m=2_various_N.png">Network visualization of Barabasi-Albert networks with different node sizes and m=2.</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/barabasi_albert_nonlinear_various_exponents.png">Network visualization of Barabasi-Albert networks with different preferential attachment exponents, N=2000 and m=3.</a></li>
                    </ul>
-           </div>
-       </div>
-    </div>
+
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
    <div class="accordion-content" id="material-section">
