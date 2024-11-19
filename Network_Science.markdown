@@ -240,6 +240,12 @@ economic systems. </p>
                    <ul>
                        <li><a href="/files/network_science/exercises/exercise_centralities.pdf">Exercise: Analyzing the 117th United States Congress Social Network.</a></li>
                    </ul>
+               <h4>Data</h4>
+               	   For a detailed description of the dataset you can give a look at the original paper <a href="https://doi.org/10.1016/j.dib.2023.109521">Fink, Christian G., et al. "A Congressional Twitter network dataset quantifying pairwise probability of influence." Data in Brief 50 (2023): 109521</a>
+                   <ul>
+                       <li><a href="/files/network_science/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
+                       <li><a href="/files/network_science/datasets/airlines/congress_network_data.json">Congress members names</a></li>
+                   </ul>
                <h4>Code</h4>
                    <ul>
                        <li><a href="/files/network_science/exercises/exercise_centralities.py">Code</a></li>
