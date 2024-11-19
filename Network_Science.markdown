@@ -233,6 +233,24 @@ economic systems. </p>
                    </ul>
           </div>
        </div>  
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_centralities.pdf">Exercise: Analyzing the 117th United States Congress Social Network.</a></li>
+                   </ul>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_centralities.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/network_strength_and_edge_width_scaled.png">Network visualization of the congress social network</a></li>
+                       <li><a href="/files/network_science/exercises/network_centralities.png">Network visualization of the different centrality measures.</a></li>
+                   </ul>
+          </div>
+       </div>  
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
