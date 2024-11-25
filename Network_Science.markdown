@@ -189,6 +189,21 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 6 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_6.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/9">Network Science. Chapter 9. A.L. Barabasi</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://snap.stanford.edu/class/cs224w-readings/granovetter73weakties.pdf">The Strength of Weak Ties. M. S. Granovetter (1973)</a></li>
+                   	<li><a href="https://www.pnas.org/doi/abs/10.1073/pnas.0610245104">Structure and tie strengths in mobile communication networks. J. P. Onnela et al. (2007)</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
@@ -271,6 +286,7 @@ economic systems. </p>
 		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000)</a></li>
 		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
+		<li><a href="https://www.nature.com/articles/nature11459" rel="nofollow">Popularity versus similarity in growing networks. F. Papadopoulos et al. (2012)</a></li>
 	</ul>
     </div>
    </div>
