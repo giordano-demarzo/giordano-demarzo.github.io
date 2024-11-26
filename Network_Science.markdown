@@ -277,7 +277,7 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Guides</h4>
                    <ul>
-                       <li><a href="/files/network_science/exercises/exercise_centralities.pdf">Exercise: Community Detection in the 117th United States Congress Social Network.</a></li>
+                       <li><a href="/files/network_science/exercises/exercise_communities.pdf">Exercise: Community Detection in the 117th United States Congress Social Network.</a></li>
                    </ul>
                <h4>Data</h4>
                	   For a detailed description of the dataset you can give a look at the original paper <a href="https://doi.org/10.1016/j.dib.2023.109521">Fink, Christian G., et al. "A Congressional Twitter network dataset quantifying pairwise probability of influence." Data in Brief 50 (2023): 109521</a>
