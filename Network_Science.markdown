@@ -271,6 +271,30 @@ economic systems. </p>
                        <li><a href="/files/network_science/exercises/network_centralities.png">Network visualization of the different centrality measures.</a></li>
                    </ul>
           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_centralities.pdf">Exercise: Community Detection in the 117th United States Congress Social Network.</a></li>
+                   </ul>
+               <h4>Data</h4>
+               	   For a detailed description of the dataset you can give a look at the original paper <a href="https://doi.org/10.1016/j.dib.2023.109521">Fink, Christian G., et al. "A Congressional Twitter network dataset quantifying pairwise probability of influence." Data in Brief 50 (2023): 109521</a>
+                   <ul>
+                       <li><a href="/files/network_science/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
+                       <li><a href="/files/network_science/datasets/congress/congress_network_data.json">Congress members names</a></li>
+                   </ul>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_communities.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/network_community_greedy.png">Greedy Modularity Maximization Communities</a></li>
+                       <li><a href="/files/network_science/exercises/louvain_communities.png">Louvain Communities.</a></li>
+                   </ul>
+          </div>
        </div>  
    </div>    
    <!-- Papers for Students Presentations -->
