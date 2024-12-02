@@ -204,6 +204,23 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 7 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_7.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/10">Network Science. Chapter 10. A.L. Barabasi</a></li>
+                       	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Spread of Behavior in an Online Social Network Experiment. D. Centola (2010).</a></li>
+                       	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0126090">Competing for Attention in Social Media under Information Overload Conditions. L. Feng et al. (2015).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://moodle2.units.it/pluginfile.php/322538/mod_resource/content/1/Barrat_et_al_2008_Dynamical_Processes_on_Complex_Networks.pdf">Dynamical processes on complex networks. A. Barrat, M. Barthelemy, A. Vespignani (2008). Chapter 9. </a></li>
+                   	<li>How Behavior Spreads: The Science of Complex Contagions. D. Centola (2018). Chapter 3 and 4. Look for the book in the library or on libgen using a VPN :) </li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
