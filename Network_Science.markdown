@@ -221,6 +221,22 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 8 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_8.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/4#generating-networks">Network Science. Section 4.6. A.L. Barabasi</a></li>
+                       	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Statistical Physics of Real-World Networks. G. Cimini et al. (2019).</a></li>
+                       	<li><a href="https://iopscience.iop.org/article/10.1088/1367-2630/aa6b38/pdf">Inferring monopartite projections of bipartite networks: an entropy-based approach. F. Saracco et al. (2017).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://link.springer.com/chapter/10.1007/978-3-319-69438-2_4">Network Reconstruction. T. Squartini and D. Garlaschelli (2017). </a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
@@ -324,7 +340,7 @@ economic systems. </p>
 		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
 		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023)</a></li>
 		<li><a href="https://www.nature.com/articles/s41598-024-61448-x" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
-		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000)</a></li>
+		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000). (Already Selected)</a></li>
 		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 		<li><a href="https://www.nature.com/articles/nature11459" rel="nofollow">Popularity versus similarity in growing networks. F. Papadopoulos et al. (2012)</a></li>
