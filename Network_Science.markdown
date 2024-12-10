@@ -328,7 +328,31 @@ economic systems. </p>
                        <li><a href="/files/network_science/exercises/louvain_communities.png">Louvain Communities.</a></li>
                    </ul>
           </div>
-       </div>  
+       </div> 
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 5 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_bicm.pdf">Exercise: Analyzing the Country Export Network with the BiCM.</a></li>
+                   </ul>
+               <h4>Data</h4>
+               	   For a detailed description of the dataset you can give a look at the PDF above. Data have been produced starting from the UN Comtrade database.
+                   <ul>
+                       <li><a href="/files/network_science/datasets/export/exportmatrix2022.csv">Export matrix for the year 2022</a></li>
+                       <li><a href="/files/network_science/datasets/export/countries.csv">List of all countries</a></li>
+                       <li><a href="/files/network_science/datasets/export/products.csv">List of all products</a></li>
+                   </ul>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/bicm_export.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/country_communities.png">Communities in the projected country network</a></li>
+                   </ul>
+          </div>
+       </div>   
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
