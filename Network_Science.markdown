@@ -80,14 +80,15 @@ economic systems. </p>
             <span class="date">December 16, 2024 </span> - <span class="lecture-title">Multilayer and Higher Order Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">January 13, 2025</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
+            <span class="date">January 13, 2025</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
         </div>
         <div class="course-date">
-            <span class="date">December 20, 2025</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
+            <span class="date">January 20, 2025</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
         </div>
         <div class="course-date">
             <span class="date">January 27, 2025</span> - <span class="lecture-title">Social Networks</span>
         </div>
+        <div class="course-date">
             <span class="date">February 03, 2025 </span> - <span class="lecture-title">Advanced Topics in Network Science</span>
         </div>
         <div class="course-date">
