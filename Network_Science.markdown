@@ -80,15 +80,14 @@ economic systems. </p>
             <span class="date">December 16, 2024 </span> - <span class="lecture-title">Multilayer and Higher Order Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">December 17, 2024</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
+            <span class="date">January 13, 2025</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
         </div>
         <div class="course-date">
-            <span class="date">January 13, 2025</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
+            <span class="date">December 20, 2025</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
         </div>
         <div class="course-date">
             <span class="date">January 27, 2025</span> - <span class="lecture-title">Social Networks</span>
         </div>
-        <div class="course-date">
             <span class="date">February 03, 2025 </span> - <span class="lecture-title">Advanced Topics in Network Science</span>
         </div>
         <div class="course-date">
@@ -234,6 +233,22 @@ economic systems. </p>
                <h4>Additional Reading</h4>
                    <ul>
                    	<li><a href="https://link.springer.com/chapter/10.1007/978-3-319-69438-2_4">Network Reconstruction. T. Squartini and D. Garlaschelli (2017). </a></li>
+                   </ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 9 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_9.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science/bianconi_multilayer.pdf">Multilayer Networks: Structure and Function. Chapters 4-7. Bianconi (2018).</a></li>
+                       	<li><a href="https://doi.org/10.1016/j.physleta.2014.01.014">Multiple routes transmitted epidemics on multiplex networks. Zhao et al. (2014).</a></li>
+                       	<li><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0092200&type=printable">Epidemics in Partially Overlapped Multiplex Networks. C. Buono et al. (2014).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://iopscience.iop.org/article/10.1088/1742-6596/640/1/012007/pdf">Epidemic spreading and immunization strategy in multiplex networks. L. G. Alvarez Zuzek et al. (2014). </a></li>
                    </ul>
            </div>
        </div>
