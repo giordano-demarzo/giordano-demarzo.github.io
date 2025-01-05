@@ -378,12 +378,34 @@ economic systems. </p>
 		<li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
 		<li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
 		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023)</a></li>
+		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). (Already Selected)</a></li>
 		<li><a href="https://www.nature.com/articles/s41598-024-61448-x" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
 		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000). (Already Selected)</a></li>
 		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 		<li><a href="https://www.nature.com/articles/nature11459" rel="nofollow">Popularity versus similarity in growing networks. F. Papadopoulos et al. (2012)</a></li>
+		<li><a href="https://www.nature.com/articles/srep08182" rel="nofollow">Ranking species in mutualistic networks. V. Domínguez-García and M. A. Muñoz  (2015)</a></li>
+		<li><a href="https://doi.org/10.1371/journal.pone.0113470" rel="nofollow">The Scientific Competitiveness of Nations. G Cimini, A Gabrielli and F Sylos Labini (2014)</a></li>
+		<li><a href="https://arxiv.org/abs/2312.06619" rel="nofollow">Emergence of scale-free networks in social interactions among large language models. G. De Marzo, L. Pietronero and D. Garcia (2023)</a></li>
+		<li><a href="https://doi.org/10.1016/j.physa.2004.04.031" rel="nofollow">Error and attack tolerance of complex networks. P. Crucitti, V. Latora, M. Marchiori, A. Rapisarda (2004)</a></li>
+		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
+	</ul>
+    </div>
+    <!-- Datasets for Students Presentations -->
+   <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested datasets to analyze &#9662;</button>
+   <div class="accordion-content" id="material-section">
+     	<ul dir="auto">
+		<li><a href="https://networkrepository.com/soc-wiki-Vote.php" rel="nofollow">Wikipedia votes</a></li>
+		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a></li>
+		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a></li>
+		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
+		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
+		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a></li>
+		<li><a href="https://networkrepository.com/socfb-Michigan23.php" rel="nofollow">Facebook social network (Michigan University students)</a></li>
+		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a></li>
+		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
+		<li><a href="https://networkrepository.com/rec-github.php" rel="nofollow">Github network (bipartite)</a></li>
+		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a></li>
 	</ul>
     </div>
    </div>
