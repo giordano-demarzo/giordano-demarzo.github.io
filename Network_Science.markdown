@@ -260,7 +260,6 @@ economic systems. </p>
                    <ul>
                        	<li><a href="/files/network_science/Network_Science_10.pdf">Slides</a></li>
                        	<li><a href="https://www.nature.com/articles/srep00723">A new metrics for countries' fitness and products' complexity. Tacchella, Andrea, et al. (2012).</a></li>
-                       	<li><a href="https://www.science.org/doi/10.1126/science.1144581">Multiple routes transmitted epidemics on multiplex networks. Zhao et al. (2014).</a></li>
                        	<li><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0092200&type=printable">The Product Space Conditions the Development of Nations. Hidalgo, César A., et al. (2007).</a></li>
                    </ul>
                <h4>Additional Reading</h4>
