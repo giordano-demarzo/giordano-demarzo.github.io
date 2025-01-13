@@ -253,6 +253,22 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 10 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_10.pdf">Slides</a></li>
+                       	<li><a href="https://www.nature.com/articles/srep00723">A new metrics for countries' fitness and products' complexity. Tacchella, Andrea, et al. (2012).</a></li>
+                       	<li><a href="https://www.science.org/doi/10.1126/science.1144581">Multiple routes transmitted epidemics on multiplex networks. Zhao et al. (2014).</a></li>
+                       	<li><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0092200&type=printable">The Product Space Conditions the Development of Nations. Hidalgo, César A., et al. (2007).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0113770">How the Taxonomy of Products Drives the Economic Development of Countries. Zaccaria, Andrea, et al. (2014). </a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
@@ -389,6 +405,7 @@ economic systems. </p>
 		<li><a href="https://arxiv.org/abs/2312.06619" rel="nofollow">Emergence of scale-free networks in social interactions among large language models. G. De Marzo, L. Pietronero and D. Garcia (2023)</a></li>
 		<li><a href="https://doi.org/10.1016/j.physa.2004.04.031" rel="nofollow">Error and attack tolerance of complex networks. P. Crucitti, V. Latora, M. Marchiori, A. Rapisarda (2004)</a></li>
 		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
+		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
 	</ul>
     </div>
     <!-- Datasets for Students Presentations -->
@@ -398,7 +415,7 @@ economic systems. </p>
 		<li><a href="https://networkrepository.com/soc-wiki-Vote.php" rel="nofollow">Wikipedia votes</a></li>
 		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a></li>
 		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a></li>
-		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
+		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a> Already selected by Theresa Wagner</li>
 		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
 		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a></li>
 		<li><a href="https://networkrepository.com/socfb-Michigan23.php" rel="nofollow">Facebook social network (Michigan University students)</a></li>
