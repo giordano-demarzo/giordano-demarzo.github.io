@@ -383,7 +383,32 @@ economic systems. </p>
                        <li><a href="/files/network_science/exercises/country_communities.png">Communities in the projected country network</a></li>
                    </ul>
           </div>
-       </div>   
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 6 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_fitness.pdf">Exercise: Analyzing the Country Export Network with the Fitness and Complexity algorithm.</a></li>
+                   </ul>
+               <h4>Data</h4>
+               	   Export data have been produced starting from the UN Comtrade database. GDP per capita (ppp) has been download from the World Bank Data Bank.
+                   <ul>
+                       <li><a href="/files/network_science/datasets/export_gdp/exportmatrix2021.csv">Export matrix for the year 2021</a></li>
+                       <li><a href="/files/network_science/datasets/export_gdp/countries.csv">List of all countries</a></li>
+                       <li><a href="/files/network_science/datasets/export_gdp/gdp_ppp.csv">GDP per capita (ppp) for 2021</a></li>
+                   </ul>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/economic_fitness.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/nested_export_matrix.png">Nested export matrix</a></li>
+                       <li><a href="/files/network_science/exercises/fitness_gdp_plane.png">Fitness-GDPpc plane</a></li>
+                   </ul>
+          </div>
+       </div>      
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
@@ -404,7 +429,8 @@ economic systems. </p>
 		<li><a href="https://arxiv.org/abs/2312.06619" rel="nofollow">Emergence of scale-free networks in social interactions among large language models. G. De Marzo, L. Pietronero and D. Garcia (2023)</a></li>
 		<li><a href="https://doi.org/10.1016/j.physa.2004.04.031" rel="nofollow">Error and attack tolerance of complex networks. P. Crucitti, V. Latora, M. Marchiori, A. Rapisarda (2004)</a></li>
 		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
-		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
+		<li><a href="https://doi.org/10.1371/journal.pone.0182774" rel="nofollow">Economic development and wage inequality: A complex system analysis. A. Sbardella, E. Pugliese, L. Pietronero (2017)</a></li>
+		<li><a href="https://iopscience.iop.org/article/10.1088/2632-072X/ada845" rel="nofollow">Fitness Centrality: a non-linear centrality measure for complex networks. V.D.P. Servedio et al. (2025)</a></li>
 	</ul>
     </div>
     <!-- Datasets for Students Presentations -->
