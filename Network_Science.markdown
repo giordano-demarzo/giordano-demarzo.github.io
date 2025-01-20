@@ -445,7 +445,7 @@ economic systems. </p>
 		<li><a href="https://doi.org/10.1371/journal.pone.0113470" rel="nofollow">The Scientific Competitiveness of Nations. G Cimini, A Gabrielli and F Sylos Labini (2014)</a></li>
 		<li><a href="https://arxiv.org/abs/2312.06619" rel="nofollow">Emergence of scale-free networks in social interactions among large language models. G. De Marzo, L. Pietronero and D. Garcia (2023)</a></li>
 		<li><a href="https://doi.org/10.1016/j.physa.2004.04.031" rel="nofollow">Error and attack tolerance of complex networks. P. Crucitti, V. Latora, M. Marchiori, A. Rapisarda (2004)</a></li>
-		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
+		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a> Already selected by Estelle Klevenz.</li>
 		<li><a href="https://doi.org/10.1371/journal.pone.0182774" rel="nofollow">Economic development and wage inequality: A complex system analysis. A. Sbardella, E. Pugliese, L. Pietronero (2017)</a></li>
 		<li><a href="https://iopscience.iop.org/article/10.1088/2632-072X/ada845" rel="nofollow">Fitness Centrality: a non-linear centrality measure for complex networks. V.D.P. Servedio et al. (2025)</a></li>
 	</ul>
