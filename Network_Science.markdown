@@ -268,6 +268,23 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 11 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_11.pdf">Slides</a></li>
+                       	<li><a href="https://www.nature.com/articles/s41598-017-06322-9">Uncovering offshore financial centers: Conduits and sinks in the global corporate ownership network. Garcia-Bernardo, Javier, et al. (2017).</a></li>
+                       	<li><a href="https://arxiv.org/pdf/2302.08987">Firm-level supply chains to minimize unemployment and economic losses in rapid decarbonization scenarios. Stangl, Johannes, et al. (2024).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://link.springer.com/article/10.1140/epjb/e2004-00127-8">Statistical properties of corporate board and director networks.Battiston, Stefano, and Michele Catanzaro (2004). </a></li>
+                   	<li><a href="https://www.econstor.eu/bitstream/10419/259389/1/wp2022-33.pdf">The indirect costs of corporate tax avoidance exacerbate cross-country inequality. Garcia-Bernardo, Javier, et al. (2022).</a></li>
+                   	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0283217">Prediction and visualization of Mergers and Acquisitions using Economic Complexity. Arsini, Lorenzo, Matteo Straccamore, and Andrea Zaccaria. (2023).</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
