@@ -464,7 +464,7 @@ economic systems. </p>
 		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a></li>
 		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
 		<li><a href="https://networkrepository.com/rec-github.php" rel="nofollow">Github network (bipartite)</a></li>
-		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a></li>
+		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a>Already selected by Evgeniia Tcoi</li>
 	</ul>
     </div>
    </div>
