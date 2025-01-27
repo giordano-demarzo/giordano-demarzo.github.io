@@ -26,6 +26,20 @@ Before my employment in Konstanz, I was a doctoral student at Enrico Fermi Resea
 <div class="news-section">
 
     <div class="news-item">
+        <div class="news-date">22/01/2025</div>
+        <div class="news-title">Today I gave a talk at CEU Department of Network and Data Science. More info <a href="https://events.ceu.edu/2025-01-22/emergent-behaviors-llms-populated-societies">here.</a>. You can donwload here the <a href="files/slides/LLMs_CEU.pdf">slides.</a> </div>
+    </div>
+    <div class="news-item">
+        <div class="news-date">04/12/2024</div>
+        <div class="news-title">Our team classified second out of 59 at the EPO CodeFest 2024 on generative AI! More details <a href="https://www.epo.org/en/news-events/in-focus/codefest/codefest-2024-generative-ai">here.</a></div>
+    </div>
+
+    <div class="news-item">
+        <div class="news-date">25/10/2024</div>
+        <div class="news-title">Today I gave a talk at Complexity Science Vienna on Large Language Model populated societies. You can donwload here the <a href="files/slides/LLMs_CSH.pdf">slides.</a></div>
+    </div>
+
+    <div class="news-item">
         <div class="news-date">25/10/2024</div>
         <div class="news-title">Today I gave a talk at Complexity Science Vienna on Large Language Model populated societies. You can donwload here the <a href="files/slides/LLMs_CSH.pdf">slides.</a> </div>
     </div>
