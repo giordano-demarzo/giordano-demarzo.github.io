@@ -442,7 +442,30 @@ economic systems. </p>
                        <li><a href="/files/network_science/exercises/fitness_gdp_plane.png">Fitness-GDPpc plane</a></li>
                    </ul>
           </div>
-       </div>      
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 7 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Guides</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_news_spreading.pdf">Exercise: Analyzing the spreading of true and false news on Twitter.</a></li>
+                   </ul>
+               <h4>Data</h4>
+               	   Data represent retweet trees on Twitter. Each Tweet corresponds to a news, classified as being true or fake. Data can be downloaded <a href="https://github.com/mdepak/fake-news-propagation/">here</a>.
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/exercise_news_spreading.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/retweet_tree.png">Sample tree</a></li>
+                       <li><a href="/files/network_science/exercises/retweets_distribution.png">Distribution of retweets number.</a></li>
+                       <li><a href="/files/network_science/exercises/depth.png">Distribution of depth.</a></li>
+                       <li><a href="/files/network_science/exercises/branching_ratio.png">Distribution of branching ratio.</a></li>
+                       <li><a href="/files/network_science/exercises/diffusion_speed.png">Diffusion speed.</a></li>
+                   </ul>
+          </div>
+       </div>            
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
