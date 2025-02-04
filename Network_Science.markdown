@@ -302,6 +302,16 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 13 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_13.pdf">Slides</a></li>
+                       	<li><a href="https://iopscience.iop.org/article/10.1088/2632-072X/ada845">Fitness centrality: a non-linear centrality measure for complex networks. Servedio, Vito D.P. et al. (2025).</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>
        <div class="nested-accordion">
