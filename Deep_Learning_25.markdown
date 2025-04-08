@@ -30,9 +30,9 @@ applications to the Social Sciences. </p>
     <h4>Format</h4>
     <p>The course is structured as:</p>
     <ol>
-        <li>14 lectures on the theory of Deep Learning</li>
+        <li>13 lectures on the theory of Deep Learning</li>
         <li>8 coding labs </li>
-        <li>2 guest researchers seminars </li>
+        <li>3 guest researchers seminars </li>
         <li>1 students presentation day</li>
     </ol>
 
@@ -89,9 +89,7 @@ applications to the Social Sciences. </p>
     <div class="course-date">
         <span class="date">July 9, 2025</span> - <span class="lecture-title">Image Generation</span>
     </div>
-    <div class="course-date">
-        <span class="date">July 16, 2025</span> - <span class="lecture-title">Advanced Topics in AI</span>
-    </div>
+    
     
     <h3>Labs and Coding Sessions</h3>
     <div class="course-date">
@@ -127,7 +125,10 @@ applications to the Social Sciences. </p>
         <span class="date">July 3, 2025</span> - <span class="lecture-title">E. Francazi (EPFL) "Emergence of bias in deep neural networks predictions"</span>
     </div>
     <div class="course-date">
-        <span class="date">July 17, 2025</span> - <span class="lecture-title">Students Presentations</span>
+        <span class="date">July 16, 2025</span> - <span class="lecture-title">Students Presentation Day</span>
+    </div>
+    <div class="course-date">
+        <span class="date">July 17, 2025</span> - <span class="lecture-title">S. Petruzzi (Sapienza) "Introduction to Mechanistic Interpretability of LLMs"</span>
     </div>
 </div>
     <!-- Material Section -->
