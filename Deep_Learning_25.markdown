@@ -158,7 +158,7 @@ applications to the Social Sciences. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       <li><a href="/files/dlss25/DLSS1.pdf">Slides</a></li>
+                       <li><a href="/files/dlss25/slides/DLSS1.pdf">Slides</a></li>
                    </ul>
            </div>
        </div>
