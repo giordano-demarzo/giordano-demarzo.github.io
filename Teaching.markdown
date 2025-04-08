@@ -18,6 +18,7 @@ During the Summer Semester 2025 I will be teaching Deep Learning for the Social 
       </a>
     </div>
   </div>
+</div>
 <h3>Winter Semester 2024/2025</h3>
 <!-- Short Introductory Paragraph -->
 During the Winter Semester 2024-2025 I will be teaching Network Science of Socio-Economic Systems in the Social and Economic Data Science Master at the Department of Politics and Public Administration, University of Konstanz.
