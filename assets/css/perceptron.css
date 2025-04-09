@@ -1,0 +1,78 @@
+/* File: /assets/css/perceptron.css */
+
+.perceptron-container {
+  max-width: 900px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.perceptron-top-row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.perceptron-canvas-container {
+  flex: 1;
+  min-width: 400px;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.perceptron-diagram-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+}
+
+.perceptron-bottom-row {
+  width: 100%;
+}
+
+.perceptron-controls {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+}
+
+.perceptron-instructions {
+  margin-top: 15px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+canvas.border {
+  border: 1px solid #ccc;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 900px) {
+  .perceptron-top-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .perceptron-canvas-container,
+  .perceptron-diagram-container {
+    width: 100%;
+    max-width: 500px;
+  }
+}

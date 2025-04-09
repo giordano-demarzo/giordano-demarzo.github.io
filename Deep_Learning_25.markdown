@@ -84,10 +84,10 @@ applications to the Social Sciences. </p>
         <span class="date">June 25, 2025</span> - <span class="lecture-title">Large Language Models</span>
     </div>
     <div class="course-date">
-        <span class="date">July 2, 2025</span> - <span class="lecture-title">Reinforcement Learning</span>
+        <span class="date">July 2, 2025</span> - <span class="lecture-title">Reinforcement Learning and Alignment</span>
     </div>
     <div class="course-date">
-        <span class="date">July 9, 2025</span> - <span class="lecture-title">Image Generation</span>
+        <span class="date">July 9, 2025</span> - <span class="lecture-title">Image Generation and Multimodality</span>
     </div>
     
     
@@ -154,6 +154,8 @@ applications to the Social Sciences. </p>
                        <li><a href="/files/dlss25/old_material/nlp_project_2_gpt-2.md">Synthetic Product Review Generation for Market Analysis</a></li>
                 </ul>
     	<h3> Lessons </h3>
+    	
+
         <div class="nested-accordion">
            <button class="nested-accordion-button">Lesson 1 &#9662;</button>
            <div class="nested-accordion-content">
@@ -161,6 +163,15 @@ applications to the Social Sciences. </p>
                    <ul>
                        <li><a href="/files/dlss25/slides/DLSS1.pdf">Slides</a></li>
                    </ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 2 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+               			<li><a href="/teaching/deep-learning-25/perceptron/">Perceptron Visualization Demo</a> </li>
+    			</ul>
            </div>
        </div>
    </div>
