@@ -57,7 +57,7 @@ applications to the Social Sciences. </p>
 <div class="accordion-content" id="course-dates-section">
     <h3>Theory Seminars</h3>
     <div class="course-date">
-        <span class="date">April 14, 2025</span> - <span class="lecture-title">Shallow Neural Networks</span>
+        <span class="date">April 16, 2025</span> - <span class="lecture-title">Shallow Neural Networks</span>
     </div>
     <div class="course-date">
         <span class="date">April 23, 2025</span> - <span class="lecture-title">The Multilayer Perceptron</span>
@@ -93,7 +93,7 @@ applications to the Social Sciences. </p>
     
     <h3>Labs and Coding Sessions</h3>
     <div class="course-date">
-        <span class="date">April 15, 2025</span> - <span class="lecture-title">Lab: GPU Server + Machine Learning Basics</span>
+        <span class="date">April 17, 2025</span> - <span class="lecture-title">Lab: GPU Server + Machine Learning Basics</span>
     </div>
     <div class="course-date">
         <span class="date">April 24, 2025</span> - <span class="lecture-title">Lab: Building a MLP with PyTorch</span>
@@ -170,6 +170,7 @@ applications to the Social Sciences. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS1.pdf">Slides</a></li>
                			<li><a href="/teaching/deep-learning-25/perceptron/">Perceptron Visualization Demo</a> </li>
     			</ul>
            </div>
