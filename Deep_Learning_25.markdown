@@ -173,6 +173,10 @@ applications to the Social Sciences. </p>
                    		<li><a href="/files/dlss25/slides/DLSS2.pdf">Slides</a></li>
                			<li><a href="/teaching/deep-learning-25/perceptron/">Perceptron Visualization Demo</a> </li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/Intro_to_Machine_Learning.ipynb">Notebook: Introduction to Colab and Machine Learning</a></li>
+    			</ul>
            </div>
        </div>
    </div>
