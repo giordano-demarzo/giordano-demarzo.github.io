@@ -512,12 +512,20 @@ document.addEventListener('DOMContentLoaded', function() {
       return contributions;
     }
     
+    // Calculate dynamic height based on neuron count
+    const baseHeight = 180; // Minimum height
+    const heightPerNeuron = 40; // Additional height per neuron
+    const svgHeight = Math.max(baseHeight, 120 + (neuronCount * heightPerNeuron));
+    
+    // Update SVG height
+    svg.setAttribute('height', svgHeight.toString());
+    
     const neuronContributions = calculateContributions();
     // Adjusted coordinates to fit the smaller SVG width
     const inputX = 40;
-    const inputY = 90;
+    const inputY = svgHeight / 2; // Center vertically
     const outputX = 360;
-    const outputY = 90;
+    const outputY = svgHeight / 2; // Center vertically
     const hiddenX = 200;
     
     // Create defs for patterns and gradients
@@ -607,7 +615,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Draw ALL connections first - this ensures they appear under the neurons
     for (let i = 0; i < neuronCount; i++) {
-      const hiddenY = 40 + (i * 100 / (neuronCount - 1 || 1));
+      // Calculate vertical spacing based on number of neurons
+      // For single neuron, place it in the center
+      // For multiple neurons, distribute them evenly
+      let hiddenY;
+      if (neuronCount === 1) {
+        hiddenY = svgHeight / 2;
+      } else {
+        // Determine spacing between neurons
+        const totalHeight = svgHeight * 0.7; // Use 70% of available height
+        const margin = (svgHeight - totalHeight) / 2; // Margin at top and bottom
+        
+        // Calculate position based on index
+        hiddenY = margin + (i * (totalHeight / (neuronCount - 1)));
+      }
+      
       const inputWeight = networkParams.inputWeights[i] || 0;
       const outputWeight = networkParams.outputWeights[i] || 0;
       
@@ -761,7 +783,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Hidden Layer Neurons
     for (let i = 0; i < neuronCount; i++) {
-      const hiddenY = 40 + (i * 100 / (neuronCount - 1 || 1));
+      // Use the same positioning logic as in connections
+      let hiddenY;
+      if (neuronCount === 1) {
+        hiddenY = svgHeight / 2;
+      } else {
+        const totalHeight = svgHeight * 0.7;
+        const margin = (svgHeight - totalHeight) / 2;
+        hiddenY = margin + (i * (totalHeight / (neuronCount - 1)));
+      }
+      
       const bias = networkParams.hiddenBiases[i] || 0;
       const biasColor = bias >= 0 ? "rgba(34, 197, 94, 0.9)" : "rgba(239, 68, 68, 0.9)";
       
@@ -944,16 +975,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Legend
     const legendBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     legendBg.setAttribute('x', '10');
-    legendBg.setAttribute('y', '165');
-    legendBg.setAttribute('width', '460');
+    legendBg.setAttribute('y', svgHeight - 15);
+    legendBg.setAttribute('width', '380');
     legendBg.setAttribute('height', '15');
     legendBg.setAttribute('rx', '7');
     legendBg.setAttribute('fill', 'rgba(255, 255, 255, 0.7)');
     svg.appendChild(legendBg);
     
     const legendText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    legendText.setAttribute('x', '230');
-    legendText.setAttribute('y', '176');
+    legendText.setAttribute('x', '200');
+    legendText.setAttribute('y', svgHeight - 4);
     legendText.setAttribute('text-anchor', 'middle');
     legendText.setAttribute('font-size', '10');
     legendText.setAttribute('fill', '#475569');
