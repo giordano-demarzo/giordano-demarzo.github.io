@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const neuronCountSlider = document.createElement('input');
     neuronCountSlider.type = 'range';
-    neuronCountSlider.min = '1';
+    neuronCountSlider.min = '2';
     neuronCountSlider.max = '5';
     neuronCountSlider.step = '1';
     neuronCountSlider.value = neuronCount;
