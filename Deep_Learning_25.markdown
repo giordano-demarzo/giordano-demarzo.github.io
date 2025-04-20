@@ -63,7 +63,7 @@ applications to the Social Sciences. </p>
         <span class="date">April 23, 2025</span> - <span class="lecture-title">The Multilayer Perceptron</span>
     </div>
     <div class="course-date">
-        <span class="date">April 28, 2025</span> - <span class="lecture-title">Regularization of Neural Networks</span>
+        <span class="date">April 30, 2025</span> - <span class="lecture-title">Regularization of Neural Networks</span>
     </div>
     <div class="course-date">
         <span class="date">May 7, 2025</span> - <span class="lecture-title">Convolutional Neural Networks</span>
@@ -176,6 +176,16 @@ applications to the Social Sciences. </p>
     		<h4>Coding session</h4>
     			<ul>
                    		<li><a href="/files/dlss25/notebooks/Intro_to_Machine_Learning.ipynb">Notebook: Introduction to Colab and Machine Learning</a></li>
+    			</ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS3.pdf">Slides</a></li>
+               			<li><a href="/teaching/deep-learning-25/shallow_nn/">Shallow Neural Network Visualization Demo</a> </li>
     			</ul>
            </div>
        </div>
