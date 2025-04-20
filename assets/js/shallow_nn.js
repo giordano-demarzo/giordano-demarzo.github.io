@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const networkContainer = document.getElementById('network-container');
   if (!networkContainer) return;
   
-  // Create top row with diagram and canvas side by side
+  // Create top row with canvas and diagram side by side
   const topRow = document.createElement('div');
   topRow.classList.add('network-top-row');
   networkContainer.appendChild(topRow);
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Network diagram
   const diagramSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  diagramSvg.setAttribute('width', '450');
+  diagramSvg.setAttribute('width', '480');
   diagramSvg.setAttribute('height', '180');
   diagramSvg.classList.add('border');
   diagramContainer.appendChild(diagramSvg);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Canvas setup
   const canvas = document.createElement('canvas');
-  canvas.width = 420;
+  canvas.width = 480;
   canvas.height = 280;
   canvas.classList.add('border');
   canvas.style.cursor = 'crosshair';
