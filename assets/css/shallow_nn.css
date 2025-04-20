@@ -11,23 +11,23 @@
   display: flex;
   gap: 30px;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .network-canvas-container {
-  flex: 1;
-  min-width: 480px;
-  max-width: 520px;
+  width: 450px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .network-diagram-container {
-  flex: 1;
+  width: 400px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 320px;
 }
 
 .network-bottom-row {
@@ -195,6 +195,13 @@ h3 {
   .network-neuron-controls,
   .network-instructions {
     width: 100%;
-    max-width: 520px;
+    max-width: 450px;
+    margin: 0 auto 15px auto;
+  }
+  
+  canvas.border,
+  svg.border {
+    max-width: 100%;
+    height: auto;
   }
 }

@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
   bottomRow.classList.add('network-bottom-row');
   networkContainer.appendChild(bottomRow);
   
-  // Left column in top row (network diagram)
+  // Left column in top row (network diagram) - more explicit ordering
   const diagramContainer = document.createElement('div');
   diagramContainer.classList.add('network-diagram-container');
+  diagramContainer.style.marginRight = '10px';
   topRow.appendChild(diagramContainer);
   
   // Add heading to diagram container
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Network diagram
   const diagramSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  diagramSvg.setAttribute('width', '480');
+  diagramSvg.setAttribute('width', '400');
   diagramSvg.setAttribute('height', '180');
   diagramSvg.classList.add('border');
   diagramContainer.appendChild(diagramSvg);
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Canvas setup
   const canvas = document.createElement('canvas');
-  canvas.width = 480;
+  canvas.width = 450;
   canvas.height = 280;
   canvas.classList.add('border');
   canvas.style.cursor = 'crosshair';
@@ -512,11 +513,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     const neuronContributions = calculateContributions();
-    const inputX = 50;
+    // Adjusted coordinates to fit the smaller SVG width
+    const inputX = 40;
     const inputY = 90;
-    const outputX = 430;
+    const outputX = 360;
     const outputY = 90;
-    const hiddenX = 240;
+    const hiddenX = 200;
     
     // Create defs for patterns and gradients
     const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
