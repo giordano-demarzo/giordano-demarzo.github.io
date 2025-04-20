@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const neuronCountSlider = document.createElement('input');
     neuronCountSlider.type = 'range';
-    neuronCountSlider.min = '2';
+    neuronCountSlider.min = '1';
     neuronCountSlider.max = '5';
     neuronCountSlider.step = '1';
     neuronCountSlider.value = neuronCount;
@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const outputWeightColor = outputWeight >= 0 ? "rgba(34, 197, 94, 0.9)" : "rgba(239, 68, 68, 0.9)";
       
       // Calculate if this is a center neuron (special case)
-      const isCenter = (neuronCount === 3 && i === 1) || (neuronCount === 5 && i === 2);
+      const isCenter = (neuronCount === 1) || (neuronCount === 3 && i === 1) || (neuronCount === 5 && i === 2);
       
       // Special offsets for the control points based on neuron position
       let yOffset;
