@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Special offsets for the control points based on neuron position
       let yOffset;
-      if (neuronCount <= 2) {
+      if (neuronCount <= 0) {
         yOffset = 0;
       } else {
         // Create an offset that's proportional to distance from center
