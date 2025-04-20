@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Network diagram
   const diagramSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   diagramSvg.setAttribute('width', '400');
-  diagramSvg.setAttribute('height', '180');
+  diagramSvg.setAttribute('height', '250');
   diagramSvg.classList.add('border');
   diagramContainer.appendChild(diagramSvg);
   
