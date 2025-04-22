@@ -186,6 +186,7 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss25/slides/DLSS3.pdf">Slides</a></li>
                			<li><a href="/teaching/deep-learning-25/shallow_nn/">Shallow Neural Network Visualization Demo</a> </li>
+               			<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince. Relevant chapters are from 3 to 7.</a></li>
     			</ul>
            </div>
        </div>
