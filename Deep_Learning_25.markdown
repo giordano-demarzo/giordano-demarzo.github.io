@@ -160,9 +160,9 @@ applications to the Social Sciences. </p>
            <button class="nested-accordion-button">Lesson 1 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
-                   <ul>
-                       <li><a href="/files/dlss25/slides/DLSS1.pdf">Slides</a></li>
-                   </ul>
+                   	<ul>
+                       		<li><a href="/files/dlss25/slides/DLSS1.pdf">Slides: Intro to the Course</a></li>
+                   	</ul>
            </div>
        </div>
        <div class="nested-accordion">
@@ -170,7 +170,7 @@ applications to the Social Sciences. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    	<ul>
-                   		<li><a href="/files/dlss25/slides/DLSS2.pdf">Slides</a></li>
+                   		<li><a href="/files/dlss25/slides/DLSS2.pdf">Slides: Shallow Neural Networks</a></li>
                			<li><a href="/teaching/deep-learning-25/perceptron/">Perceptron Visualization Demo</a> </li>
     			</ul>
     		<h4>Coding session</h4>
@@ -184,9 +184,13 @@ applications to the Social Sciences. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    	<ul>
-                   		<li><a href="/files/dlss25/slides/DLSS3.pdf">Slides</a></li>
+                   		<li><a href="/files/dlss25/slides/DLSS3.pdf">Slides: The Multilayer Perceptron</a></li>
                			<li><a href="/teaching/deep-learning-25/shallow_nn/">Shallow Neural Network Visualization Demo</a> </li>
                			<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince. Relevant chapters are from 3 to 7.</a></li>
+    			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/MultilayerPerceptron_classification.ipynb">Notebook: Multilayer Perceptron for Classification</a></li>
     			</ul>
            </div>
        </div>
