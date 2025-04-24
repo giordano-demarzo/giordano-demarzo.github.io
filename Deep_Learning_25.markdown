@@ -195,4 +195,13 @@ applications to the Social Sciences. </p>
            </div>
        </div>
    </div>
+   <!-- Assignments -->
+    <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
+    <div class="accordion-content" id="material-section">
+    	<h3> Assignment 1: Multilayer Perceptron</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/assignments/assignment1.pdf">Assignment</a></li>
+                	<li><a href="/files/dlss25/assignments/filtered_vacancies_dataset_uruguay.csv">Dataset</a></li>
+                </ul>
+    </div>
 </div>
