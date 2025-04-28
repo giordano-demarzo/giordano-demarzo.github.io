@@ -144,7 +144,7 @@ permalink: /teaching/computational-modeling/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       <li><a href="/files/CMSS_Seminar4.pdf">Slides</a></li>
+                       <li><a href="/files/CMSS_Seminar4_v2025.pdf">Slides</a></li>
                        <li><a href="https://www.jstor.org/stable/2778111">Threshold Models of Collective Behavior. Mark Granovetter. American Journal of Sociology (1978).</a></li>
                    </ul>
                <h4>Additional Readings</h4>
