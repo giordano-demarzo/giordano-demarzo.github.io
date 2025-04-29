@@ -194,6 +194,19 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS4.pdf">Slides: Regularization of Neural Networks and Autoencoder</a></li>
+    			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/MultilayerPerceptron_regularization.ipynb">Notebook: Regularization and Autoencoder</a></li>
+    			</ul>
+           </div>
+       </div>
    </div>
    <!-- Assignments -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
