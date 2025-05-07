@@ -214,6 +214,11 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss25/slides/DLSS5.pdf">Slides: Convolutional Neural Networks</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network.ipynb">Notebook: Convolutional Neural Network: Fashion Mnist</a></li>
+                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network_Cifar10.ipynb">Notebook: Convolutional Neural Network: CIFAR-10</a></li>
+    			</ul>
            </div>
        </div>
    </div>
