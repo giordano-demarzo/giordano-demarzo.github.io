@@ -221,6 +221,23 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 6 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS6.pdf">Slides: Graph Neural Networks</a></li>
+                   		<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">Most of the concepts covered in the slides can also be found on "Understanding Deep Learning" by S. J. D. Prince, Chapter 13.</a></li>
+                   		<li><a href="https://www.youtube.com/watch?v=eLcGehfjvgs&t=615s">Short video explaining GNNs very well.</a></li>
+                   		<li><a href="https://www.youtube.com/watch?v=zCEYiCxrL_0&t=2141s">Longer and more technical video.</a></li>
+    			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network.ipynb">Notebook: Convolutional Neural Network: Fashion Mnist</a></li>
+                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network_Cifar10.ipynb">Notebook: Convolutional Neural Network: CIFAR-10</a></li>
+    			</ul>
+           </div>
+       </div>
    </div>
    <!-- Assignments -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
