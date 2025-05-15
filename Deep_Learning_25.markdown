@@ -243,8 +243,12 @@ applications to the Social Sciences. </p>
     <div class="accordion-content" id="material-section">
     	<h3> Assignment 1: Multilayer Perceptron</h3>
     		<ul>
-                	<li><a href="/files/dlss25/assignments/assignment1.pdf">Assignment</a></li>
+                	<li><a href="/files/dlss25/assignments/assignment1.pdf">Assignment 1</a></li>
                 	<li><a href="/files/dlss25/assignments/filtered_vacancies_dataset_uruguay.csv">Dataset</a></li>
+                </ul>
+       	<h3> Assignment 2: Convolutional Neural Network</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/assignments/assignment2.pdf">Assignment 2</a></li>
                 </ul>
     </div>
 </div>
