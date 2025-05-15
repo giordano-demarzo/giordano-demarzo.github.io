@@ -233,8 +233,7 @@ applications to the Social Sciences. </p>
     			</ul>
     		<h4>Coding session</h4>
     			<ul>
-                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network.ipynb">Notebook: Convolutional Neural Network: Fashion Mnist</a></li>
-                   		<li><a href="/files/dlss25/notebooks/Convolutional_Neural_Network_Cifar10.ipynb">Notebook: Convolutional Neural Network: CIFAR-10</a></li>
+                   		<li><a href="/files/dlss25/notebooks/GNN_Cora.ipynb">Notebook: Graph Neural Network applied to Scientific Papers</a></li>
     			</ul>
            </div>
        </div>
