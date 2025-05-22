@@ -238,11 +238,15 @@ applications to the Social Sciences. </p>
            </div>
        </div>
        <div class="nested-accordion">
-           <button class="nested-accordion-button">Lesson 6 &#9662;</button>
+           <button class="nested-accordion-button">Lesson 7 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    	<ul>
                    		<li><a href="/files/dlss25/slides/DLSS7.pdf">Slides: Recurrent Neural Networks</a></li>
+    			</ul>
+    	       <h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/RNN_LSTM.ipynb">Notebook: RNN to forecast temperature variations</a></li>
     			</ul>
            </div>
        </div>
