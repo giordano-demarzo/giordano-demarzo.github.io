@@ -247,6 +247,7 @@ applications to the Social Sciences. </p>
     	       <h4>Coding session</h4>
     			<ul>
                    		<li><a href="/files/dlss25/notebooks/RNN_LSTM.ipynb">Notebook: RNN to forecast temperature variations</a></li>
+                   		<li><a href="/files/dlss25/notebooks/NYC_Central_Park_weather_1869-2022.csv">Data: Historical NYC weather data</a></li>
     			</ul>
            </div>
        </div>
