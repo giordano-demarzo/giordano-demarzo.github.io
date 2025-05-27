@@ -251,6 +251,21 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 8 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS8.pdf">Slides: Attention and Transformer</a></li>
+                   		<li>The videos I showed in the lecture are from <a href="https://www.youtube.com/watch?v=eMlx5fFNoYc&t=1306s">"Attention in transformers, step-by-step | DL6"</a>. The channel 3Blue1Brown makes great videos! You should watch also the two other videos on LLMs: "Transformers (how LLMs work) explained visually | DL5" and "How might LLMs store facts | DL7."</li>
+    			</ul>
+    	       <h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/RNN_LSTM.ipynb">Notebook: RNN to forecast temperature variations</a></li>
+                   		<li><a href="/files/dlss25/notebooks/NYC_Central_Park_weather_1869-2022.csv">Data: Historical NYC weather data</a></li>
+    			</ul>
+           </div>
+       </div>
    </div>
    <!-- Assignments -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
