@@ -75,13 +75,13 @@ applications to the Social Sciences. </p>
         <span class="date">May 21, 2025</span> - <span class="lecture-title">Recurrent Neural Networks</span>
     </div>
     <div class="course-date">
-        <span class="date">May 28, 2025</span> - <span class="lecture-title">Natural Language Processing</span>
+        <span class="date">May 28, 2025</span> - <span class="lecture-title">Attention and Transformer</span>
     </div>
     <div class="course-date">
-        <span class="date">June 4, 2025</span> - <span class="lecture-title">Transformer and Attention</span>
+        <span class="date">June 4, 2025</span> - <span class="lecture-title">Large Language Models</span>
     </div>
     <div class="course-date">
-        <span class="date">June 25, 2025</span> - <span class="lecture-title">Large Language Models</span>
+        <span class="date">June 25, 2025</span> - <span class="lecture-title">Fine-Tuning Large Language Models</span>
     </div>
     <div class="course-date">
         <span class="date">July 2, 2025</span> - <span class="lecture-title">Reinforcement Learning and Alignment</span>
@@ -258,6 +258,16 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss25/slides/DLSS8.pdf">Slides: Attention and Transformer</a></li>
                    		<li>The videos I showed in the lecture are from <a href="https://www.youtube.com/watch?v=eMlx5fFNoYc&t=1306s">"Attention in transformers, step-by-step | DL6"</a>. The channel 3Blue1Brown makes great videos! You should watch also the two other videos on LLMs: "Transformers (how LLMs work) explained visually | DL5" and "How might LLMs store facts | DL7."</li>
+    			</ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 9 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS9.pdf">Slides: Large Language Models</a></li>
+                   		<li><a href="https://cameronrwolfe.substack.com/p/llm-scaling-laws">Nice article on LLMs scaling laws.</a></li>
     			</ul>
            </div>
        </div>

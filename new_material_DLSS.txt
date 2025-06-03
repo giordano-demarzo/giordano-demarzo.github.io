@@ -5,3 +5,5 @@ https://jalammar.github.io/illustrated-transformer/
 https://www.youtube.com/watch?v=h9Z4oGN89MU
 
 https://hmkcode.com/ai/backpropagation-step-by-step/
+
+https://cameronrwolfe.substack.com/p/llm-scaling-laws
