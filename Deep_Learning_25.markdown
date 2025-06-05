@@ -269,6 +269,10 @@ applications to the Social Sciences. </p>
                    		<li><a href="/files/dlss25/slides/DLSS9.pdf">Slides: Large Language Models</a></li>
                    		<li><a href="https://cameronrwolfe.substack.com/p/llm-scaling-laws">Nice article on LLMs scaling laws.</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/LLMs_IMDB.ipynb">Notebook: Using LLMs for text classification</a></li>
+    			</ul>
            </div>
        </div>
    </div>
