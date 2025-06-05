@@ -44,8 +44,8 @@ applications to the Social Sciences. </p>
     <ol>
         <li>April 24 - Multilayer Perceptron</li>
         <li>May 15 - Convolutional Neural Network</li>
-        <li>June 5 - Graph Neural Networks/Recurrent Neural Networks</li>
-        <li>June 21 - Large Language Models</li>
+        <li>June 5 - Graph Neural Networks</li>
+        <li>June 26 - Large Language Models</li>
     </ol>
 
     <h4>Exercises</h4>
@@ -287,6 +287,10 @@ applications to the Social Sciences. </p>
        	<h3> Assignment 2: Convolutional Neural Network</h3>
     		<ul>
                 	<li><a href="/files/dlss25/assignments/assignment2.pdf">Assignment 2</a></li>
+                </ul>
+        <h3> Assignment 3: Graph Neural Network</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/assignments/assignment3.pdf">Assignment 3</a></li>
                 </ul>
     </div>
 </div>
