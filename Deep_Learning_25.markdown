@@ -296,9 +296,8 @@ applications to the Social Sciences. </p>
     <!-- Final Projects -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Final Projects &#9662;</button>
     <div class="accordion-content" id="material-section">
-    	<h3> Group 1: Cristina Flintoaca, Ekaterina Kabashko, Anastasia Siebers, Anna Jochmann</h3>
     		<ul>
-                	<li><a href="/files/dlss25/final_projects/CNN1.md">CNN 1</a></li>
+                	<li><a href="/files/dlss25/final_projects/CNN1.md">CNN 1</a>Cristina Flintoaca, Ekaterina Kabashko, Anastasia Siebers, Anna Jochmann</li>
                 </ul>
     </div>
 </div>
