@@ -296,8 +296,26 @@ applications to the Social Sciences. </p>
     <!-- Final Projects -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Final Projects &#9662;</button>
     <div class="accordion-content" id="material-section">
+    	<h3>Convolutional Neural Networks</h3>
     		<ul>
-                	<li><a href="/files/dlss25/final_projects/CNN1.md">CNN 1</a>Cristina Flintoaca, Ekaterina Kabashko, Anastasia Siebers, Anna Jochmann</li>
+                	<li><a href="/files/dlss25/final_projects/CNN1.md">CNN 1.</a> Cristina Flintoaca, Ekaterina Kabashko, Anastasia Siebers, Anna Jochmann</li>
+                	<li><a href="/files/dlss25/final_projects/CNN2.md">CNN 2.</a> Katharina Mayer, Anna Werner, Katrina Jones, Tessa Bartels</li>
+                	<li><a href="/files/dlss25/final_projects/CNN3.md">CNN 3.</a> Emrecan Ulu, Jingyao Shi, Xiaoxuan Zhang</li>
                 </ul>
+        <h3>Large Language Models</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/final_projects/LLM1.md">LLM 1.</a> Elena Solar, Estelle Klevenz, Jelena Meyer, Pascal Mounchid </li>
+                	<li><a href="/files/dlss25/final_projects/LLM2.md">LLM 2.</a> Nicole Kloss, Jan Thiele, Katrin Sauter, Eszter Diána Kocsis</li>
+                	<li><a href="/files/dlss25/final_projects/LLM3.md">LLM 3.</a> Maximilian Wallhöfer, Robert Seidel, Ludwig Kunz, Timothy Gudson</li>
+                </ul>
+        <h3>Graph Neural Networks</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/final_projects/GNN1.md">GNN 1.</a> Kuon Ito, Lorenz Rückert, Nafiß Tavakol, Marius Helten</li>
+                	<li><a href="/files/dlss25/final_projects/GNN2.md">GNN 2.</a> Samuel Rauh, Jonas Schrade, Leander Dietrich, Jonah Hartmann</li>
+                </ul>
+        <h3>Recurrent Neural Networks</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/final_projects/RNN1.md">RNN 1.</a> Radek Samuel Kopecek, Richard Neureuther, Jens Wiederspohn</li>
+                </ul>       
     </div>
 </div>
