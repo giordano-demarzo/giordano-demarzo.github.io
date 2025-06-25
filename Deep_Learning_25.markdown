@@ -275,6 +275,18 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 10 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS10.pdf">Slides: Fine-Tuning LLMs</a></li>
+                   		<li><a href="https://modal.com/blog/how-much-vram-need-fine-tuning">Explanation of meory requirements for full fine-tuning.</a></li>
+                   		<li><a href="https://patents-visualization.onrender.com/">Patents and Technologies visualization</a></li>
+                   		<li><a href="https://pollution-abatement-sdgs.onrender.com/">Pollution Abatement Dashboard/a></li>
+    			</ul>
+           </div>
+       </div>
    </div>
    <!-- Assignments -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
