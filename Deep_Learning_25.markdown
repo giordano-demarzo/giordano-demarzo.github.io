@@ -283,7 +283,7 @@ applications to the Social Sciences. </p>
                    		<li><a href="/files/dlss25/slides/DLSS10.pdf">Slides: Fine-Tuning LLMs</a></li>
                    		<li><a href="https://modal.com/blog/how-much-vram-need-fine-tuning">Explanation of meory requirements for full fine-tuning.</a></li>
                    		<li><a href="https://patents-visualization.onrender.com/">Patents and Technologies visualization</a></li>
-                   		<li><a href="https://pollution-abatement-sdgs.onrender.com/">Pollution Abatement Dashboard/a></li>
+                   		<li><a href="https://pollution-abatement-sdgs.onrender.com/">Pollution Abatement Dashboard</a></li>
     			</ul>
            </div>
        </div>
