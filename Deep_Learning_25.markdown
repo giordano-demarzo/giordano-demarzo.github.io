@@ -310,6 +310,10 @@ applications to the Social Sciences. </p>
     		<ul>
                 	<li><a href="/files/dlss25/assignments/assignment3.pdf">Assignment 3</a></li>
                 </ul>
+       <h3> Assignment 4: Large Language Models</h3>
+    		<ul>
+                	<li><a href="/files/dlss25/assignments/assignment4.pdf">Assignment 4</a></li>
+                </ul>
     </div>
     <!-- Final Projects -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Final Projects &#9662;</button>
