@@ -285,9 +285,15 @@ applications to the Social Sciences. </p>
                    		<li><a href="https://patents-visualization.onrender.com/">Patents and Technologies visualization</a></li>
                    		<li><a href="https://pollution-abatement-sdgs.onrender.com/">Pollution Abatement Dashboard</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss25/notebooks/Gemma3_fine_tuning.ipynb">Notebook: Fine-Tuning LLMs using LoRA</a></li>
+                   		<li><a href="/files/dlss25/notebooks/patent_sample_data.csv">Data: Small sample of EPO patent data</a></li>
+    			</ul>
            </div>
        </div>
    </div>
+   
    <!-- Assignments -->
     <button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
     <div class="accordion-content" id="material-section">
