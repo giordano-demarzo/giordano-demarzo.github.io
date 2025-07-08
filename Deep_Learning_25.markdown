@@ -87,7 +87,7 @@ applications to the Social Sciences. </p>
         <span class="date">July 2, 2025</span> - <span class="lecture-title">Reinforcement Learning and Alignment</span>
     </div>
     <div class="course-date">
-        <span class="date">July 9, 2025</span> - <span class="lecture-title">Image Generation and Multimodality</span>
+        <span class="date">July 9, 2025</span> - <span class="lecture-title">Image Generation with Deep Neural Networks</span>
     </div>
     
     
@@ -301,6 +301,20 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 12 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss25/slides/DLSS12.pdf">Slides: Image Generation with Deep Neural Networks</a></li>
+    			</ul>
+           </div>
+       </div>
+       <h3> Guests Seminars </h3>
+     		<ul>
+                       <li><a href="/files/dlss25/guests_slides/alessandro.pdf">Conformity in LLMs: experimental evidence from visual tasks</a></li>
+                       <li><a href="/files/dlss25/guests_slides/emanuele.pdf">Emergence of Bias in DNN Predictions and its Impact on Trainability</a></li>
+                </ul>
    </div>
    
    <!-- Assignments -->
