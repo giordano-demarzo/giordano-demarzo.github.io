@@ -312,8 +312,8 @@ applications to the Social Sciences. </p>
        </div>
        <h3> Guests Seminars </h3>
      		<ul>
-                       <li><a href="/files/dlss25/guests_slides/alessandro.pdf">Conformity in LLMs: experimental evidence from visual tasks</a></li>
-                       <li><a href="/files/dlss25/guests_slides/emanuele.pdf">Emergence of Bias in DNN Predictions and its Impact on Trainability</a></li>
+                       <li>Alessandro Bellina (CREF and Sony CSL Roma) <a href="/files/dlss25/guests_slides/alessandro.pdf">Conformity in LLMs: experimental evidence from visual tasks</a></li>
+                       <li>Emanuele Francazi (EPFL and Eawag) <a href="/files/dlss25/guests_slides/emanuele.pdf">Emergence of Bias in DNN Predictions and its Impact on Trainability</a></li>
                 </ul>
    </div>
    
