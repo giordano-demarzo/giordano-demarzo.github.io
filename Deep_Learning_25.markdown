@@ -308,6 +308,10 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss25/slides/DLSS12.pdf">Slides: Image Generation with Deep Neural Networks</a></li>
     			</ul>
+	       <h4>Coding session</h4>
+			<ul>
+		   		<li><a href="/files/dlss25/notebooks/image_generation.ipynb">Notebook: CVAE and Diffusion Models for image generation</a></li>
+			</ul>
            </div>
        </div>
        <h3> Guests Seminars </h3>
