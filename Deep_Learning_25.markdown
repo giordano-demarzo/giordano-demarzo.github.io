@@ -318,6 +318,8 @@ applications to the Social Sciences. </p>
      		<ul>
                        <li>Alessandro Bellina (CREF and Sony CSL Roma) <a href="/files/dlss25/guests_slides/alessandro.pdf">Conformity in LLMs: experimental evidence from visual tasks</a></li>
                        <li>Emanuele Francazi (EPFL and Eawag) <a href="/files/dlss25/guests_slides/emanuele.pdf">Emergence of Bias in DNN Predictions and its Impact on Trainability</a></li>
+                       <li>Simone Petruzzi (Sapienza and Fastweb) <a href="/files/dlss25/guests_slides/simone.pdf">Mechanistic Interpretability: an overview</a></li>
+                       
                 </ul>
    </div>
    
