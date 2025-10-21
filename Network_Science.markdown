@@ -132,7 +132,7 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science/Network_Science_1.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_25/Network_Science_1.pdf">Slides</a></li>
                    </ul>
           </div>
        </div>  
