@@ -30,7 +30,7 @@ economic systems. </p>
     <ol>
         <li>13 Seminars, the first 7 covering the main topics in Network Science, the following 6 covering more advanced techniques and applications of Network Science to Socio-Economic systems.</li>
         <li>1 Students Q&A Session</li>
-        <li>8 Coding Sessions</li>
+        <li>7 Coding Sessions</li>
     </ol>
     
     <h4>Grading</h4>
@@ -44,7 +44,10 @@ economic systems. </p>
 		<li>References</li>
     	</ol>
     </p>
-    
+    <h4>Exam Dates</h4>
+    <p>
+    The dates of the exam are flexible. I will create a form to select some exam dates that suits you and publish the dates here.
+    </p>
     <h4>Coding Sessions</h4>
     <p>A practical part of exercises connected to the lectures will be offered. It is highly recommended to participate in these coding sesisons because it will help to acquire the skills that are important for the final project. The exercises will not be graded.</p>
     </div> 
