@@ -100,7 +100,7 @@ economic systems. </p>
 </span>
         </div>
         <div class="course-date">
-            <span class="date">November 5, 2025< /span> - <span class="lecture-title">Analysis of real world networks</span>
+            <span class="date">November 5, 2025</span> - <span class="lecture-title">Analysis of real world networks</span>
         </div>
         <div class="course-date">
             <span class="date">November 19, 2025</span> - <span class="lecture-title">Centrality measures</span>
