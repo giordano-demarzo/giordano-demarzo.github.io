@@ -160,6 +160,21 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_4.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/4">Network Science. Chapter 4. A.L. Barabasi</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/5">Network Science. Chapter 5. A.L. Barabasi</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                       	<li><a href="https://www.nature.com/articles/s41467-019-08746-5">Scale-free networks are rare. Broido, A.D., Clauset, A. (2019)</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
