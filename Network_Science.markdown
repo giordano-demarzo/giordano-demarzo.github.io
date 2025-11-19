@@ -175,6 +175,21 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 5 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_5.pdf">Slides</a></li>
+                       	<li><a href="https://www.cis.upenn.edu/~mkearns/teaching/NetworkedLife/pagerank.pdf">The PageRank Citation Ranking: Bringing Order to the Web. L. Page, S. Brin (1998)</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://www.researchgate.net/publication/2490397_Mapping_Networks_of_Terrorist_Cells">Mapping Networks of Terrorist Cells. V. Krebs (2002)</a></li>
+                     	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0236476">Disrupting resilient criminal networks through data analysis: The case of Sicilian Mafia. L. Cavallaro et al (2020)</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -200,6 +215,22 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Code</h4>
+                   <ul>
+                   	<li><a href="/files/network_science_25/exercises/centrality_tutorial.ipynb">Tutorial</a>: Centrality Measures of Airports network. For this tutorial we will use the data from the previous coding session.</li>
+                   	<li><a href="/files/network_science_25/exercises/centrality_congress_exercise.ipynb">Exercise</a>: Analyzing the 117th United States Congress Social Network.</li>
+                   </ul>
+               <h4>Data</h4>
+               	   For a detailed description of the dataset you can give a look at the original paper <a href="https://doi.org/10.1016/j.dib.2023.109521">Fink, Christian G., et al. "A Congressional Twitter network dataset quantifying pairwise probability of influence." Data in Brief 50 (2023): 109521</a>
+                   <ul>
+                       <li><a href="/files/network_science_25/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
+                       <li><a href="/files/network_science_25/datasets/congress/congress_network_data.json">Congress members names</a></li>
+                   </ul>
+          </div>
+       </div>
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
