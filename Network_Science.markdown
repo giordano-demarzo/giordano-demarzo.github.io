@@ -190,6 +190,21 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 6 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_6.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/9">Network Science. Chapter 9. A.L. Barabasi</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://snap.stanford.edu/class/cs224w-readings/granovetter73weakties.pdf">The Strength of Weak Ties. M. S. Granovetter (1973)</a></li>
+                   	<li><a href="https://www.pnas.org/doi/abs/10.1073/pnas.0610245104">Structure and tie strengths in mobile communication networks. J. P. Onnela et al. (2007)</a></li>
+                   </ul>
+           </div>
+       </div>
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -228,6 +243,22 @@ economic systems. </p>
                    <ul>
                        <li><a href="/files/network_science_25/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
                        <li><a href="/files/network_science_25/datasets/congress/congress_network_data.json">Congress members names</a></li>
+                   </ul>
+          </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Code</h4>
+                   <ul>
+                   	<li><a href="/files/network_science_25/exercises/community_detection_tutorial.ipynb">Tutorial</a>: Community detection in simulated and real networks.</li>
+                   	<li><a href="/files/network_science_25/exercises/airport_exercise_communities.ipynb">Exercise</a>: Community detection applied to Airports network. For this exercise you will use the data from the previous coding sessions.</li>
+                   </ul>
+               <h4>Data</h4>
+               	   Network of American football games between Division IA colleges during regular season Fall 2000. From M. Girvan and M. E. J. Newman, Community structure in social and biological networks. Proc. Natl. Acad. Sci. USA 99(12), 7821-7826 (2002).
+                   <ul>
+                       <li><a href="/files/network_science_25/datasets/football/edges.csv">Edgelist of football teams (matches)</a></li>
+                       <li><a href="/files/network_science_25/datasets/football/nodes.csv">Nodes (football teams)</a></li>
                    </ul>
           </div>
        </div>
