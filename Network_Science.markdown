@@ -99,8 +99,7 @@ economic systems. </p>
         </div>
         <h3>Coding Sessions</h3>
         <div class="course-date">
-            <span class="date">October 29, 2025</span> - <span class="lecture-title">Introduction to Network Science in Python
-</span>
+            <span class="date">October 29, 2025</span> - <span class="lecture-title">Introduction to Network Science in Python</span>
         </div>
         <div class="course-date">
             <span class="date">November 5, 2025</span> - <span class="lecture-title">Analysis of real world networks</span>
@@ -222,6 +221,22 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 8 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science/Network_Science_8.pdf">Slides</a></li>
+                       	<li><a href="https://networksciencebook.com/chapter/4#generating-networks">Network Science. Section 4.6. A.L. Barabasi</a></li>
+                       	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Statistical Physics of Real-World Networks. G. Cimini et al. (2019).</a></li>
+                       	<li><a href="https://iopscience.iop.org/article/10.1088/1367-2630/aa6b38/pdf">Inferring monopartite projections of bipartite networks: an entropy-based approach. F. Saracco et al. (2017).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://link.springer.com/chapter/10.1007/978-3-319-69438-2_4">Network Reconstruction. T. Squartini and D. Garlaschelli (2017). </a></li>
+                   </ul>
+           </div>
+       </div>      
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -276,6 +291,31 @@ economic systems. </p>
                    <ul>
                        <li><a href="/files/network_science_25/datasets/football/edges.csv">Edgelist of football teams (matches)</a></li>
                        <li><a href="/files/network_science_25/datasets/football/nodes.csv">Nodes (football teams)</a></li>
+                   </ul>
+          </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 5 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science_25/exercises/bipartite_projection_tutorial.ipynb">Tutorial</a>: Projection of bipartite networks applied to export networks.</li>
+                   </ul>
+               <h4>Data</h4>
+               	   Global trade data from UN Comtrade (2022) containing export values for 171 countries and 5206 products
+                   <ul>
+                       <li><a href="/files/network_science_25/datasets/export/exportmatrix2022.csv">Export matrix for the year 2022</a></li>
+                       <li><a href="/files/network_science_25/datasets/export/countries.csv">List of all countries</a></li>
+                       <li><a href="/files/network_science_25/datasets/export/products.csv">List of all products</a></li>
+                       <li><a href="/files/network_science_25/datasets/export/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
+                   </ul>
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/bicm_export.py">Code</a></li>
+                   </ul>
+               <h4>Plots</h4>
+                   <ul>
+                       <li><a href="/files/network_science/exercises/country_communities.png">Communities in the projected country network</a></li>
                    </ul>
           </div>
        </div>
