@@ -309,14 +309,6 @@ economic systems. </p>
                        <li><a href="/files/network_science_25/datasets/export/products.csv">List of all products</a></li>
                        <li><a href="/files/network_science_25/datasets/export/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
                    </ul>
-               <h4>Code</h4>
-                   <ul>
-                       <li><a href="/files/network_science/exercises/bicm_export.py">Code</a></li>
-                   </ul>
-               <h4>Plots</h4>
-                   <ul>
-                       <li><a href="/files/network_science/exercises/country_communities.png">Communities in the projected country network</a></li>
-                   </ul>
           </div>
        </div>
    </div>    
