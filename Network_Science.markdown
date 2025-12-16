@@ -209,7 +209,7 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science/Network_Science_7.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_25/Network_Science_7.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/10">Network Science. Chapter 10. A.L. Barabasi</a></li>
                        	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Spread of Behavior in an Online Social Network Experiment. D. Centola (2010).</a></li>
                        	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0126090">Competing for Attention in Social Media under Information Overload Conditions. L. Feng et al. (2015).</a></li>
@@ -226,7 +226,7 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science/Network_Science_8.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_25/Network_Science_8.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/4#generating-networks">Network Science. Section 4.6. A.L. Barabasi</a></li>
                        	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Statistical Physics of Real-World Networks. G. Cimini et al. (2019).</a></li>
                        	<li><a href="https://iopscience.iop.org/article/10.1088/1367-2630/aa6b38/pdf">Inferring monopartite projections of bipartite networks: an entropy-based approach. F. Saracco et al. (2017).</a></li>
@@ -234,6 +234,22 @@ economic systems. </p>
                <h4>Additional Reading</h4>
                    <ul>
                    	<li><a href="https://link.springer.com/chapter/10.1007/978-3-319-69438-2_4">Network Reconstruction. T. Squartini and D. Garlaschelli (2017). </a></li>
+                   </ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 9 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_9.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science/bianconi_multilayer.pdf">Multilayer Networks: Structure and Function. Chapters 4-7. Bianconi (2018).</a></li>
+                       	<li><a href="https://doi.org/10.1016/j.physleta.2014.01.014">Multiple routes transmitted epidemics on multiplex networks. Zhao et al. (2014).</a></li>
+                       	<li><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0092200&type=printable">Epidemics in Partially Overlapped Multiplex Networks. C. Buono et al. (2014).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://iopscience.iop.org/article/10.1088/1742-6596/640/1/012007/pdf">Epidemic spreading and immunization strategy in multiplex networks. L. G. Alvarez Zuzek et al. (2014). </a></li>
                    </ul>
            </div>
        </div>      
