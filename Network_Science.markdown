@@ -339,7 +339,8 @@ economic systems. </p>
 		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). </a></li>
 		<li><a href="https://www.nature.com/articles/s41598-024-61448-x" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
 		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000). </a></li>
-		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a></li>
+		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a> Assigned to Niklas Bacher.
+</li>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 		<li><a href="https://www.nature.com/articles/nature11459" rel="nofollow">Popularity versus similarity in growing networks. F. Papadopoulos et al. (2012)</a></li>
 		<li><a href="https://www.nature.com/articles/srep08182" rel="nofollow">Ranking species in mutualistic networks. V. Domínguez-García and M. A. Muñoz  (2015)</a></li>
@@ -360,7 +361,7 @@ economic systems. </p>
 		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a></li>
 		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
 		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
-		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a></li>
+		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a> Assigned to Katrin Sauter.</li>
 		<li><a href="https://networkrepository.com/socfb-Michigan23.php" rel="nofollow">Facebook social network (Michigan University students)</a></li>
 		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a></li>
 		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
