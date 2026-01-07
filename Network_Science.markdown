@@ -352,7 +352,7 @@ economic systems. </p>
                <h4>Data</h4>
                	   Global trade data from UN Comtrade (2021) containing export values for 169 countries and 5206 products
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/exportmatrix201.csv">Export matrix for the year 2021</a></li>
+                       <li><a href="/files/network_science_25/datasets/export_gdp/exportmatrix2021.csv">Export matrix for the year 2021</a></li>
                        <li><a href="/files/network_science_25/datasets/export_gdp/countries.csv">List of all countries</a></li>
                        <li><a href="/files/network_science_25/datasets/export_gdp/products.csv">List of all products</a></li>
                        <li><a href="/files/network_science_25/datasets/export_gdp/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
