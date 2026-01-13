@@ -267,7 +267,24 @@ economic systems. </p>
                    	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0113770">How the Taxonomy of Products Drives the Economic Development of Countries. Zaccaria, Andrea, et al. (2014). </a></li>
                    </ul>
            </div>
-       </div>    
+       </div>  
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 11 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_11.pdf">Slides</a></li>
+                       	<li><a href="https://www.nature.com/articles/s41598-017-06322-9">Uncovering offshore financial centers: Conduits and sinks in the global corporate ownership network. Garcia-Bernardo, Javier, et al. (2017).</a></li>
+                       	<li><a href="https://arxiv.org/pdf/2302.08987">Firm-level supply chains to minimize unemployment and economic losses in rapid decarbonization scenarios. Stangl, Johannes, et al. (2024).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://link.springer.com/article/10.1140/epjb/e2004-00127-8">Statistical properties of corporate board and director networks.Battiston, Stefano, and Michele Catanzaro (2004). </a></li>
+                   	<li><a href="https://www.econstor.eu/bitstream/10419/259389/1/wp2022-33.pdf">The indirect costs of corporate tax avoidance exacerbate cross-country inequality. Garcia-Bernardo, Javier, et al. (2022).</a></li>
+                   	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0283217">Prediction and visualization of Mergers and Acquisitions using Economic Complexity. Arsini, Lorenzo, Matteo Straccamore, and Andrea Zaccaria. (2023).</a></li>
+                   </ul>
+           </div>
+       </div>  
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -395,7 +412,7 @@ economic systems. </p>
    <div class="accordion-content" id="material-section">
      	<ul dir="auto">
 		<li><a href="https://networkrepository.com/soc-wiki-Vote.php" rel="nofollow">Wikipedia votes</a></li>
-		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a></li>
+		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a> Assigned to Ludwig Kunz.</li>
 		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a> Assigned to Marco Stöhr.</li>
 		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
 		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
@@ -405,7 +422,7 @@ economic systems. </p>
 		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
 		<li><a href="https://networkrepository.com/rec-github.php" rel="nofollow">Github network (bipartite)</a></li>
 		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a> Assigned to Jian Feng.</li>
-		<li>I can privatelly provide patent data to study different type of bipartite networks involving for instance inventors, firms, technologies, countries, cities. More than a single project on this topic is possible. <b>NEW</b> </li>
+		<li>I can privatelly provide patent data to study different type of bipartite networks involving for instance inventors, firms, technologies, countries, cities. More than a single project on this topic is possible. <b>NEW</b> Assigned to Robert Seidel and Cristina Flintoaca.</li>
 	</ul>
     </div>
    </div>
