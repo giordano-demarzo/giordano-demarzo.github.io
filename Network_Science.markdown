@@ -284,7 +284,24 @@ economic systems. </p>
                    	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0283217">Prediction and visualization of Mergers and Acquisitions using Economic Complexity. Arsini, Lorenzo, Matteo Straccamore, and Andrea Zaccaria. (2023).</a></li>
                    </ul>
            </div>
-       </div>  
+       </div> 
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 12 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Network_Science_12.pdf">Slides</a></li>
+                       	<li><a href="https://doi.org/10.1073/pnas.2023301118">The echo chamber effect on social media. Cinelli, Matteo et al. (2021).</a></li>
+                       	<li><a href="https://www.science.org/doi/full/10.1126/science.aap9559">The spread of true and false news online. Vosoughi, Soroush, Deb Roy, and Sinan Aral. (2018).</a></li>
+                       	<li><a href="https://doi.org/10.1371/journal.pone.0181821">Debunking in a world of tribes. Zollo, Fabiana et al. (2017).</a></li>
+                   </ul>
+               <h4>Additional Reading</h4>
+                   <ul>
+                   	<li><a href="https://www.nature.com/articles/s41558-022-01527-x">Growing polarization around climate change on social media. Falkenberg, Max, et al. (2022).</a></li>
+                   	<li><a href="https://www.pnas.org/doi/abs/10.1073/pnas.1804840115">Exposure to opposing views on social media can increase political polarization. Bail, Christopher A. et al. (2018).</a></li>
+                   </ul>
+           </div>
+       </div> 
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -377,6 +394,17 @@ economic systems. </p>
                    </ul>
           </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Coding Session 7 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Data</h4>
+                   Data represent retweet trees on Twitter. Each tree corresponds to a news, classified as being true or fake. Data can be downloaded <a href="https://github.com/mdepak/fake-news-propagation/">here</a>.
+               <h4>Code</h4>
+                   <ul>
+                       <li><a href="/files/network_science_25/exercises/fake_news_diffusion_tutorial.ipynb">Notebook</a></li>
+                   </ul>
+           </div>
+       </div> 
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
