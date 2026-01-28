@@ -302,6 +302,17 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Seminar 13 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   <ul>
+                       	<li><a href="/files/network_science_25/Konstanz - Lesson.pdf">Slides</a></li>
+                       	<li><a href="https://www.nature.com/articles/s41567-022-01866-8">Laplacian renormalization group for heterogeneous networks. Villegas, Pablo et al. (2023).</a></li>
+                       	<li><a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.7.013065">Multi-scale Laplacian community detection in heterogeneous networks. Villegas, Pablo et al. (2025).</a></li>
+                   </ul>
+           </div>
+       </div> 
        <h3> Coding Sessions </h3>
        <h5> </h5>  
        <div class="nested-accordion">
@@ -414,7 +425,7 @@ economic systems. </p>
 		<li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
 		<li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
 		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). </a></li>
+		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). </a> Assigned to David Marasek.</li>
 		<li><a href="https://www.nature.com/articles/s41598-024-61448-x" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
 		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000). </a></li>
 		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a> Assigned to Niklas Bacher.
@@ -442,12 +453,12 @@ economic systems. </p>
 		<li><a href="https://networkrepository.com/soc-wiki-Vote.php" rel="nofollow">Wikipedia votes</a></li>
 		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a> Assigned to Ludwig Kunz.</li>
 		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a> Assigned to Marco Stöhr.</li>
-		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
+		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a> Assigned to Jan Thiele.</li>
 		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
 		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a> Assigned to Katrin Sauter.</li>
 		<li><a href="https://networkrepository.com/socfb-Michigan23.php" rel="nofollow">Facebook social network (Michigan University students)</a></li>
-		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a></li>
-		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
+		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a> Assigned to Timothy Gunson.</li>
+		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a> Assigned to Emrecan Ulu.</li>
 		<li><a href="https://networkrepository.com/rec-github.php" rel="nofollow">Github network (bipartite)</a></li>
 		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a> Assigned to Jian Feng.</li>
 		<li>I can privatelly provide patent data to study different type of bipartite networks involving for instance inventors, firms, technologies, countries, cities. More than a single project on this topic is possible. <b>NEW</b> Assigned to Robert Seidel and Cristina Flintoaca.</li>
