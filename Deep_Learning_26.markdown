@@ -124,13 +124,13 @@ applications to the Social Sciences. </p>
         <span class="date">May 22, 2026</span> - <span class="lecture-title">A. Bellina (Sony CSL) "Conformity in Humans and LLMs" (D301-13:30) </span>
     </div>
     <div class="course-date">
-        <span class="date">July 3, 2026</span> - <span class="lecture-title">E. Francazi (EPFL) "Emergence of bias in deep neural networks predictions"</span>
+        <span class="date">May 28, 2026</span> - <span class="lecture-title">E. Francazi (EPFL and EAWAG) TBD</span>
+    </div>
+    <div class="course-date">
+        <span class="date">June 11, 2026</span> - <span class="lecture-title">F. Santoro (Sapienza and CREF) TBD</span>
     </div>
     <div class="course-date">
         <span class="date">July 15, 2026</span> - <span class="lecture-title">Students Presentation Day</span>
-    </div>
-    <div class="course-date">
-        <span class="date">July 17, 2026</span> - <span class="lecture-title">S. Petruzzi (Sapienza) "Introduction to Mechanistic Interpretability of LLMs"</span>
     </div>
 </div>
     <!-- Material Section -->
