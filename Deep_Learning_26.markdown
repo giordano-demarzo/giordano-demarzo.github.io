@@ -170,7 +170,16 @@ applications to the Social Sciences. </p>
                    	</ul>
            </div>
        </div>
-    		<h4>Coding session</h4>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 2 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss26/slides/DLSS2.pdf">Slides: Introduction to Machine Learning</a></li>
+                   		<li><a href="https://slds-lmu.github.io/i2ml/">More material on machine learning</a></li>
+                   		
+    			</ul>
+       </div>
 
        <h3> Guests Seminars </h3>
    
