@@ -121,9 +121,6 @@ applications to the Social Sciences. </p>
     
     <h3>Seminars and Presentations</h3>
     <div class="course-date">
-        <span class="date">May 22, 2026</span> - <span class="lecture-title">A. Bellina (Sony CSL) "Conformity in Humans and LLMs" (D301-13:30) </span>
-    </div>
-    <div class="course-date">
         <span class="date">May 28, 2026</span> - <span class="lecture-title">E. Francazi (EPFL and EAWAG) TBD</span>
     </div>
     <div class="course-date">
