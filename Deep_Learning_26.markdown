@@ -176,6 +176,10 @@ applications to the Social Sciences. </p>
                    		<li><a href="https://slds-lmu.github.io/i2ml/">More material on machine learning</a></li>
                    		
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss26/notebooks/Intro_to_Machine_Learning.ipynb">Notebook: Introduction to Colab and Machine Learning</a></li>
+    			</ul>
        </div>
 
        <h3> Guests Seminars </h3>
