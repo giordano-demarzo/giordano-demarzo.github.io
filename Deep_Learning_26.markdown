@@ -180,6 +180,7 @@ applications to the Social Sciences. </p>
     			<ul>
                    		<li><a href="/files/dlss26/notebooks/Intro_to_Machine_Learning.ipynb">Notebook: Introduction to Colab and Machine Learning</a></li>
     			</ul>
+           </div>
        </div>
        <div class="nested-accordion">
            <button class="nested-accordion-button">Lesson 3 &#9662;</button>
