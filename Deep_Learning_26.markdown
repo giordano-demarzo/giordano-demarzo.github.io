@@ -190,7 +190,17 @@ applications to the Social Sciences. </p>
                    		<li><a href="/files/dlss26/slides/DLSS3.pdf">Slides: The Multilayer Perceptron</a></li>
                    		<li><a href="/teaching/deep-learning-25/perceptron/">Perceptron Visualization Demo</a> </li>
                			<li><a href="/teaching/deep-learning-25/shallow_nn/">Shallow Neural Network Visualization Demo</a> </li>
-               			<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince. Relevant chapters are from 3 to 7.</a></li>
+               			<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince, chapter 3 and 4.</a></li>
+    			</ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 4 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss26/slides/DLSS4.pdf">Slides: Regularization of Neural Networks and Autoencoder</a></li>
+                   		<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince, chapter 5, 6 and 7.</a></li>
     			</ul>
            </div>
        </div>
