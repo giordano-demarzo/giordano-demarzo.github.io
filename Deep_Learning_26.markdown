@@ -202,6 +202,10 @@ applications to the Social Sciences. </p>
                    		<li><a href="/files/dlss26/slides/DLSS4.pdf">Slides: Regularization of Neural Networks and Autoencoder</a></li>
                    		<li><a href="https://github.com/udlbook/udlbook/releases/download/v5.0.1/UnderstandingDeepLearning_03_26_25_C.pdf">The topics we covered this week are very well explained in the book "Understanding Deep Learning" by S. J. D. Prince, chapter 5, 6 and 7.</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss26/notebooks/MultilayerPerceptron_classification.ipynb">Notebook: Multilayer Perceptron for Classification</a></li>
+    			</ul>
            </div>
        </div>
        <h3> Guests Seminars </h3>
