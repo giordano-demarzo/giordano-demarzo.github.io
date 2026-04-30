@@ -208,6 +208,7 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+    </div>
 	<!-- Assignments -->
 		<button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
 		<div class="accordion-content" id="material-section">
