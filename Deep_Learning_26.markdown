@@ -208,7 +208,17 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
-       <h3> Guests Seminars </h3>
+	<!-- Assignments -->
+		<button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
+		<div class="accordion-content" id="material-section">
+    			<h3>Assignment 1: Multilayer Perceptron</h3>
+    			<p>The dataset is a filtered subset of the European Social Survey (ESS), Wave 11 (fieldwork 2022--2023), containing individual-level responses across 30 European countries. The prediction target is household total net income, encoded as a decile. For full variable documentation and response codes, consult the codebook or visit the <a href="https://ess.sikt.no/en/datafile/242aaa39-3bbb-40f5-98bf-bfb1ce53d8ef">official ESS data portal</a>.</p>
+    				<ul>
+        				<li><a href="/files/dlss26/assignments/assignment_1.pdf">Assignment 1</a></li>
+        				<li><a href="/files/dlss26/assignments/ESS11e04_1_filtered.csv">Dataset</a></li>
+        				<li><a href="/files/dlss26/assignments/ESS11e04_1_codebook.html">Codebook</a></li>
+    				</ul>
+		</div>
    
 
 </div>
