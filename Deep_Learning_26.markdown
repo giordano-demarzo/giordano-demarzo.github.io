@@ -208,8 +208,7 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
-       </div>
-           <div class="nested-accordion">
+       <div class="nested-accordion">
            <button class="nested-accordion-button">Lesson 5 &#9662;</button>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
