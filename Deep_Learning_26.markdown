@@ -241,6 +241,12 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss26/slides/DLSS7.pdf">Slides: Recurrent Neural Networks</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+    			<ul>
+                   		<li><a href="/files/dlss26/notebooks/RNN_LSTM.ipynb">Notebook: RNN to forecast temperature variations</a></li>
+                   		<li><a href="/files/dlss26/notebooks/NYC_Central_Park_weather_1869-2022.csv">Data: Historical NYC weather data</a></li>
+                   		<li><a href="/files/dlss26/notebooks/GNN_Cora.ipynb">Notebook: Graph Neural Network applied to Scientific Papers</a></li>
+    			</ul>
            </div>
        </div>
 	<!-- Assignments -->
