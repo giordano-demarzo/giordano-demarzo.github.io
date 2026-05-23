@@ -259,6 +259,12 @@ applications to the Social Sciences. </p>
         				<li><a href="/files/dlss26/assignments/ESS11e04_1_filtered.csv">Dataset</a></li>
         				<li><a href="/files/dlss26/assignments/ESS11e04_1_codebook.html">Codebook</a></li>
     				</ul>
+    			<h3>Assignment 2: Convolutional Neural Network</h3>
+    			<p>In this assignment, students build and compare Convolutional Neural Networks to classify the social relationship between pairs of people in photographs, predicting whether two individuals share a friendship, family bond, or professional connection. The task uses a curated subset of the PISC dataset (~6,800 images at 64×64 resolution).</p>
+    				<ul>
+        				<li><a href="/files/dlss26/assignments/assignment_2.pdf">Assignment 2</a></li>
+        				<li><a href="/files/dlss26/assignments/PISC.zip">Dataset</a></li>
+    				</ul>
 		</div>
    
 
