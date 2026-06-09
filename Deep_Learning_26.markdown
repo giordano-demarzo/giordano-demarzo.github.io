@@ -260,6 +260,16 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 9 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss26/slides/DLSS9.pdf">Slides: Large Language Models</a></li>
+                   		<li><a href="https://cameronrwolfe.substack.com/p/llm-scaling-laws">Nice article on LLMs scaling laws.</a></li>
+    			</ul>
+           </div>
+       </div>
 	<!-- Assignments -->
 		<button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
 		<div class="accordion-content" id="material-section">
