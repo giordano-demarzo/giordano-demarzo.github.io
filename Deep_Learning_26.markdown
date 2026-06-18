@@ -308,6 +308,22 @@ applications to the Social Sciences. </p>
         				<li><a href="/files/dlss26/assignments/PISC.zip">Dataset</a></li>
     				</ul>
 		</div>
-   
+	<!-- Final Projects -->
+		<button class="accordion-button" onclick="toggleAccordion('material-section')">Final Projects &#9662;</button>
+		<div class="accordion-content" id="material-section">
+			<h3>Convolutional Neural Networks</h3>
+				<ul>
+					<li><a href="/files/dlss26/final_projects/CNN_natural_disasters.md">Mapping Natural-Disaster Damage from Satellite Imagery.</a> Bhuvanesh Dinesh Wadhwani, Artur Zavistovskyi, Anastasiia Khitrova, Yitian Zhou</li>
+					<li><a href="/files/dlss26/final_projects/CNN_air_pollution.md">Mapping Air Pollution and Exposure Inequality in Germany from Satellite Imagery.</a> Aaron Siebert, Lisanne Dolleman, Simone Mazzoli, David Marasek</li>
+					<li><a href="/files/dlss26/final_projects/CNN_war_damage.md">Quantifying War Damage from Satellite Imagery.</a> Marcel Julian Kalb, Mike Barth, Sam Känner, Nils Neuner</li>
+				</ul>
+			<h3>Large Language Models</h3>
+				<ul>
+					<li><a href="/files/dlss26/final_projects/LLM_job_posts_ISCO.md">Classifying Online Job Postings into Occupations with LLMs.</a> Leon Exeler, Philipp Raumanns, Lars Stützle, Leander Müller</li>
+					<li><a href="/files/dlss26/final_projects/LLM_parliament_embeddings.md">Tracking Political Change with Embeddings of Parliamentary Speech.</a> Paulina Dannhäuser, Luise Harnischmacher, Annika Völkers, Marlene Bernhart</li>
+					<li><a href="/files/dlss26/final_projects/LLM_political_steering.md">Steering the Politics of LLMs.</a> Kofi Yentumi Asante, Hamed Laroui, Kanta Ito, Ayoub Manouche</li>
+				</ul>
+		</div>
+
 
 </div>
