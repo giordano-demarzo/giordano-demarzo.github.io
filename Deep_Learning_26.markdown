@@ -307,6 +307,11 @@ applications to the Social Sciences. </p>
         				<li><a href="/files/dlss26/assignments/assignment_2.pdf">Assignment 2</a></li>
         				<li><a href="/files/dlss26/assignments/PISC.zip">Dataset</a></li>
     				</ul>
+    			<h3>Assignment 5: Encoder vs. Decoder Language Models</h3>
+			<p>In this assignment, students fine-tune and compare an encoder-only model and a decoder-only model on the task of detecting offensive language in tweets, exploring when and why each architecture wins. The task uses the TweetEval offensive language dataset (~11,900 tweets), loaded directly from the HuggingFace Hub.</p>
+				<ul>
+    					<li><a href="/files/dlss26/assignments/assignment_3.pdf">Assignment 3</a></li>
+				</ul>
 		</div>
 	<!-- Final Projects -->
 		<button class="accordion-button" onclick="toggleAccordion('material-section')">Final Projects &#9662;</button>
