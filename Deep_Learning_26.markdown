@@ -291,6 +291,15 @@ applications to the Social Sciences. </p>
     			</ul>
            </div>
        </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 11 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss26/slides/DLSS11.pdf">Slides: Image Generation and Multimodality</a></li>
+    			</ul>
+           </div>
+       </div>
 	<!-- Assignments -->
 		<button class="accordion-button" onclick="toggleAccordion('material-section')">Assignments &#9662;</button>
 		<div class="accordion-content" id="material-section">
