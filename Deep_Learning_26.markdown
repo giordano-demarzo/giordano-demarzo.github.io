@@ -298,6 +298,10 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss26/slides/DLSS11.pdf">Slides: Image Generation and Multimodality</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+			<ul>
+		   		<li><a href="/files/dlss26/notebooks/image_generation.ipynb">Notebook: CVAE and Diffusion Models for image generation</a></li>
+			</ul>
            </div>
        </div>
 	<!-- Assignments -->
