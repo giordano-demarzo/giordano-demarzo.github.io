@@ -121,9 +121,6 @@ applications to the Social Sciences. </p>
     
     <h3>Seminars and Presentations</h3>
     <div class="course-date">
-        <span class="date">May 28, 2026</span> - <span class="lecture-title">E. Francazi (EPFL and EAWAG) TBD</span>
-    </div>
-    <div class="course-date">
         <span class="date">June 11, 2026</span> - <span class="lecture-title">F. Santoro (Sapienza and CREF) TBD</span>
     </div>
     <div class="course-date">
@@ -302,6 +299,15 @@ applications to the Social Sciences. </p>
 			<ul>
 		   		<li><a href="/files/dlss26/notebooks/image_generation.ipynb">Notebook: CVAE and Diffusion Models for image generation</a></li>
 			</ul>
+           </div>
+       </div>
+       <div class="nested-accordion">
+           <button class="nested-accordion-button">Lesson 12 &#9662;</button>
+           <div class="nested-accordion-content">
+               <h4>Readings and Slides</h4>
+                   	<ul>
+                   		<li><a href="/files/dlss26/slides/DLSS12.pdf">Slides: Reinforcement Learning</a></li>
+    			</ul>
            </div>
        </div>
 	<!-- Assignments -->
