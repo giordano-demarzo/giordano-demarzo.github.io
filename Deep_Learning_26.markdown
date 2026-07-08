@@ -308,6 +308,10 @@ applications to the Social Sciences. </p>
                    	<ul>
                    		<li><a href="/files/dlss26/slides/DLSS12.pdf">Slides: Reinforcement Learning</a></li>
     			</ul>
+    		<h4>Coding session</h4>
+			<ul>
+		   		<li><a href="/files/dlss26/notebooks/DQN_CartPole.ipynb">Notebook: Reinforcement Learning with DQNs</a></li>
+			</ul>
            </div>
        </div>
 	<!-- Assignments -->
