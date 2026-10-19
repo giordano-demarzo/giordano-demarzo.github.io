@@ -140,7 +140,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_2.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_2.pdf">Slides</a></li>
                        	<li><a href="https://www.nature.com/articles/s41598-022-26961-x">The explosive value of the networks. A. Scala, M. Del Mastro (2023) </a></li>
                    </ul>
            </div>
@@ -152,7 +152,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_3.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_3.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/3">Network Science. Chapter 3. A.L. Barabasi</a></li>
                    </ul>
                <h4>Additional Reading</h4>
@@ -168,7 +168,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_4.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_4.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/4">Network Science. Chapter 4. A.L. Barabasi</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/5">Network Science. Chapter 5. A.L. Barabasi</a></li>
                    </ul>
@@ -185,7 +185,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_5.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_5.pdf">Slides</a></li>
                        	<li><a href="https://www.cis.upenn.edu/~mkearns/teaching/NetworkedLife/pagerank.pdf">The PageRank Citation Ranking: Bringing Order to the Web. L. Page, S. Brin (1998)</a></li>
                    </ul>
                <h4>Additional Reading</h4>
@@ -202,7 +202,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_6.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_6.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/9">Network Science. Chapter 9. A.L. Barabasi</a></li>
                    </ul>
                <h4>Additional Reading</h4>
@@ -219,7 +219,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_7.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_7.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/10">Network Science. Chapter 10. A.L. Barabasi</a></li>
                        	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Spread of Behavior in an Online Social Network Experiment. D. Centola (2010).</a></li>
                        	<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0126090">Competing for Attention in Social Media under Information Overload Conditions. L. Feng et al. (2015).</a></li>
@@ -238,7 +238,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_8.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_8.pdf">Slides</a></li>
                        	<li><a href="https://networksciencebook.com/chapter/4#generating-networks">Network Science. Section 4.6. A.L. Barabasi</a></li>
                        	<li><a href="https://www.science.org/doi/10.1126/science.1185231">The Statistical Physics of Real-World Networks. G. Cimini et al. (2019).</a></li>
                        	<li><a href="https://iopscience.iop.org/article/10.1088/1367-2630/aa6b38/pdf">Inferring monopartite projections of bipartite networks: an entropy-based approach. F. Saracco et al. (2017).</a></li>
@@ -256,7 +256,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_9.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_9.pdf">Slides</a></li>
                        	<li><a href="/files/network_science/bianconi_multilayer.pdf">Multilayer Networks: Structure and Function. Chapters 4-7. Bianconi (2018).</a></li>
                        	<li><a href="https://doi.org/10.1016/j.physleta.2014.01.014">Multiple routes transmitted epidemics on multiplex networks. Zhao et al. (2014).</a></li>
                        	<li><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0092200&type=printable">Epidemics in Partially Overlapped Multiplex Networks. C. Buono et al. (2014).</a></li>
@@ -274,7 +274,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_10.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_10.pdf">Slides</a></li>
                        	<li><a href="https://www.nature.com/articles/srep00723">A new metrics for countries' fitness and products' complexity. Tacchella, Andrea, et al. (2012).</a></li>
                        	<li><a href="https://doi.org/10.1126/science.1144581">The Product Space Conditions the Development of Nations. Hidalgo, César A., et al. (2007).</a></li>
                    </ul>
@@ -291,7 +291,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_11.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_11.pdf">Slides</a></li>
                        	<li><a href="https://www.nature.com/articles/s41598-017-06322-9">Uncovering offshore financial centers: Conduits and sinks in the global corporate ownership network. Garcia-Bernardo, Javier, et al. (2017).</a></li>
                        	<li><a href="https://arxiv.org/pdf/2302.08987">Firm-level supply chains to minimize unemployment and economic losses in rapid decarbonization scenarios. Stangl, Johannes, et al. (2024).</a></li>
                    </ul>
@@ -310,7 +310,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_12.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_12.pdf">Slides</a></li>
                        	<li><a href="https://doi.org/10.1073/pnas.2023301118">The echo chamber effect on social media. Cinelli, Matteo et al. (2021).</a></li>
                        	<li><a href="https://www.science.org/doi/full/10.1126/science.aap9559">The spread of true and false news online. Vosoughi, Soroush, Deb Roy, and Sinan Aral. (2018).</a></li>
                        	<li><a href="https://doi.org/10.1371/journal.pone.0181821">Debunking in a world of tribes. Zollo, Fabiana et al. (2017).</a></li>
@@ -329,7 +329,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Konstanz - Lesson.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Konstanz - Lesson.pdf">Slides</a></li>
                        	<li><a href="https://www.nature.com/articles/s41567-022-01866-8">Laplacian renormalization group for heterogeneous networks. Villegas, Pablo et al. (2023).</a></li>
                        	<li><a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.7.013065">Multi-scale Laplacian community detection in heterogeneous networks. Villegas, Pablo et al. (2025).</a></li>
                    </ul>
@@ -344,7 +344,7 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Code</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/exercises/networkx_introduction.ipynb">Code</a></li>
+                       <li><a href="/files/network_science_26/exercises/networkx_introduction.ipynb">Code</a></li>
                    </ul>
            </div>
        </div>
@@ -355,12 +355,12 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Data</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/airlines/airports.csv">Airports data</a></li>
-                       <li><a href="/files/network_science_25/datasets/airlines/routes.csv">Routes data</a></li>
+                       <li><a href="/files/network_science_26/datasets/airlines/airports.csv">Airports data</a></li>
+                       <li><a href="/files/network_science_26/datasets/airlines/routes.csv">Routes data</a></li>
                    </ul>
                <h4>Code</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/exercises/airport_network_analysis.ipynb">Notebook</a></li>
+                       <li><a href="/files/network_science_26/exercises/airport_network_analysis.ipynb">Notebook</a></li>
                    </ul>
            </div>
        </div> 
@@ -371,14 +371,14 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Code</h4>
                    <ul>
-                   	<li><a href="/files/network_science_25/exercises/centrality_tutorial.ipynb">Tutorial</a>: Centrality Measures of Airports network. For this tutorial we will use the data from the previous coding session.</li>
-                   	<li><a href="/files/network_science_25/exercises/centrality_congress_exercise.ipynb">Exercise</a>: Analyzing the 117th United States Congress Social Network.</li>
+                   	<li><a href="/files/network_science_26/exercises/centrality_tutorial.ipynb">Tutorial</a>: Centrality Measures of Airports network. For this tutorial we will use the data from the previous coding session.</li>
+                   	<li><a href="/files/network_science_26/exercises/centrality_congress_exercise.ipynb">Exercise</a>: Analyzing the 117th United States Congress Social Network.</li>
                    </ul>
                <h4>Data</h4>
                	   For a detailed description of the dataset you can give a look at the original paper <a href="https://doi.org/10.1016/j.dib.2023.109521">Fink, Christian G., et al. "A Congressional Twitter network dataset quantifying pairwise probability of influence." Data in Brief 50 (2023): 109521</a>
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
-                       <li><a href="/files/network_science_25/datasets/congress/congress_network_data.json">Congress members names</a></li>
+                       <li><a href="/files/network_science_26/datasets/congress/formatted_congress.edgelist">Edgelist of Congress members social network</a></li>
+                       <li><a href="/files/network_science_26/datasets/congress/congress_network_data.json">Congress members names</a></li>
                    </ul>
           </div>
        </div>
@@ -389,14 +389,14 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Code</h4>
                    <ul>
-                   	<li><a href="/files/network_science_25/exercises/community_detection_tutorial.ipynb">Tutorial</a>: Community detection in simulated and real networks.</li>
-                   	<li><a href="/files/network_science_25/exercises/airport_exercise_communities.ipynb">Exercise</a>: Community detection applied to Airports network. For this exercise you will use the data from the previous coding sessions.</li>
+                   	<li><a href="/files/network_science_26/exercises/community_detection_tutorial.ipynb">Tutorial</a>: Community detection in simulated and real networks.</li>
+                   	<li><a href="/files/network_science_26/exercises/airport_exercise_communities.ipynb">Exercise</a>: Community detection applied to Airports network. For this exercise you will use the data from the previous coding sessions.</li>
                    </ul>
                <h4>Data</h4>
                	   Network of American football games between Division IA colleges during regular season Fall 2000. From M. Girvan and M. E. J. Newman, Community structure in social and biological networks. Proc. Natl. Acad. Sci. USA 99(12), 7821-7826 (2002).
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/football/edges.csv">Edgelist of football teams (matches)</a></li>
-                       <li><a href="/files/network_science_25/datasets/football/nodes.csv">Nodes (football teams)</a></li>
+                       <li><a href="/files/network_science_26/datasets/football/edges.csv">Edgelist of football teams (matches)</a></li>
+                       <li><a href="/files/network_science_26/datasets/football/nodes.csv">Nodes (football teams)</a></li>
                    </ul>
           </div>
        </div>
@@ -407,15 +407,15 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Code</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/exercises/bipartite_projection_tutorial.ipynb">Tutorial</a>: Projection of bipartite networks applied to export networks.</li>
+                       <li><a href="/files/network_science_26/exercises/bipartite_projection_tutorial.ipynb">Tutorial</a>: Projection of bipartite networks applied to export networks.</li>
                    </ul>
                <h4>Data</h4>
                	   Global trade data from UN Comtrade (2022) containing export values for 171 countries and 5206 products
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/export/exportmatrix2022.csv">Export matrix for the year 2022</a></li>
-                       <li><a href="/files/network_science_25/datasets/export/countries.csv">List of all countries</a></li>
-                       <li><a href="/files/network_science_25/datasets/export/products.csv">List of all products</a></li>
-                       <li><a href="/files/network_science_25/datasets/export/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
+                       <li><a href="/files/network_science_26/datasets/export/exportmatrix2022.csv">Export matrix for the year 2022</a></li>
+                       <li><a href="/files/network_science_26/datasets/export/countries.csv">List of all countries</a></li>
+                       <li><a href="/files/network_science_26/datasets/export/products.csv">List of all products</a></li>
+                       <li><a href="/files/network_science_26/datasets/export/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
                    </ul>
           </div>
        </div>
@@ -426,16 +426,16 @@ permalink: /teaching/network-science/
            <div class="nested-accordion-content">
                <h4>Code</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/exercises/economic_fitness_tutorial.ipynb">Tutorial</a>: Projection of bipartite networks applied to export networks.</li>
+                       <li><a href="/files/network_science_26/exercises/economic_fitness_tutorial.ipynb">Tutorial</a>: Projection of bipartite networks applied to export networks.</li>
                    </ul>
                <h4>Data</h4>
                	   Global trade data from UN Comtrade (2021) containing export values for 169 countries and 5206 products
                    <ul>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/exportmatrix2021.csv">Export matrix for the year 2021</a></li>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/countries.csv">List of all countries</a></li>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/products.csv">List of all products</a></li>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
-                       <li><a href="/files/network_science_25/datasets/export_gdp/gdp_ppp.csv">GDPppp per capita for the year 2021. Downloaded from the World Bank website.</a></li>
+                       <li><a href="/files/network_science_26/datasets/export_gdp/exportmatrix2021.csv">Export matrix for the year 2021</a></li>
+                       <li><a href="/files/network_science_26/datasets/export_gdp/countries.csv">List of all countries</a></li>
+                       <li><a href="/files/network_science_26/datasets/export_gdp/products.csv">List of all products</a></li>
+                       <li><a href="/files/network_science_26/datasets/export_gdp/HSCodeandDescription.xlsx">Descriptions of all products</a></li>
+                       <li><a href="/files/network_science_26/datasets/export_gdp/gdp_ppp.csv">GDPppp per capita for the year 2021. Downloaded from the World Bank website.</a></li>
                    </ul>
           </div>
        </div>
@@ -448,7 +448,7 @@ permalink: /teaching/network-science/
                    Data represent retweet trees on Twitter. Each tree corresponds to a news, classified as being true or fake. Data can be downloaded <a href="https://github.com/mdepak/fake-news-propagation/">here</a>.
                <h4>Code</h4>
                    <ul>
-                       <li><a href="/files/network_science_25/exercises/fake_news_diffusion_tutorial.ipynb">Notebook</a></li>
+                       <li><a href="/files/network_science_26/exercises/fake_news_diffusion_tutorial.ipynb">Notebook</a></li>
                    </ul>
            </div>
        </div> 
