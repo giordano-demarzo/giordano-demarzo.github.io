@@ -7,9 +7,8 @@ permalink: /teaching/network-science/
 <div class="course-page-container">
     <h1>Network Science of Socio-Economic Systems</h1>
     <h4>Department of Politics and Public Administration, Konstanz University</h4>
-    <h5>Winter Semester 2025/2026</h5>
-    <p>This course covers the foundational theories and models in network science, with a focus on socio-
-economic systems. </p>
+    <h5>Winter Semester 2026/2027</h5>
+    <p>This course covers the foundational theories and models in network science, with a focus on socio-economic systems. </p>
 
     <!-- Contents Section -->
     <button class="accordion-button" onclick="toggleAccordion('contents-section')">Contents &#9662;</button>
@@ -28,13 +27,13 @@ economic systems. </p>
     <h4>Format</h4>
     <p>The course takes the form of seminars and coding sessions:</p>
     <ol>
-        <li>13 Seminars, the first 7 covering the main topics in Network Science, the following 6 covering more advanced techniques and applications of Network Science to Socio-Economic systems.</li>
+        <li>14 Seminars, the first 8 covering the main topics in Network Science, the following 6 covering more advanced techniques and applications of Network Science to Socio-Economic systems.</li>
         <li>1 Students Q&A Session</li>
         <li>7 Coding Sessions</li>
     </ol>
     
     <h4>Grading</h4>
-    <p>Students select a published article from a set of readings or a dataset. The exam consist in reproducing the paper or analyzing the dataset using the techniques discussed in the course. The course grade is based on the student presentation (35%), the code (15%), and on the report (50%). Reports should be 4/5 pages long (including the bibliography) and must contain
+    <p>Students select a published article from a set of readings or a dataset. The exam consist in reproducing the paper or analyzing the dataset using the techniques discussed in the course. The course grade is based on the student presentation (50%), the code (15%), and on the report (35%). Reports should be 4/5 pages long (including the bibliography) and must contain
         <ol>
 		<li>Abstract</li>
 		<li>Introduction</li>
@@ -56,68 +55,68 @@ economic systems. </p>
     <div class="accordion-content" id="course-dates-section">
     	<h3>Seminars</h3>
         <div class="course-date">
-            <span class="date">October 22, 2025</span> - <span class="lecture-title">Introduction to Network Science</span>
+            <span class="date">October 20, 2026</span> - <span class="lecture-title">Introduction to Network Science</span>
         </div>
         <div class="course-date">
-            <span class="date">October 29, 2025</span> - <span class="lecture-title">Network Theory Basics</span>
+            <span class="date">October 27, 2026</span> - <span class="lecture-title">Network Theory Basics</span>
         </div>
         <div class="course-date">
-            <span class="date">November 05, 2025</span> - <span class="lecture-title">Random Graphs and Small World</span>
+            <span class="date">November 3, 2026</span> - <span class="lecture-title">Random Graphs and Small World</span>
         </div>
         <div class="course-date">
-            <span class="date">November 12, 2025</span> - <span class="lecture-title">Scale Free Networks</span>
+            <span class="date">November 19, 2026</span> - <span class="lecture-title">Scale Free Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">November 19, 2025</span> - <span class="lecture-title">Measuring Nodes Centrality</span>
+            <span class="date">November 24, 2026</span> - <span class="lecture-title">Measuring Nodes Centrality</span>
         </div>
         <div class="course-date">
-            <span class="date">November 26, 2025</span> - <span class="lecture-title">Communities in Networks</span>
+            <span class="date">December 8, 2026</span> - <span class="lecture-title">Communities in Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">December 3, 2025</span> - <span class="lecture-title">Processes on Networks</span>
+            <span class="date">December 15, 2026</span> - <span class="lecture-title">Processes on Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">December 10, 2025</span> - <span class="lecture-title">Network Ensembles</span>
+            <span class="date">December 17, 2026</span> - <span class="lecture-title">Network Ensembles</span>
         </div>
         <div class="course-date">
-            <span class="date">December 17, 2025 </span> - <span class="lecture-title">Multilayer and Higher Order Networks</span>
+            <span class="date">January 12, 2027</span> - <span class="lecture-title">Multilayer and Higher Order Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">January 7, 2026</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
+            <span class="date">January 14, 2027</span> - <span class="lecture-title">Economic and Financial Networks 1</span>
         </div>
         <div class="course-date">
-            <span class="date">January 14, 2026</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
+            <span class="date">January 19, 2027</span> - <span class="lecture-title">Economic and Financial Networks 2</span>
         </div>
         <div class="course-date">
-            <span class="date">January 21, 2026</span> - <span class="lecture-title">Social Networks</span>
+            <span class="date">January 26, 2027</span> - <span class="lecture-title">Social Networks</span>
         </div>
         <div class="course-date">
-            <span class="date">January 28, 2026 </span> - <span class="lecture-title">Advanced Topics in Network Science</span>
+            <span class="date">February 2, 2027</span> - <span class="lecture-title">Advanced Topics in Network Science</span>
         </div>
         <div class="course-date">
-            <span class="date">February 04, 2026 </span> - <span class="lecture-title">Students Q&A</span>
+            <span class="date">February 4, 2027</span> - <span class="lecture-title">Students Q&A</span>
         </div>
         <h3>Coding Sessions</h3>
         <div class="course-date">
-            <span class="date">October 29, 2025</span> - <span class="lecture-title">Introduction to Network Science in Python</span>
+            <span class="date">October 29, 2026</span> - <span class="lecture-title">Introduction to Network Science in Python</span>
         </div>
         <div class="course-date">
-            <span class="date">November 5, 2025</span> - <span class="lecture-title">Analysis of real world networks</span>
+            <span class="date">November 5, 2026</span> - <span class="lecture-title">Analysis of real world networks</span>
         </div>
         <div class="course-date">
-            <span class="date">November 19, 2025</span> - <span class="lecture-title">Centrality measures</span>
+            <span class="date">November 26, 2026</span> - <span class="lecture-title">Centrality measures</span>
         </div>
         <div class="course-date">
-            <span class="date">November 26, 2025</span> - <span class="lecture-title">Community detection algorithms</span>
+            <span class="date">December 10, 2026</span> - <span class="lecture-title">Community detection algorithms</span>
         </div>
         <div class="course-date">
-            <span class="date">December 10, 2025</span> - <span class="lecture-title">Configuration models</span>
+            <span class="date">December 22, 2026</span> - <span class="lecture-title">Configuration models</span>
         </div>
         <div class="course-date">
-            <span class="date">January 7, 2026</span> - <span class="lecture-title">Analysis of the world trading network</span>
+            <span class="date">January 21, 2027</span> - <span class="lecture-title">Analysis of the world trading network</span>
         </div>
         <div class="course-date">
-            <span class="date">January 21, 2026</span> - <span class="lecture-title">Analysis of social networks</span>
+            <span class="date">January 28, 2027</span> - <span class="lecture-title">Analysis of social networks</span>
         </div>
         <!-- Additional dates can be added here -->
     </div>
@@ -131,10 +130,11 @@ economic systems. </p>
            <div class="nested-accordion-content">
                <h4>Readings and Slides</h4>
                    <ul>
-                       	<li><a href="/files/network_science_25/Network_Science_1.pdf">Slides</a></li>
+                       	<li><a href="/files/network_science_26/Network_Science_1.pdf">Slides</a></li>
                    </ul>
           </div>
        </div>  
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 2 &#9662;</button>
            <div class="nested-accordion-content">
@@ -145,6 +145,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 3 &#9662;</button>
            <div class="nested-accordion-content">
@@ -159,6 +161,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 4 &#9662;</button>
            <div class="nested-accordion-content">
@@ -174,6 +178,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 5 &#9662;</button>
            <div class="nested-accordion-content">
@@ -189,6 +195,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 6 &#9662;</button>
            <div class="nested-accordion-content">
@@ -204,6 +212,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 7 &#9662;</button>
            <div class="nested-accordion-content">
@@ -221,6 +231,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 8 &#9662;</button>
            <div class="nested-accordion-content">
@@ -237,6 +249,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 9 &#9662;</button>
            <div class="nested-accordion-content">
@@ -253,6 +267,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>  
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 10 &#9662;</button>
            <div class="nested-accordion-content">
@@ -268,6 +284,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>  
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 11 &#9662;</button>
            <div class="nested-accordion-content">
@@ -285,6 +303,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 12 &#9662;</button>
            <div class="nested-accordion-content">
@@ -302,6 +322,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 13 &#9662;</button>
            <div class="nested-accordion-content">
@@ -313,8 +335,10 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       -->
        <h3> Coding Sessions </h3>
        <h5> </h5>  
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
            <div class="nested-accordion-content">
@@ -324,6 +348,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
            <div class="nested-accordion-content">
@@ -338,6 +364,8 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 3 &#9662;</button>
            <div class="nested-accordion-content">
@@ -354,6 +382,8 @@ economic systems. </p>
                    </ul>
           </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 4 &#9662;</button>
            <div class="nested-accordion-content">
@@ -370,6 +400,8 @@ economic systems. </p>
                    </ul>
           </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 5 &#9662;</button>
            <div class="nested-accordion-content">
@@ -387,6 +419,8 @@ economic systems. </p>
                    </ul>
           </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 6 &#9662;</button>
            <div class="nested-accordion-content">
@@ -405,6 +439,8 @@ economic systems. </p>
                    </ul>
           </div>
        </div>
+       -->
+       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 7 &#9662;</button>
            <div class="nested-accordion-content">
@@ -416,6 +452,7 @@ economic systems. </p>
                    </ul>
            </div>
        </div> 
+       -->
    </div>    
    <!-- Papers for Students Presentations -->
    <button class="accordion-button" onclick="toggleAccordion('material-section')">Suggested articles to present &#9662;</button>
@@ -425,10 +462,10 @@ economic systems. </p>
 		<li><a href="https://www.science.org/doi/full/10.1126/science.1167782" rel="nofollow">Explosive percolation in random networks. Dimitris Achlioptas, Raissa M D'Souza, Joel Spencer (2009)</a></li>
 		<li><a href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.99.228701" rel="nofollow">Emergence of Communities in Weighted Networks. Jussi M. Kumpula, Jukka-Pekka Onnela, Jari Saramäki, Kimmo Kaski, and János Kertész (2007)</a></li>
 		<li><a href="https://www.nature.com/articles/srep05679" rel="nofollow">The role of endogenous and exogenous mechanisms in the formation of R&amp;D networks. Mario V. Tomasello, Nicola Perra, Claudio J. Tessone, Márton Karsai &amp; Frank Schweitzer (2014)</a></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). </a> Assigned to David Marasek.</li>
+		<li><a href="https://www.nature.com/articles/s41598-023-31658-w" rel="nofollow">Quantifying the complexity and similarity of chess openings using online chess community data. Giordano De Marzo and Vito DP Servedio (2023). </a></li>
 		<li><a href="https://www.nature.com/articles/s41598-024-61448-x" rel="nofollow">Mapping job fitness and skill coherence into wages: an economic complexity analysis. Sabrina Aufiero, Giordano De Marzo, Angelica Sbardella, Andrea Zaccaria (2024)</a></li>
 		<li><a href="https://www.nature.com/articles/35019019" rel="nofollow">Error and attack tolerance of complex networks. Réka Albert, Hawoong Jeong and Albert-László Barabási (2000). </a></li>
-		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a> Assigned to Niklas Bacher.
+		<li><a href="https://www.nature.com/articles/s41467-018-04287-5" rel="nofollow">Dynamically induced cascading failures in power grids. Benjamin Schäfer, Dirk Witthaut, Marc Timme & Vito Latora (2018)</a>
 </li>
 		<li><a href="https://journals.aps.org/pre/pdf/10.1103/PhysRevE.65.026107?casa_token=0_slnATnRWYAAAAA%3A9KFhSozPdXTgY4StjSL0eLF3-vv6UWoFa3y9Q5D1ItcXiBSxs9Mq7vtrF6U3Jt2gNVQovt8lAoljofg" rel="nofollow">Growing scale-free networks with tunable clustering. Petter Holme and Beom Jun Kim (2002)</a></li>
 		<li><a href="https://www.nature.com/articles/nature11459" rel="nofollow">Popularity versus similarity in growing networks. F. Papadopoulos et al. (2012)</a></li>
@@ -439,11 +476,11 @@ economic systems. </p>
 		<li><a href="https://www.nature.com/articles/srep02980" rel="nofollow">The Anatomy of a Scientific Rumor. M. De Domenico, A. Lima, P. Mougel and M. Musolesi (2013)</a></li>
 		<li><a href="https://doi.org/10.1371/journal.pone.0182774" rel="nofollow">Economic development and wage inequality: A complex system analysis. A. Sbardella, E. Pugliese, L. Pietronero (2017)</a></li>
 		<li><a href="https://iopscience.iop.org/article/10.1088/2632-072X/ada845" rel="nofollow">Fitness Centrality: a non-linear centrality measure for complex networks. V.D.P. Servedio et al. (2025)</a></li>
-		<li><a href="https://doi.org/10.1016/j.chaos.2025.116741" rel="nofollow">Species vulnerability and ecosystem fragility: A dual perspective in food webs. E. Calo, G. De Marzo and V.D.P. Servedio (2025)</a> <b>NEW</b></li>
-		<li><a href="https://www.nature.com/articles/s41598-023-30649-1" rel="nofollow">Urban economic fitness and complexity from patent data. M. Straccamore, M. Bruno, B. Monechi and V. Loreto (2023)</a> <b>NEW</b></li>
-		<li><a href="https://arxiv.org/abs/2512.24976" rel="nofollow">Graphicality of power-law and double power-law degree sequences. P. Valigi, M. A. Serrano, C. Castellano and L. Cirigliano (2025)</a> <b>NEW</b></li>
-		<li><a href="https://doi.org/10.1371/journal.pone.0086197" rel="nofollow">Do the Rich Get Richer? An Empirical Analysis of the Bitcoin Transaction Network. D. Kondor, M. Posfai, I. Csabai, G. Vattay (2014)</a> <b>NEW</b></li>
-		<li><a href="https://www.nature.com/articles/s41538-025-00588-4" rel="nofollow">The networks of ingredient combinations as culinary fingerprints of world cuisines. C. Caprioli et al. (2025)</a> <b>NEW</b></li>
+		<li><a href="https://doi.org/10.1016/j.chaos.2025.116741" rel="nofollow">Species vulnerability and ecosystem fragility: A dual perspective in food webs. E. Calo, G. De Marzo and V.D.P. Servedio (2025)</a></li>
+		<li><a href="https://www.nature.com/articles/s41598-023-30649-1" rel="nofollow">Urban economic fitness and complexity from patent data. M. Straccamore, M. Bruno, B. Monechi and V. Loreto (2023)</a></li>
+		<li><a href="https://arxiv.org/abs/2512.24976" rel="nofollow">Graphicality of power-law and double power-law degree sequences. P. Valigi, M. A. Serrano, C. Castellano and L. Cirigliano (2025)</a></li>
+		<li><a href="https://doi.org/10.1371/journal.pone.0086197" rel="nofollow">Do the Rich Get Richer? An Empirical Analysis of the Bitcoin Transaction Network. D. Kondor, M. Posfai, I. Csabai, G. Vattay (2014)</a></li>
+		<li><a href="https://www.nature.com/articles/s41538-025-00588-4" rel="nofollow">The networks of ingredient combinations as culinary fingerprints of world cuisines. C. Caprioli et al. (2025)</a></li>
 	</ul>
     </div>
     <!-- Datasets for Students Presentations -->
@@ -451,17 +488,17 @@ economic systems. </p>
    <div class="accordion-content" id="material-section">
      	<ul dir="auto">
 		<li><a href="https://networkrepository.com/soc-wiki-Vote.php" rel="nofollow">Wikipedia votes</a></li>
-		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a> Assigned to Ludwig Kunz.</li>
-		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a> Assigned to Marco Stöhr.</li>
-		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a> Assigned to Jan Thiele.</li>
+		<li><a href="https://networkrepository.com/fb-pages-politician.php" rel="nofollow">Facebook pages</a></li>
+		<li><a href="https://networkrepository.com/inf-power.php" rel="nofollow">US power grid</a></li>
+		<li><a href="https://networkrepository.com/ca-netscience.php" rel="nofollow">Co-authorship of scientists in network theory</a></li>
 		<li><a href="https://networkrepository.com/ca-hollywood-2009.php" rel="nofollow">Hollywood collaboration network</a></li>
-		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a> Assigned to Katrin Sauter.</li>
+		<li><a href="https://networkrepository.com/socfb-Stanford3.php" rel="nofollow">Facebook social network (Stanford students)</a></li>
 		<li><a href="https://networkrepository.com/socfb-Michigan23.php" rel="nofollow">Facebook social network (Michigan University students)</a></li>
-		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a> Assigned to Timothy Gunson.</li>
-		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a> Assigned to Emrecan Ulu.</li>
+		<li><a href="https://networkrepository.com/socfb-Northeastern19.php" rel="nofollow">Facebook social network (Northeastern University students)</a></li>
+		<li><a href="https://networkrepository.com/rec-dating.php" rel="nofollow">Dating network (bipartite)</a></li>
 		<li><a href="https://networkrepository.com/rec-github.php" rel="nofollow">Github network (bipartite)</a></li>
-		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a> Assigned to Jian Feng.</li>
-		<li>I can privatelly provide patent data to study different type of bipartite networks involving for instance inventors, firms, technologies, countries, cities. More than a single project on this topic is possible. <b>NEW</b> Assigned to Robert Seidel and Cristina Flintoaca.</li>
+		<li><a href="https://networkrepository.com/rec-movielens.php" rel="nofollow">Movies rating network (bipartite)</a></li>
+		<li>I can privatelly provide patent data to study different type of bipartite networks involving for instance inventors, firms, technologies, countries, cities. More than a single project on this topic is possible.</li>
 	</ul>
     </div>
    </div>
