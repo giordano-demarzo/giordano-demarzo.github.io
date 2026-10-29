@@ -336,7 +336,6 @@ permalink: /teaching/network-science/
        -->
        <h3> Coding Sessions </h3>
        <h5> </h5>  
-       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 1 &#9662;</button>
            <div class="nested-accordion-content">
@@ -346,7 +345,6 @@ permalink: /teaching/network-science/
                    </ul>
            </div>
        </div>
-       -->
        <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Coding Session 2 &#9662;</button>
