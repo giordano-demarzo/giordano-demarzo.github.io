@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giant Component Emergence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --accent-soft:rgba(58,125,184,.12);
+  --second:#e08a2c; --small:#9aa6b8; --iso:#cfd6e0; --edge:rgba(90,105,125,.35);
+  --band-sub:rgba(138,147,160,.10); --band-sup:rgba(58,125,184,.07); --band-con:rgba(58,125,184,.15);
+  --bar:#5bc8f0;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --accent-soft:rgba(95,163,220,.16);
+  --second:#f0a04b; --small:#6f7c8f; --iso:#3a434f; --edge:rgba(170,185,205,.28);
+  --band-sub:rgba(124,134,149,.10); --band-sup:rgba(95,163,220,.07); --band-con:rgba(95,163,220,.15);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:18px 32px 4px;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;border-left:6px solid var(--bar)}
+h1{margin:0;font-size:clamp(22px,2.6vw,40px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+#regime{width:100%;min-height:2.2em;font-size:clamp(14px,1.4vw,22px);color:var(--ink2);font-weight:500}
+#regime b{color:var(--ink)}
+main{flex:1;display:grid;grid-template-columns:1.15fr 1fr;gap:20px;padding:12px 32px;min-height:0}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;overflow:hidden}
+#net{width:100%;height:100%;display:block}
+.right{display:flex;flex-direction:column;gap:14px;min-height:0}
+#plotWrap{flex:1;min-height:260px;padding:8px 8px 0}
+#plot{width:100%;height:100%;display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{background:var(--panel);border-radius:12px;padding:10px 14px}
+.stat .v{font-size:clamp(18px,2vw,30px);font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+.legend{position:absolute;left:14px;bottom:10px;font-size:12px;color:var(--ink2);display:flex;gap:14px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}
+footer{padding:8px 32px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.kval{font-size:clamp(18px,1.8vw,28px);font-weight:700;min-width:120px;font-variant-numeric:tabular-nums}
+.kval span{color:var(--accent)}
+input[type=range]{flex:1;min-width:200px;accent-color:var(--accent);height:28px}
+button{font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--grid);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center}
+.group .lab{font-size:13px;color:var(--ink2);margin-right:2px}
+.keys{font-size:11px;color:var(--muted);width:100%}
+#tip{position:absolute;pointer-events:none;background:var(--bg);border:1px solid var(--grid);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--ink);opacity:0;transition:opacity .1s;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+@media (max-width:820px){
+  html,body{height:auto}
+  #regime{min-height:4.5em}
+  header,main,footer{padding-left:16px;padding-right:16px}
+  #plotWrap{flex:none;height:300px}
+  .legend{position:static;padding:0 12px 10px}
+  main{grid-template-columns:1fr}
+  .panel.netp{height:auto}
+  #net{height:90vw;max-height:420px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Erdős–Rényi: <span class="hl">Giant Component</span></h1>
+  <div id="regime"></div>
+</header>
+<main>
+  <div class="panel netp">
+    <canvas id="net"></canvas>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--accent)"></i>largest component</span>
+      <span><i class="sw" style="background:var(--second)"></i>2nd largest</span>
+      <span><i class="sw" style="background:var(--small)"></i>other components</span>
+      <span><i class="sw" style="background:var(--iso)"></i>isolated</span>
+    </div>
+  </div>
+  <div class="right">
+    <div class="panel" id="plotWrap"><svg id="plot"></svg><div id="tip"></div></div>
+    <div class="stats">
+      <div class="stat"><div class="v" id="sS">0</div><div class="l"><i class="sw" style="background:var(--accent)"></i><span>S = N<sub>G</sub>/N</span></div></div>
+      <div class="stat"><div class="v" id="sNG">0</div><div class="l"><span>N<sub>G</sub> (largest)</span></div></div>
+      <div class="stat"><div class="v" id="sN2">0</div><div class="l"><i class="sw" style="background:var(--second)"></i><span>2nd largest</span></div></div>
+      <div class="stat"><div class="v" id="sIso">0</div><div class="l">isolated nodes</div></div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="kval">⟨k⟩ = <span id="kv">0.00</span></div>
+  <input type="range" id="k" min="0" max="8" step="0.01" value="0.5" aria-label="average degree">
+  <button id="play">▶ Play</button>
+  <div class="group"><span class="lab">N</span>
+    <button data-n="100">100</button><button data-n="200">200</button><button data-n="500">500</button><button data-n="1000">1000</button>
+  </div>
+  <button id="resample">↻ New sample</button>
+  <button id="theme">◐</button>
+  <div class="keys">Keys: ← → change ⟨k⟩ · Shift+← → bigger steps · 1 / 0 jump to ⟨k⟩=1 / 0 · L jump to ln N · Space play · R new sample · D dark mode · click the plot to set ⟨k⟩</div>
+</footer>
+
+<script>
+const KMAX = 8;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let N = 200, k = 0.5, edges = [], nodes = [], sim = null, empirical = [];
+let compOf = new Int32Array(0), rank = {}, playing = false, playTimer = null;
+
+// ---------- theory: S = 1 - exp(-k S)
+function theoryS(kk){
+  if (kk <= 1) return 0;
+  let lo = 1e-12, hi = 1;
+  for (let i=0;i<80;i++){ const m=(lo+hi)/2; (m - 1 + Math.exp(-kk*m) < 0) ? lo=m : hi=m; }
+  return (lo+hi)/2;
+}
+const theory = d3.range(0, KMAX+0.0001, 0.01).map(x=>({k:x,S:theoryS(x)}));
+
+// ---------- coupled ER sample: each pair gets u ~ U(0,1); edge present iff u < p = k/(N-1)
+// Increasing k only ADDS edges, so the layout evolves continuously.
+function sample(){
+  const pmax = KMAX/(N-1), list = [];
+  for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){ const u=Math.random(); if (u<pmax) list.push({u, s:i, t:j}); }
+  list.sort((a,b)=>a.u-b.u);
+  edges = list.map(e=>({kth:e.u*(N-1), source:e.s, target:e.t}));
+  // empirical S(k) for this sample
+  const par = new Int32Array(N).map((_,i)=>i), sz = new Int32Array(N).fill(1);
+  const find = x=>{ while(par[x]!==x){ par[x]=par[par[x]]; x=par[x]; } return x; };
+  let big = 1, ei = 0; empirical = [];
+  for (let x=0; x<=KMAX+1e-9; x+=0.02){
+    while (ei<edges.length && edges[ei].kth<=x){
+      let a=find(edges[ei].source), b=find(edges[ei].target);
+      if (a!==b){ if(sz[a]<sz[b]) [a,b]=[b,a]; par[b]=a; sz[a]+=sz[b]; if(sz[a]>big) big=sz[a]; }
+      ei++;
+    }
+    empirical.push({k:x, S:big/N});
+  }
+  const old = nodes;
+  const R0 = Math.min(W,H)*0.42;
+  nodes = d3.range(N).map(i=>{
+    if (old[i] && old.length===N) return {id:i,x:old[i].x,y:old[i].y};
+    const a=Math.random()*2*Math.PI, r=R0*Math.sqrt(Math.random());
+    return {id:i, x:W/2+r*Math.cos(a), y:H/2-12+r*Math.sin(a)};
+  });
+}
+
+function activeEdges(){ return edges.filter(e=>e.kth<=k); }
+
+function components(act){
+  const par = new Int32Array(N).map((_,i)=>i);
+  const find = x=>{ while(par[x]!==x){ par[x]=par[par[x]]; x=par[x]; } return x; };
+  for (const e of act){ const a=find(e.source.id ?? e.source), b=find(e.target.id ?? e.target); if(a!==b) par[a]=b; }
+  const size = new Map(); compOf = new Int32Array(N);
+  for (let i=0;i<N;i++){ const r=find(i); compOf[i]=r; size.set(r,(size.get(r)||0)+1); }
+  const sorted = [...size.entries()].sort((a,b)=>b[1]-a[1]);
+  rank = {first: sorted[0]?.[0], second: sorted[1]?.[1]>1 ? sorted[1][0] : -1,
+          s1: sorted[0]?.[1]||0, s2: sorted[1]?.[1]||0, size};
+}
+
+// ---------- network canvas
+const canvas = document.getElementById('net'), ctx = canvas.getContext('2d');
+let W=0,H=0;
+function sizeCanvas(){
+  const r = canvas.parentElement.getBoundingClientRect(), dpr = window.devicePixelRatio||1;
+  W=r.width; H=r.height; canvas.width=W*dpr; canvas.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  if (sim){ sim.force('x').x(W/2); sim.force('y').y(H/2-12); sim.alpha(.5).restart(); }
+}
+function nodeR(){ return N<=100?6:N<=200?4.8:N<=500?3.2:2.3; }
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const act = activeEdges();
+  ctx.strokeStyle = css('--edge'); ctx.lineWidth = N>500?0.6:1; ctx.beginPath();
+  for (const e of act){ ctx.moveTo(e.source.x,e.source.y); ctx.lineTo(e.target.x,e.target.y); }
+  ctx.stroke();
+  const r = nodeR(), cA=css('--accent'), c2=css('--second'), cS=css('--small'), cI=css('--iso'), bg=css('--panel');
+  for (const n of nodes){
+    const c = compOf[n.id], s = rank.size.get(c);
+    ctx.fillStyle = (c===rank.first && s>1) ? cA : c===rank.second ? c2 : s===1 ? cI : cS;
+    ctx.beginPath(); ctx.arc(n.x,n.y,r,0,2*Math.PI); ctx.fill();
+    if (N<=500){ ctx.lineWidth=1; ctx.strokeStyle=bg; ctx.stroke(); }
+  }
+}
+function buildSim(){
+  if (sim) sim.stop();
+  sim = d3.forceSimulation(nodes)
+    .force('charge', d3.forceManyBody().strength(N<=200?-22:N<=500?-9:-4).distanceMax(220))
+    .force('link', d3.forceLink([]).id(d=>d.id).distance(N<=200?16:10).strength(0.7))
+    .force('x', d3.forceX(W/2).strength(N<=200?0.05:0.08))
+    .force('y', d3.forceY(H/2-12).strength(N<=200?0.07:0.11))
+    .alphaDecay(0.03).on('tick', ()=>{ const r=nodeR()+2; for(const n of nodes){ n.x=Math.max(r,Math.min(W-r,n.x)); n.y=Math.max(r,Math.min(H-28,n.y)); } draw(); });
+  sim.force('link').links(activeEdges()); components(activeEdges());
+  sim.stop(); for (let i=0;i<120;i++) sim.tick();   // pre-settle so the first frame is already laid out
+  updateGraph(0.3);
+}
+function updateGraph(alpha=0.35){
+  const act = activeEdges();
+  sim.force('link').links(act);
+  components(act);
+  sim.alpha(Math.max(sim.alpha(), alpha)).restart();
+  draw();
+}
+
+// ---------- S(k) plot
+const svg = d3.select('#plot'), tip = document.getElementById('tip');
+let X, Y, g = {};
+function buildPlot(){
+  svg.selectAll('*').remove();
+  const r = svg.node().getBoundingClientRect(), m = {l:52,r:16,t:30,b:44};
+  const w = r.width, h = r.height;
+  X = d3.scaleLinear([0,KMAX],[m.l,w-m.r]); Y = d3.scaleLinear([0,1],[h-m.b,m.t]);
+  const lnN = Math.log(N);
+  // regime bands
+  const bands = [[0,1,'--band-sub','sub-critical'],[1,lnN,'--band-sup','super-critical'],[lnN,KMAX,'--band-con','connected']];
+  for (const [a,b,c,lab] of bands){
+    svg.append('rect').attr('x',X(a)).attr('y',m.t).attr('width',Math.max(0,X(b)-X(a))).attr('height',h-m.b-m.t).attr('fill',`var(${c})`);
+    svg.append('text').attr('x',(X(a)+X(b))/2).attr('y',m.t-10).attr('text-anchor','middle').attr('font-size',12).attr('fill','var(--ink2)').text(lab);
+  }
+  // grid + axes
+  svg.append('g').selectAll('line').data(Y.ticks(5)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  const ax = svg.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).ticks(7).tickSize(0).tickPadding(8));
+  const ay = svg.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(5).tickSize(0).tickPadding(8));
+  [ax,ay].forEach(a=>{a.select('.domain').remove(); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',12).attr('font-family','Poppins');});
+  svg.append('text').attr('x',(m.l+w-m.r)/2).attr('y',h-8).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('average degree ⟨k⟩');
+  svg.append('text').attr('transform',`translate(14,${(m.t+h-m.b)/2}) rotate(-90)`).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('S = N_G / N');
+  // markers at 1 and ln N
+  for (const [v,lab] of [[1,'⟨k⟩ = 1'],[lnN,`ln N = ${lnN.toFixed(2)}`]]){
+    svg.append('line').attr('x1',X(v)).attr('x2',X(v)).attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--muted)').attr('stroke-dasharray','4 4');
+    svg.append('text').attr('x',X(v)+5).attr('y',Y(0.06)).attr('font-size',11).attr('fill','var(--ink2)').text(lab);
+  }
+  const line = d3.line().x(d=>X(d.k)).y(d=>Y(d.S));
+  g.emp = svg.append('path').attr('fill','none').attr('stroke','var(--muted)').attr('stroke-width',1.5);
+  svg.append('path').datum(theory).attr('fill','none').attr('stroke','var(--accent)').attr('stroke-width',2.5).attr('d',line);
+  // legend (bottom-right is always empty: S is large there)
+  const lg = svg.append('g').attr('transform',`translate(${Math.min(X(3.4), w-215)},${Y(0.32)})`);
+  lg.append('line').attr('x1',0).attr('x2',22).attr('y1',0).attr('y2',0).attr('stroke','var(--accent)').attr('stroke-width',2.5);
+  const tt = lg.append('text').attr('x',30).attr('y',4).attr('font-size',13).attr('fill','var(--ink)');
+  tt.append('tspan').text('theory: S = 1 − e'); tt.append('tspan').attr('dy',-6).attr('font-size',10).text('−⟨k⟩S');
+  lg.append('line').attr('x1',0).attr('x2',22).attr('y1',24).attr('y2',24).attr('stroke','var(--muted)').attr('stroke-width',1.5);
+  lg.append('text').attr('x',30).attr('y',28).attr('font-size',13).attr('fill','var(--ink)').text(`this sample (N = ${N})`);
+  g.cur = svg.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--accent)').attr('stroke-width',1).attr('opacity',.5);
+  g.dotT = svg.append('circle').attr('r',6).attr('fill','var(--accent)').attr('stroke','var(--panel)').attr('stroke-width',2);
+  g.dotE = svg.append('circle').attr('r',6).attr('fill','var(--ink)').attr('stroke','var(--panel)').attr('stroke-width',2);
+  // hover / click
+  const hover = svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',h-m.t-m.b).attr('fill','transparent').style('cursor','crosshair');
+  const hl = svg.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--ink2)').attr('opacity',0).attr('pointer-events','none');
+  hover.on('mousemove',ev=>{
+    const [px] = d3.pointer(ev), kk = Math.max(0,Math.min(KMAX,X.invert(px)));
+    const e = empirical[Math.round(kk/0.02)] || {S:0};
+    hl.attr('x1',px).attr('x2',px).attr('opacity',.4);
+    tip.innerHTML = `⟨k⟩ = <b>${kk.toFixed(2)}</b><br>theory S = <b>${theoryS(kk).toFixed(3)}</b><br>sample S = <b>${e.S.toFixed(3)}</b><br><span style="color:var(--muted)">click to jump here</span>`;
+    tip.style.opacity=1;
+    const tx = px + 14 + 150 > w ? px - 160 : px + 14;
+    tip.style.left = tx+'px'; tip.style.top = (m.t+8)+'px';
+  }).on('mouseleave',()=>{ tip.style.opacity=0; hl.attr('opacity',0); })
+    .on('click',ev=>{ const [px]=d3.pointer(ev); setK(Math.round(X.invert(px)*100)/100); });
+  updatePlot();
+}
+function updatePlot(){
+  const line = d3.line().x(d=>X(d.k)).y(d=>Y(d.S));
+  const upto = empirical.filter(d=>d.k<=k+1e-9);
+  g.emp.attr('d', line(upto));
+  const last = upto[upto.length-1] || {k:0,S:0};
+  g.cur.attr('x1',X(k)).attr('x2',X(k));
+  g.dotT.attr('cx',X(k)).attr('cy',Y(theoryS(k)));
+  g.dotE.attr('cx',X(k)).attr('cy',Y(rank.s1/N));
+}
+
+// ---------- text / stats
+function regimeText(){
+  const lnN = Math.log(N);
+  if (Math.abs(k-1) < 0.06) return `<b>Critical</b> · ⟨k⟩ = 1 · no giant component yet, but large clusters appear · N<sub>G</sub> ~ N<sup>2/3</sup> ≈ ${Math.round(Math.pow(N,2/3))}`;
+  if (k < 1) return `<b>Sub-critical</b> · ⟨k⟩ &lt; 1 · many small tree-like components · N<sub>G</sub> ~ ln N`;
+  if (k < lnN) return `<b>Super-critical</b> · 1 &lt; ⟨k⟩ &lt; ln N · a giant component holds a finite fraction S of the nodes`;
+  return `<b>Connected</b> · ⟨k⟩ &gt; ln N · isolated nodes disappear · N<sub>G</sub> → N`;
+}
+function updateText(){
+  document.getElementById('kv').textContent = k.toFixed(2);
+  document.getElementById('regime').innerHTML = regimeText();
+  let iso = 0; for (const [,s] of rank.size) if (s===1) iso++;
+  document.getElementById('sS').textContent = (rank.s1/N).toFixed(2);
+  document.getElementById('sNG').textContent = rank.s1;
+  document.getElementById('sN2').textContent = rank.s2;
+  document.getElementById('sIso').textContent = iso;
+  document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on', +b.dataset.n===N));
+}
+
+// ---------- controls
+const slider = document.getElementById('k');
+function setK(v){
+  k = Math.max(0, Math.min(KMAX, v)); slider.value = k;
+  updateGraph(); updatePlot(); updateText();
+}
+slider.addEventListener('input', ()=>setK(+slider.value));
+function setN(n){ N=n; nodes=[]; sample(); buildSim(); buildPlot(); updateText(); }
+document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>setN(+b.dataset.n));
+document.getElementById('resample').onclick = ()=>{ sample(); buildSim(); buildPlot(); updateText(); };
+const playBtn = document.getElementById('play');
+function togglePlay(){
+  playing = !playing; playBtn.textContent = playing ? '❚❚ Pause' : '▶ Play'; playBtn.classList.toggle('on',playing);
+  clearInterval(playTimer);
+  if (playing){
+    if (k >= KMAX-0.01) setK(0);
+    playTimer = setInterval(()=>{
+      const step = (k>0.8 && k<1.3) ? 0.006 : 0.015;   // slow down around the critical point
+      if (k + step > KMAX){ setK(KMAX); togglePlay(); } else setK(k+step);
+    }, 40);
+  }
+}
+playBtn.onclick = togglePlay;
+const themeBtn = document.getElementById('theme');
+function toggleTheme(){
+  const r=document.documentElement; r.dataset.theme = r.dataset.theme==='dark' ? 'light' : 'dark';
+  try{ localStorage.setItem('ns-theme', r.dataset.theme); }catch(e){}
+  draw();
+}
+themeBtn.onclick = toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown', e=>{
+  if (e.target.tagName==='INPUT' && (e.key==='ArrowLeft'||e.key==='ArrowRight')) e.preventDefault();
+  const big = e.shiftKey ? 0.5 : 0.1;
+  if (e.key==='ArrowRight') setK(Math.round((k+big)*100)/100);
+  else if (e.key==='ArrowLeft') setK(Math.round((k-big)*100)/100);
+  else if (e.key===' '){ e.preventDefault(); togglePlay(); }
+  else if (e.key==='1') setK(1);
+  else if (e.key==='0') setK(0);
+  else if (e.key==='l'||e.key==='L') setK(Math.round(Math.log(N)*100)/100+0.01);
+  else if (e.key==='r'||e.key==='R') document.getElementById('resample').click();
+  else if (e.key==='d'||e.key==='D') toggleTheme();
+});
+let rzT; new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ sizeCanvas(); buildPlot(); },60); }).observe(document.querySelector('main'));
+
+// ---------- init (URL params: ?N=200&k=0.5)
+const qs = new URLSearchParams(location.search);
+if ([100,200,500,1000].includes(+qs.get('N'))) N = +qs.get('N');
+if (qs.has('k')) k = Math.max(0,Math.min(KMAX,+qs.get('k')||0));
+slider.value = k;
+sizeCanvas(); sample(); buildSim(); buildPlot(); updateText();
+</script>
+</body>
+</html>

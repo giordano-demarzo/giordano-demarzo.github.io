@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Computing the Critical Point</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --bar:#5bc8f0; --hi:rgba(58,125,184,.10);
+  --c1:#7b5cc4; --c2:#e08a2c; --c3:#3f9a5a; --c4:#c8463d;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --hi:rgba(95,163,220,.14);
+  --c1:#a58bea; --c2:#f0a04b; --c3:#5fbf7a; --c4:#ec6a5f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:16px 32px 4px;border-left:6px solid var(--bar);display:flex;align-items:baseline;gap:28px;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(22px,2.5vw,38px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+.eq{font-size:clamp(18px,1.9vw,30px);font-weight:500}
+.eq sup{font-size:.62em}
+main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:10px 32px 6px;min-height:0}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;display:flex;flex-direction:column;padding:10px 12px 4px}
+.ptitle{font-size:clamp(13px,1.1vw,17px);font-weight:700}
+.ptitle span{font-weight:400;color:var(--ink2)}
+.panel svg{flex:1;width:100%;min-height:0;display:block}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:6px 32px 4px}
+.step{background:var(--panel);border-radius:12px;padding:10px 14px;font-size:clamp(12px,1vw,15px);line-height:1.4;color:var(--ink2);border:2px solid transparent;transition:border-color .2s, background .2s}
+.step b{color:var(--ink)}
+.step .n{display:inline-block;width:1.5em;height:1.5em;border-radius:50%;background:var(--grid);color:var(--ink);text-align:center;font-weight:700;font-size:.85em;line-height:1.5em;margin-right:4px}
+.step.on{border-color:var(--accent);background:var(--hi)}
+.step.on .n{background:var(--accent);color:#fff}
+.step .now{display:block;margin-top:4px;font-weight:500;color:var(--accent)}
+sup,sub{line-height:0}
+footer{padding:8px 32px 14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.kval{font-size:clamp(18px,1.8vw,28px);font-weight:700;min-width:120px;font-variant-numeric:tabular-nums}
+.kval span{color:var(--accent)}
+input[type=range]{flex:1;min-width:200px;accent-color:var(--accent);height:28px}
+button{font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--grid);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center}
+.group .lab{font-size:13px;color:var(--ink2)}
+.keys{font-size:11px;color:var(--muted);width:100%}
+svg text{font-family:Poppins,system-ui,sans-serif}
+@media (max-width:820px){
+  html,body{height:auto}
+  header,main,footer,.steps{padding-left:16px;padding-right:16px}
+  main{grid-template-columns:1fr}
+  .panel svg{flex:none;height:320px}
+  .steps{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Computing the <span class="hl">Critical Point</span></h1>
+  <div class="eq">S = 1 − e<sup>−⟨k⟩S</sup></div>
+</header>
+<main>
+  <div class="panel">
+    <div class="ptitle">Solutions = intersections <span>· y = S and y = 1 − e<sup>−⟨k⟩S</sup></span></div>
+    <svg id="left"></svg>
+  </div>
+  <div class="panel">
+    <div class="ptitle">Largest solution S(⟨k⟩) <span>· the size of the giant component</span></div>
+    <svg id="right"></svg>
+  </div>
+</main>
+<div class="steps">
+  <div class="step" id="st1"><span class="n">1</span><b>S = 0 is always a solution</b>: 1 − e<sup>0</sup> = 0. It means: no giant component.</div>
+  <div class="step" id="st2"><span class="n">2</span>The curve is <b>concave</b> and never exceeds 1. So it can cross y = S again only if it <b>starts steeper</b> than y = S.</div>
+  <div class="step" id="st3"><span class="n">3</span>Slope at the origin: d/dS (1 − e<sup>−⟨k⟩S</sup>) at S = 0 is <b>⟨k⟩</b>. Second solution S* &gt; 0 ⇔ <b>⟨k⟩ &gt; 1</b>.<span class="now" id="now3"></span></div>
+  <div class="step" id="st4"><span class="n">4</span>Just above <b>⟨k⟩<sub>c</sub> = 1</b>, expand e<sup>−x</sup> ≈ 1 − x + x²/2: <b>S ≈ 2(⟨k⟩−1)/⟨k⟩²</b>. S grows continuously from 0: a <b>second-order</b> transition.</div>
+</div>
+<footer>
+  <div class="kval">⟨k⟩ = <span id="kv">0.50</span></div>
+  <input type="range" id="k" min="0" max="5" step="0.01" value="0.5" aria-label="average degree">
+  <button id="play">▶ Play</button>
+  <div class="group"><span class="lab">pin</span>
+    <button data-k="0.5">0.5</button><button data-k="1">1</button><button data-k="2">2</button><button data-k="5">5</button>
+  </div>
+  <button id="zoom">🔍 Zoom on S≈0</button>
+  <button id="clear">✕ Clear</button>
+  <button id="theme">◐</button>
+  <div class="keys">Keys: ← → change ⟨k⟩ · Shift+← → bigger steps · P pin current ⟨k⟩ · Z zoom near the origin · C clear · Space play · 1 jump to ⟨k⟩=1 · D dark mode · click the right plot to set ⟨k⟩</div>
+</footer>
+
+<script>
+const KMAX = 5, CRIT = 0.03;
+let k = 0.5, zoom = false, traced = 0;
+let pins = [];                       // {k, color}
+const PIN_COLORS = ['--c1','--c2','--c3','--c4'];
+const f = (kk,S)=>1-Math.exp(-kk*S);
+function SstarSafe(kk){
+  if (kk <= 1) return 0;
+  let lo=1e-9, hi=1;               // g(lo)<0, g(hi)>0 where g = S - f(S)
+  for (let i=0;i<90;i++){ const m=(lo+hi)/2; if (m - f(kk,m) < 0) lo=m; else hi=m; }
+  return (lo+hi)/2;
+}
+
+// ================= LEFT: y = S vs y = 1 - e^{-kS}
+const L = {svg:d3.select('#left')};
+function buildLeft(){
+  const s = L.svg; s.selectAll('*').remove();
+  const r = s.node().getBoundingClientRect(), m={l:50,r:16,t:12,b:40};
+  L.w=r.width; L.h=r.height; L.m=m;
+  L.X = d3.scaleLinear([0, zoom?0.3:1.5],[m.l, r.width-m.r]);
+  L.Y = d3.scaleLinear([0, zoom?0.3:1.5],[r.height-m.b, m.t]);
+  L.gGrid = s.append('g'); L.gAx = s.append('g'); L.gAy = s.append('g');
+  s.append('text').attr('x',(m.l+r.width-m.r)/2).attr('y',r.height-6).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('S');
+  s.append('text').attr('transform',`translate(13,${(m.t+r.height-m.b)/2}) rotate(-90)`).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('y');
+  s.append('clipPath').attr('id','lclip').append('rect').attr('x',m.l).attr('y',m.t).attr('width',r.width-m.l-m.r).attr('height',r.height-m.t-m.b);
+  L.body = s.append('g').attr('clip-path','url(#lclip)');
+  L.one = L.body.append('line').attr('stroke','var(--muted)').attr('stroke-dasharray','2 4');
+  L.pinG = L.body.append('g');
+  L.diag = L.body.append('line').attr('stroke','var(--ink)').attr('stroke-width',2).attr('stroke-dasharray','7 5');
+  L.tan = L.body.append('line').attr('stroke','var(--accent)').attr('stroke-width',1.5).attr('stroke-dasharray','3 4');
+  L.curve = L.body.append('path').attr('fill','none').attr('stroke','var(--accent)').attr('stroke-width',3.5);
+  L.dotG = s.append('g');
+  L.lab = s.append('text').attr('font-size',15).attr('font-weight',700).attr('fill','var(--ink)');
+  L.leg = s.append('g');
+  drawLeftStatic(); updateLeft();
+}
+function drawLeftStatic(){
+  const {X,Y,m,w,h} = L;
+  const tk = zoom ? [0.1,0.2,0.3] : [0.25,0.5,0.75,1,1.25,1.5];
+  L.gGrid.selectAll('*').remove();
+  L.gGrid.selectAll('.gy').data(tk).join('line').attr('class','gy').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  L.gGrid.selectAll('.gx').data(tk).join('line').attr('class','gx').attr('y1',m.t).attr('y2',h-m.b).attr('x1',X).attr('x2',X).attr('stroke','var(--grid)');
+  L.gAx.attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).ticks(6).tickSize(0).tickPadding(8));
+  L.gAy.attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(6).tickSize(0).tickPadding(8));
+  [L.gAx,L.gAy].forEach(a=>{ a.select('.domain').attr('stroke','var(--muted)'); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',12); });
+  const dmax = X.domain()[1];
+  L.diag.attr('x1',X(0)).attr('y1',Y(0)).attr('x2',X(dmax)).attr('y2',Y(dmax));
+  L.one.attr('x1',X(0)).attr('x2',X(dmax)).attr('y1',Y(1)).attr('y2',Y(1));
+  // legend (top-left: always empty because the curve stays below 1 and y=S is the diagonal)
+  L.leg.selectAll('*').remove();
+  L.leg.attr('transform',`translate(${m.l+14},${m.t+18})`);
+  const rows = [['var(--ink)',2,'7 5','y = S'],['var(--accent)',3.5,null,'y = 1 − e^(−⟨k⟩S), current ⟨k⟩'],['var(--accent)',1.5,'3 4','tangent at S = 0 (slope ⟨k⟩)']];
+  rows.forEach(([c,sw,da,t],i)=>{
+    L.leg.append('line').attr('x1',0).attr('x2',24).attr('y1',i*22).attr('y2',i*22).attr('stroke',c).attr('stroke-width',sw).attr('stroke-dasharray',da);
+    const tx = L.leg.append('text').attr('x',32).attr('y',i*22+5).attr('font-size',13).attr('fill','var(--ink)');
+    if (i===1){ tx.append('tspan').text('y = 1 − e'); tx.append('tspan').attr('dy',-6).attr('font-size',9.5).text('−⟨k⟩S'); tx.append('tspan').attr('dy',6).text(' (current ⟨k⟩)'); } else tx.text(t);
+  });
+  L.pinLeg = L.leg.append('g').attr('transform',`translate(0,${rows.length*22+4})`);
+}
+function curvePath(kk){
+  const dmax = L.X.domain()[1];
+  return d3.line().x(S=>L.X(S)).y(S=>L.Y(f(kk,S)))(d3.range(0,dmax+1e-9,dmax/300));
+}
+function updateLeft(){
+  const {X,Y} = L, dmax = X.domain()[1];
+  L.curve.attr('d', curvePath(k));
+  const xe = Math.min(dmax, dmax/Math.max(k,1e-6));
+  L.tan.attr('x1',X(0)).attr('y1',Y(0)).attr('x2',X(xe)).attr('y2',Y(k*xe));
+  // pinned curves
+  L.pinG.selectAll('path').data(pins,d=>d.k).join('path').attr('fill','none').attr('stroke',d=>`var(${d.c})`).attr('stroke-width',2).attr('opacity',.85).attr('d',d=>curvePath(d.k));
+  L.pinLeg.selectAll('*').remove();
+  pins.forEach((p,i)=>{
+    L.pinLeg.append('line').attr('x1',0).attr('x2',24).attr('y1',i*22).attr('y2',i*22).attr('stroke',`var(${p.c})`).attr('stroke-width',2);
+    L.pinLeg.append('text').attr('x',32).attr('y',i*22+5).attr('font-size',13).attr('fill','var(--ink)').text(`⟨k⟩ = ${p.k}  →  S* = ${SstarSafe(p.k).toFixed(2)}`);
+  });
+  // intersection dots: pins + current
+  const S = SstarSafe(k);
+  const dots = [];
+  pins.forEach(p=>{ dots.push({S:0,c:`var(${p.c})`,r:6,key:'p0'+p.k}); const s=SstarSafe(p.k); if (s>0) dots.push({S:s,c:`var(${p.c})`,r:6,key:'p'+p.k}); });
+  dots.push({S:0, c:'var(--accent)', r:8, key:'c0', hollow: k>1+CRIT});
+  if (S>0) dots.push({S, c:'var(--accent)', r:8, key:'c'});
+  L.dotG.selectAll('circle').data(dots,d=>d.key).join('circle')
+    .attr('cx',d=>X(Math.min(d.S,dmax))).attr('cy',d=>Y(Math.min(d.S,dmax))).attr('r',d=>d.r)
+    .attr('fill',d=>d.hollow?'var(--panel)':d.c).attr('stroke',d=>d.hollow?d.c:'var(--panel)').attr('stroke-width',2.5)
+    .attr('opacity',d=>d.S<=dmax?1:0);
+  if (S>0.05 && S<=dmax){ L.lab.attr('x',X(S)+12).attr('y',Y(S)+22).attr('opacity',1).text(`S* = ${S.toFixed(3)}`); }
+  else L.lab.attr('opacity',0);
+}
+
+// ================= RIGHT: S(k)
+const R = {svg:d3.select('#right')};
+const theory = d3.range(0,KMAX+1e-9,0.005).map(x=>({k:x,S:SstarSafe(x)}));
+function buildRight(){
+  const s = R.svg; s.selectAll('*').remove();
+  const r = s.node().getBoundingClientRect(), m={l:50,r:16,t:12,b:40};
+  const w=r.width, h=r.height;
+  R.X = d3.scaleLinear([0,KMAX],[m.l,w-m.r]); R.Y = d3.scaleLinear([0,1.05],[h-m.b,m.t]);
+  const {X,Y} = R;
+  s.append('g').selectAll('line').data([0.2,0.4,0.6,0.8,1]).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  s.append('g').selectAll('line').data([1,2,3,4,5]).join('line').attr('y1',m.t).attr('y2',h-m.b).attr('x1',X).attr('x2',X).attr('stroke','var(--grid)');
+  const ax = s.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).ticks(5).tickSize(0).tickPadding(8));
+  const ay = s.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(5).tickSize(0).tickPadding(8));
+  [ax,ay].forEach(a=>{ a.select('.domain').attr('stroke','var(--muted)'); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',12); });
+  s.append('text').attr('x',(m.l+w-m.r)/2).attr('y',h-6).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('⟨k⟩');
+  s.append('text').attr('transform',`translate(13,${(m.t+h-m.b)/2}) rotate(-90)`).attr('text-anchor','middle').attr('font-size',13).attr('fill','var(--ink2)').text('largest solution S');
+  const line = d3.line().x(d=>X(d.k)).y(d=>Y(d.S));
+  R.ghost = s.append('path').datum(theory).attr('fill','none').attr('stroke','var(--muted)').attr('stroke-width',1.2).attr('stroke-dasharray','2 4').attr('d',line);
+  R.trace = s.append('path').attr('fill','none').attr('stroke','var(--accent)').attr('stroke-width',3);
+  // near-critical expansion, shown only when step 4 is active
+  const near = d3.range(1,1.7,0.005).map(x=>({k:x,S:2*(x-1)/(x*x)}));
+  R.near = s.append('path').datum(near).attr('fill','none').attr('stroke','var(--ink)').attr('stroke-width',1.8).attr('stroke-dasharray','6 4').attr('d',line);
+  R.nearLab = s.append('text').attr('x',X(1.7)+6).attr('y',Y(2*0.7/(1.7*1.7))+4).attr('font-size',12).attr('fill','var(--ink)').text('S ≈ 2(⟨k⟩−1)/⟨k⟩²');
+  R.kc = s.append('line').attr('x1',X(1)).attr('x2',X(1)).attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--muted)').attr('stroke-dasharray','4 4');
+  s.append('text').attr('x',X(1)+6).attr('y',m.t+14).attr('font-size',12).attr('fill','var(--ink2)').text('⟨k⟩c = 1');
+  R.cur = s.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--accent)').attr('opacity',.35);
+  R.pinG = s.append('g');
+  R.dot = s.append('circle').attr('r',8).attr('fill','var(--accent)').attr('stroke','var(--panel)').attr('stroke-width',2.5);
+  s.append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',h-m.t-m.b).attr('fill','transparent').style('cursor','crosshair')
+    .on('click',ev=>{ const [px]=d3.pointer(ev); setK(Math.round(X.invert(px)*100)/100); });
+  updateRight();
+}
+function updateRight(){
+  const {X,Y} = R;
+  R.trace.attr('d', d3.line().x(d=>X(d.k)).y(d=>Y(d.S))(theory.filter(d=>d.k<=traced+1e-9)));
+  R.cur.attr('x1',X(k)).attr('x2',X(k));
+  R.dot.attr('cx',X(k)).attr('cy',Y(SstarSafe(k)));
+  R.pinG.selectAll('circle').data(pins,d=>d.k).join('circle').attr('r',6).attr('fill',d=>`var(${d.c})`).attr('stroke','var(--panel)').attr('stroke-width',2)
+    .attr('cx',d=>X(d.k)).attr('cy',d=>Y(SstarSafe(d.k)));
+  const showNear = k >= 1 - CRIT && k < 2;
+  R.near.attr('opacity', showNear?1:0); R.nearLab.attr('opacity', showNear?1:0);
+}
+
+// ================= steps
+function updateSteps(){
+  const crit = Math.abs(k-1)<CRIT;
+  document.getElementById('st1').classList.toggle('on', k<1-CRIT);
+  document.getElementById('st2').classList.toggle('on', k<1-CRIT);
+  document.getElementById('st3').classList.toggle('on', true);
+  document.getElementById('st4').classList.toggle('on', k>=1-CRIT && k<2);
+  const now = document.getElementById('now3');
+  if (crit) now.textContent = `Now: slope = ${k.toFixed(2)} ≈ 1 → tangent to y = S: critical point`;
+  else if (k<1) now.textContent = `Now: slope = ${k.toFixed(2)} < 1 → only S = 0`;
+  else now.textContent = `Now: slope = ${k.toFixed(2)} > 1 → S* = ${SstarSafe(k).toFixed(3)}`;
+}
+
+// ================= controls
+const slider = document.getElementById('k');
+function setK(v){
+  k = Math.max(0, Math.min(KMAX, v)); slider.value = k;
+  traced = Math.max(traced, k);
+  document.getElementById('kv').textContent = k.toFixed(2);
+  updateLeft(); updateRight(); updateSteps();
+}
+slider.addEventListener('input', ()=>setK(+slider.value));
+function pin(kk){
+  kk = Math.round(kk*100)/100;
+  if (pins.some(p=>p.k===kk)) return;
+  if (pins.length>=4) pins.shift();
+  const used = pins.map(p=>p.c), c = PIN_COLORS.find(c=>!used.includes(c));
+  pins.push({k:kk, c}); pins.sort((a,b)=>a.k-b.k);
+  updateLeft(); updateRight();
+}
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ setK(+b.dataset.k); pin(+b.dataset.k); });
+document.getElementById('clear').onclick = ()=>{ pins=[]; traced=k; updateLeft(); updateRight(); };
+const zoomBtn = document.getElementById('zoom');
+function toggleZoom(){ zoom=!zoom; zoomBtn.classList.toggle('on',zoom); buildLeft(); }
+zoomBtn.onclick = toggleZoom;
+let playing=false, timer=null; const playBtn=document.getElementById('play');
+function togglePlay(){
+  playing=!playing; playBtn.textContent=playing?'❚❚ Pause':'▶ Play'; playBtn.classList.toggle('on',playing);
+  clearInterval(timer);
+  if (playing){
+    if (k>=KMAX-0.01){ traced=0; setK(0); }
+    timer=setInterval(()=>{
+      const st = (k>0.85&&k<1.4)?0.004:0.012;
+      if (k+st>KMAX){ setK(KMAX); togglePlay(); } else setK(k+st);
+    },40);
+  }
+}
+playBtn.onclick=togglePlay;
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{localStorage.setItem('ns-theme',r.dataset.theme);}catch(e){} }
+document.getElementById('theme').onclick=toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown',e=>{
+  if (e.target.tagName==='INPUT' && (e.key==='ArrowLeft'||e.key==='ArrowRight')) e.preventDefault();
+  const st = e.shiftKey?0.25:0.02;
+  if (e.key==='ArrowRight') setK(Math.round((k+st)*100)/100);
+  else if (e.key==='ArrowLeft') setK(Math.round((k-st)*100)/100);
+  else if (e.key===' '){ e.preventDefault(); togglePlay(); }
+  else if (e.key==='1') setK(1);
+  else if (e.key==='p'||e.key==='P') pin(k);
+  else if (e.key==='z'||e.key==='Z') toggleZoom();
+  else if (e.key==='c'||e.key==='C') document.getElementById('clear').click();
+  else if (e.key==='d'||e.key==='D') toggleTheme();
+});
+const rebuild = ()=>{ buildLeft(); buildRight(); };
+let rzT; const ro = new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(rebuild,60); }); ro.observe(document.getElementById('left')); ro.observe(document.getElementById('right'));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(rebuild,30));
+
+// init: ?k=0.5&pins=0.5,1,2,5
+const qs = new URLSearchParams(location.search);
+if (qs.has('k')) k = Math.max(0,Math.min(KMAX,+qs.get('k')||0));
+traced = k;
+buildLeft(); buildRight();
+if (qs.has('pins')) qs.get('pins').split(',').map(Number).filter(x=>x>=0&&x<=KMAX).forEach(pin);
+setK(k);
+</script>
+</body>
+</html>

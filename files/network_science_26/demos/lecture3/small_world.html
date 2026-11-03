@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ring vs Random</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --ring:#4a5360; --front:#e08a2c; --tri:#3f9a5a;
+  --node:#d3d9e2; --edge:rgba(90,105,125,.13); --redge:rgba(90,105,125,.45); --bar:#5bc8f0;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --ring:#c4ccd8; --front:#f0a04b; --tri:#5fbf7a;
+  --node:#38414d; --edge:rgba(170,185,205,.12); --redge:rgba(170,185,205,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:14px 32px 2px;border-left:6px solid var(--bar);display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(22px,2.4vw,36px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+#hint{font-size:clamp(14px,1.2vw,19px);color:var(--ink2);padding:4px 32px 0 38px;min-height:1.7em}
+#hint b{color:var(--ink)}
+main{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.45fr 1fr;gap:12px;padding:8px 32px 6px;min-height:0}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;display:flex;flex-direction:column;padding:8px 12px 6px}
+.wide{grid-column:1 / span 2}
+.ptitle{font-size:clamp(14px,1.2vw,18px);font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ptitle .st{font-weight:500;color:var(--ink2);font-variant-numeric:tabular-nums}
+.ptitle .st b{color:var(--ink)}
+.ptitle .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.cvw{flex:1;position:relative;min-height:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
+.panel svg{flex:1;width:100%;min-height:0;display:block}
+.formula{text-align:center;font-size:clamp(15px,1.35vw,21px);color:var(--ink2);padding:2px 0 4px;font-variant-numeric:tabular-nums}
+.formula b{color:var(--ink)}
+.formula .big{font-size:1.5em;font-weight:700;color:var(--ink)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1.15}
+.frac span:first-child{border-bottom:1.5px solid var(--ink2);padding:0 4px}
+footer{padding:6px 32px 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dctl{display:flex;align-items:center;gap:12px;flex:1;min-width:280px}
+.dval{font-size:clamp(18px,1.8vw,26px);font-weight:700;min-width:70px;font-variant-numeric:tabular-nums}
+.dval span{color:var(--front)}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--front);height:28px}
+button{font-family:inherit;font-size:14px;font-weight:500;border:1px solid var(--grid);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center}
+.group .lab{font-size:13px;color:var(--ink2);margin-right:2px}
+.keys{font-size:11px;color:var(--muted);width:100%}
+svg text{font-family:Poppins,system-ui,sans-serif}
+.hide{display:none!important}
+@media (max-width:820px){
+  html,body{height:auto}
+  header,main,footer{padding-left:16px;padding-right:16px} #hint{padding-left:22px}
+  main{grid-template-columns:1fr;grid-template-rows:auto}
+  .wide{grid-column:auto}
+  .cvw{flex:none;height:90vw;max-height:420px}
+  .panel svg{flex:none;height:280px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ring vs <span class="hl">Random</span></h1>
+</header>
+<div id="hint"></div>
+<main>
+  <!-- distances -->
+  <div class="panel dist">
+    <div class="ptitle"><span><i class="sw" style="background:var(--ring)"></i>Ring lattice</span><span class="st" id="stRing"></span></div>
+    <div class="cvw"><canvas id="cvRing"></canvas></div>
+  </div>
+  <div class="panel dist">
+    <div class="ptitle"><span><i class="sw" style="background:var(--accent)"></i>Random network (ER)</span><span class="st" id="stER"></span></div>
+    <div class="cvw"><canvas id="cvER"></canvas></div>
+  </div>
+  <div class="panel dist wide">
+    <div class="ptitle"><span>Fraction of nodes within d steps</span></div>
+    <svg id="cum"></svg>
+  </div>
+</main>
+<footer>
+  <div class="dctl dist">
+    <button id="play">▶ Play</button>
+    <div class="dval">d = <span id="dv">0</span></div>
+    <input type="range" id="d" min="0" max="25" step="1" value="0" aria-label="distance d">
+  </div>
+  <button id="rnd">⟳ Another node</button>
+  <div class="group"><span class="lab">N</span><button data-n="50">50</button><button data-n="100">100</button><button data-n="200">200</button><button data-n="400">400</button></div>
+  <div class="group"><span class="lab">⟨k⟩</span><button data-k="4">4</button><button data-k="6">6</button><button data-k="8">8</button></div>
+  <button id="theme">◐</button>
+  <div class="keys" id="keys"></div>
+</footer>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let mode='distances', N=50, K=4, src=0, step=0, timer=null;
+let ring, er, bR, bE, eccR, eccE, gcE;
+
+// ---------------- graphs
+function ringAdj(n,k){ const a=Array.from({length:n},()=>[]); for(let i=0;i<n;i++) for(let j=1;j<=k/2;j++){ const t=(i+j)%n; a[i].push(t); a[t].push(i);} return a; }
+function erAdj(n,k){ // G(n,p), geometric skipping (fast also for large n)
+  const p=k/(n-1), a=Array.from({length:n},()=>[]), lp=Math.log(1-p); let v=1,w=-1;
+  while(v<n){ w+=1+Math.floor(Math.log(1-Math.random())/lp); while(w>=v&&v<n){ w-=v; v++; } if(v<n){ a[v].push(w); a[w].push(v);} }
+  return a;
+}
+function mk(adj){ const e=[]; adj.forEach((nb,i)=>nb.forEach(j=>{ if(i<j) e.push([i,j]); })); return {adj, edges:e, n:adj.length, set:adj.map(nb=>new Set(nb))}; }
+function bfs(adj,s){ const n=adj.length, d=new Int32Array(n).fill(-1), par=new Int32Array(n).fill(-1), q=new Int32Array(n); let h=0,t=0; q[t++]=s; d[s]=0;
+  while(h<t){ const u=q[h++]; for(const v of adj[u]) if(d[v]<0){ d[v]=d[u]+1; par[v]=u; q[t++]=v; } } return {dist:d, par}; }
+function giant(adj){ const n=adj.length, seen=new Uint8Array(n); let best=[]; for(let i=0;i<n;i++) if(!seen[i]){ const c=[i]; seen[i]=1; for(let h=0;h<c.length;h++) for(const v of adj[c[h]]) if(!seen[v]){ seen[v]=1; c.push(v);} if(c.length>best.length) best=c; } return best; }
+function meanDist(adj, sources){ let t=0,c=0; for(const s of sources){ const {dist}=bfs(adj,s); for(const d of dist) if(d>0){ t+=d; c++; } } return t/c; }
+
+function build(){
+  ring = mk(ringAdj(N,K)); er = mk(erAdj(N,K));
+  gcE = giant(er.adj); const inGC = new Set(gcE);
+  if (!inGC.has(src) || er.adj[src].length<2) src = gcE.find(i=>er.adj[i].length>=2) ?? gcE[0];
+  computeBFS();
+  document.getElementById('stRing').innerHTML = `average distance ⟨d⟩ = <b>${meanDist(ring.adj,[0]).toFixed(1)}</b>`;
+  document.getElementById('stER').innerHTML = `average distance ⟨d⟩ = <b>${meanDist(er.adj, gcE.slice(0,200)).toFixed(1)}</b>`;
+  refresh(true);
+}
+function computeBFS(){ bR=bfs(ring.adj,src); bE=bfs(er.adj,src); eccR=Math.max(...bR.dist); eccE=Math.max(...bE.dist);
+  slider.max = eccR; if (step>eccR) step=eccR; slider.value=step; }
+
+// ---------------- distances: network canvases (same circular layout)
+const cvs={ring:document.getElementById('cvRing'), er:document.getElementById('cvER')};
+function layout(cv){
+  const r=cv.parentElement.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  cv.width=Math.max(1,r.width*dpr); cv.height=Math.max(1,r.height*dpr);
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const R=Math.min(r.width,r.height)/2-12, cx=r.width/2, cy=r.height/2;
+  cv._pos=d3.range(N).map(i=>{ const a=2*Math.PI*i/N-Math.PI/2; return [cx+R*Math.cos(a), cy+R*Math.sin(a)]; });
+  Object.assign(cv,{_ctx:ctx,_w:r.width,_h:r.height,_c:[cx,cy]});
+}
+function nodeR(){ return N<=50?6.5:N<=100?5:N<=200?3.6:2.6; }
+function drawNet(cv,g,b,isRing){
+  const ctx=cv._ctx, P=cv._pos; if(!ctx||!P) return;
+  ctx.clearRect(0,0,cv._w,cv._h);
+  const [cx,cy]=cv._c;
+  const seg=(i,j)=>{ ctx.moveTo(...P[i]); if(isRing){ const mx=(P[i][0]+P[j][0])/2, my=(P[i][1]+P[j][1])/2, hop=Math.min(Math.abs(i-j),N-Math.abs(i-j)), t=Math.min(.15,0.04*hop*100/N); ctx.quadraticCurveTo(mx+(cx-mx)*t,my+(cy-my)*t,...P[j]); } else ctx.lineTo(...P[j]); };
+  // all links, faint
+  ctx.lineWidth=1; ctx.strokeStyle=css(isRing?'--redge':'--edge'); ctx.beginPath(); for(const [i,j] of g.edges) seg(i,j); ctx.stroke();
+  const r=nodeR(), cNet=css(isRing?'--ring':'--accent'), cF=css('--front'), cN=css('--node'), cI=css('--ink'), cP=css('--panel');
+  for(let v=0;v<g.n;v++){
+    const d=b.dist[v];
+    ctx.fillStyle = v===src?cI : (d>=0&&d===step)?cF : (d>=0&&d<step)?cNet : cN;
+    ctx.beginPath(); ctx.arc(...P[v], v===src?r+3:r, 0, 2*Math.PI); ctx.fill();
+    if(N<=200){ ctx.lineWidth=1; ctx.strokeStyle=cP; ctx.stroke(); }
+  }
+  // links used to reach the current frontier: drawn ON TOP of the nodes so short links stay visible
+  if(step>0){
+    ctx.strokeStyle=cF; ctx.lineWidth=N<=100?2.4:1.8; ctx.beginPath();
+    for(let v=0;v<g.n;v++) if(b.dist[v]===step) seg(b.par[v],v);
+    ctx.stroke();
+  }
+  ctx.fillStyle=cI; ctx.beginPath(); ctx.arc(...P[src], r+3, 0, 2*Math.PI); ctx.fill();
+}
+function drawNets(){ if(mode!=='distances') return; drawNet(cvs.ring,ring,bR,true); drawNet(cvs.er,er,bE,false); }
+function pick(cv,ev){ const r=cv.getBoundingClientRect(), x=ev.clientX-r.left, y=ev.clientY-r.top; let best=-1,bd=1e9; cv._pos.forEach(([px,py],i)=>{ const d=(px-x)**2+(py-y)**2; if(d<bd){bd=d;best=i;} }); return bd<400?best:-1; }
+Object.values(cvs).forEach(cv=>cv.addEventListener('click',ev=>{ const i=pick(cv,ev); if(i>=0){ src=i; stop(); step=0; computeBFS(); refresh(); play(); } }));
+
+// ---------------- distances: cumulative chart
+const cum=d3.select('#cum'); let CU=null;
+function cumData(b){ const n=d3.max(b.dist)+1, c=new Array(n).fill(0); for(const d of b.dist) if(d>=0) c[d]++; let s=0; return c.map((x,d)=>({d,f:(s+=x)/N})); }
+function buildCum(){
+  cum.selectAll('*').remove();
+  const r=cum.node().getBoundingClientRect(); if(!r.width) return;
+  const m={l:50,r:18,t:10,b:34}, w=r.width, h=r.height;
+  CU={m,w,h, X:d3.scaleLinear([0,6],[m.l,w-m.r]), Y:d3.scaleLinear([0,1],[h-m.b,m.t])};
+  const {Y}=CU;
+  cum.append('g').selectAll('line').data([.25,.5,.75,1]).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  CU.ax=cum.append('g').attr('transform',`translate(0,${h-m.b})`);
+  const ay=cum.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(4).tickFormat(d3.format('.0%')).tickSize(0).tickPadding(6));
+  ay.select('.domain').remove(); ay.selectAll('text').attr('fill','var(--ink2)').attr('font-size',12);
+  cum.append('text').attr('x',w-m.r).attr('y',h-4).attr('text-anchor','end').attr('font-size',13).attr('fill','var(--ink2)').text('distance d');
+  cum.append('clipPath').attr('id','cclip').append('rect').attr('x',m.l-6).attr('y',0).attr('width',w-m.l-m.r+12).attr('height',h);
+  const body=cum.append('g').attr('clip-path','url(#cclip)');
+  CU.tree=body.append('path').attr('fill','none').attr('stroke','var(--accent)').attr('stroke-width',2).attr('stroke-dasharray','6 5');
+  CU.dm=body.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--accent)').attr('stroke-dasharray','2 3');
+  CU.dmL=body.append('text').attr('font-size',12).attr('fill','var(--accent)');
+  CU.cur=body.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--front)').attr('stroke-width',2);
+  CU.lR=body.append('path').attr('fill','none').attr('stroke','var(--ring)').attr('stroke-width',3);
+  CU.lE=body.append('path').attr('fill','none').attr('stroke','var(--accent)').attr('stroke-width',3);
+  CU.pR=body.append('g'); CU.pE=body.append('g');
+  const lg=cum.append('g').attr('transform',`translate(${w-m.r-260},${Y(0.5)})`);
+  [['var(--accent)',null,'random network'],['var(--accent)','6 5','tree approximation  Σ ⟨k⟩ʲ / N'],['var(--ring)',null,'ring lattice']].forEach(([c,da,t],i)=>{
+    lg.append('line').attr('x2',26).attr('y1',i*22).attr('y2',i*22).attr('stroke',c).attr('stroke-width',da?2:3).attr('stroke-dasharray',da);
+    lg.append('text').attr('x',34).attr('y',i*22+5).attr('font-size',14).attr('fill','var(--ink)').text(t);
+  });
+  updateCum(false);
+}
+function updateCum(animate=true){
+  if(!CU) return;
+  const {X,Y,m}=CU, dmax=Math.max(6, eccE+1, step+1);
+  X.domain([0,dmax]);
+  (animate?CU.ax.transition().duration(300):CU.ax).call(d3.axisBottom(X).ticks(Math.min(dmax,14)).tickFormat(d3.format('d')).tickSize(0).tickPadding(6));
+  CU.ax.select('.domain').remove(); CU.ax.selectAll('text').attr('fill','var(--ink2)').attr('font-size',12);
+  const line=d3.line().x(p=>X(p.d)).y(p=>Y(p.f));
+  const xs=d3.range(0,dmax+1e-9,dmax/300).map(d=>({d,f:Math.min(1,(Math.pow(K,d+1)-1)/(K-1)/N)}));
+  const dm=Math.log(N)/Math.log(K);
+  const dR=cumData(bR).filter(p=>p.d<=step), dE=cumData(bE).filter(p=>p.d<=step);
+  const tr = s => animate ? s.transition().duration(300) : s;
+  tr(CU.tree).attr('d',line(xs));
+  tr(CU.dm).attr('x1',X(dm)).attr('x2',X(dm));
+  tr(CU.dmL).attr('x',X(dm)+6).attr('y',m.t+14);
+  CU.dmL.text(`ln N / ln⟨k⟩ ≈ ${dm.toFixed(1)}`);
+  tr(CU.cur).attr('x1',X(step)).attr('x2',X(step));
+  CU.lR.attr('d',line(dR)); CU.lE.attr('d',line(dE));
+  const dots=(g,data,c)=>g.selectAll('circle').data(data).join('circle').attr('r',5).attr('fill',c).attr('stroke','var(--panel)').attr('stroke-width',2).attr('cx',p=>X(p.d)).attr('cy',p=>Y(p.f));
+  dots(CU.pR,dR,'var(--ring)'); dots(CU.pE,dE,'var(--accent)');
+}
+
+// ---------------- hint & refresh
+function hint(){
+  const h=document.getElementById('hint');
+  const fr=b=>{ let c=0; for(const d of b.dist) if(d>=0&&d<=step) c++; return Math.round(100*c/N); };
+  h.innerHTML = step===0 ? `Click a node (or press <b>Play</b>): how many steps to reach everybody?`
+    : `Within <b>${step}</b> step${step>1?'s':''}: ring <b>${fr(bR)}%</b> of the nodes · random <b>${fr(bE)}%</b>`;
+  document.getElementById('dv').textContent=step;
+  document.getElementById('keys').textContent = 'Click a node · Space play / pause · ← → change d · R another node · D dark mode';
+}
+function refresh(full=false){
+  if(full){ layout(cvs.ring); layout(cvs.er); buildCum(); } drawNets(); updateCum(!full);
+  hint();
+}
+
+// ---------------- controls
+const slider=document.getElementById('d');
+function setStep(v){ step=Math.max(0,Math.min(eccR,v)); slider.value=step; drawNets(); updateCum(true); hint(); }
+slider.addEventListener('input',()=>{ stop(); setStep(+slider.value); });
+const playBtn=document.getElementById('play');
+function stop(){ clearInterval(timer); timer=null; playBtn.textContent='▶ Play'; playBtn.classList.remove('on'); }
+function play(){
+  if(step>=eccR) setStep(0);
+  stop(); playBtn.textContent='❚❚ Pause'; playBtn.classList.add('on');
+  timer=setInterval(()=>{ if(step>=eccR){ stop(); return; } setStep(step+1); }, eccR>40?250:650);
+}
+playBtn.onclick=()=>timer?stop():play();
+document.getElementById('rnd').onclick=()=>{ const c=gcE.filter(i=>er.adj[i].length>=2); src=c[(Math.random()*c.length)|0]; stop(); step=0; computeBFS(); refresh(); };
+function markBtns(){ document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',+b.dataset.n===N)); document.querySelectorAll('[data-k]').forEach(b=>b.classList.toggle('on',+b.dataset.k===K)); }
+document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ N=+b.dataset.n; src=0; step=0; stop(); markBtns(); build(); });
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ K=+b.dataset.k; step=0; stop(); markBtns(); build(); });
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{localStorage.setItem('ns-theme',r.dataset.theme);}catch(e){} refresh(); }
+document.getElementById('theme').onclick=toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')) e.preventDefault();
+  if(e.key===' '&&mode==='distances'){ e.preventDefault(); timer?stop():play(); }
+  else if(e.key==='ArrowRight'&&mode==='distances'){ stop(); setStep(step+1); }
+  else if(e.key==='ArrowLeft'&&mode==='distances'){ stop(); setStep(step-1); }
+  else if(e.key==='r'||e.key==='R') document.getElementById('rnd').click();
+  else if(e.key==='d'||e.key==='D') toggleTheme();
+});
+let rzT; new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(()=>refresh(true),60); }).observe(document.querySelector('main'));
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(()=>refresh(true),30));
+
+// init: ?N=50&k=4&d=3
+const qs=new URLSearchParams(location.search);
+if([50,100,200,400].includes(+qs.get('N'))) N=+qs.get('N');
+if([4,6,8].includes(+qs.get('k'))) K=+qs.get('k');
+markBtns();
+build();
+if(qs.has('d')){ step=Math.min(+qs.get('d'),eccR); slider.value=step; refresh(true); }
+</script>
+</body>
+</html>
