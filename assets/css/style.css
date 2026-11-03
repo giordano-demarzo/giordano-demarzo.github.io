@@ -271,9 +271,9 @@ a, .section-heading::before {
 }
 
 .news-date {
-    margin-right: -80px; /* Space between date and title */
+    flex: 0 0 110px; /* fixed-width date column, so every title starts at the same position */
+    margin-right: 16px;
     font-weight: bold;
-    flex-basis: 20%; /* Adjusts the base size of the date column */
     text-align: left;
 }
 
