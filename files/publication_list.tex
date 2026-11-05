@@ -1,0 +1,101 @@
+\documentclass[totpages,helvetica,openbib,english,nologo,nobranding,notitle,totpages]{europecv}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx} 
+\usepackage[a4paper,top=1cm,left=1cm,right=1cm,bottom=2cm]{geometry}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{bookmark}
+\usepackage{scrextend}
+\usepackage{pgfkeys}
+\usepackage{etoolbox}
+\hypersetup{
+    colorlinks,
+    linkcolor={black},
+    citecolor={black},
+    urlcolor={black}
+}
+\renewcommand{\ttdefault}{phv} % Uses Helvetica instead of fixed width font
+
+\newcommand{\mycvhyperlink}[1]{%
+	\hyperlink{#1}{\csname #1\endcsname}%
+}
+
+\newcounter{JournalPublications}
+\setcounter{JournalPublications}{0}
+\newcommand{\journalPublications}[1][]{
+	\stepcounter{JournalPublications}
+	\hypertarget{#1}{[P\theJournalPublications]}}
+
+\newcounter{Preprint}
+\setcounter{Preprint}{0}
+\newcommand{\preprint}[1][]{
+	\stepcounter{Preprint}
+	\hypertarget{#1}{[W\thePreprint]}}
+
+\newcommand{\refjournalPublications}[1][]{
+	\mycvhyperlink{#1}
+}
+
+% Marker for the three most important publications (required by the MPRG call)
+\newcommand{\keypaper}{\textbf{$\star$}~}
+
+\ecvname{Giordano De Marzo}
+\ecvfootername{Giordano De Marzo -- Publication list}
+\ecvtelephone{+39 3899233193}
+\ecvprofessional{\href{mailto:giordano.de-marzo@uni-konstanz.de}{giordano.de-marzo@uni-konstanz.de}}
+\ecvdateofbirth{24 June 1996}
+
+\begin{document}
+\selectlanguage{english}
+
+\begin{europecv}
+
+\ecvitem{}{\Large{\textbf{Publication list of Giordano De Marzo}}\newline}
+
+\pdfbookmark{Publications}{Publications}
+\section{Publications}
+\ecvitem{}{Publications marked with $\star$ are the three most important papers, submitted with this application. Google Scholar (October 2026): h-index 15, i10-index 21, 718 citations. ORCID 0000-0002-3127-5336.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[22PubLabel]}{\keypaper De Marzo, Giordano, Claudio Castellano, and David Garcia. ``AI agents can coordinate via majority-following beyond human scale.'' Science Advances 12, eaea6091 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[24PubLabel]}{Bouleimen, Azza, Giordano De Marzo, Taehee Kim, Nicolò Pagan, Hannah Metzler, Silvia Giordano, and David Garcia. "The Collective Turing Test: Large Language Models Can Generate Realistic Multi-User Discussions." Scientific Reports (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[21PubLabel]}{Calò, Emanuele, Giordano De Marzo, and Vito DP Servedio. "Species vulnerability and ecosystem fragility: A dual perspective in food webs." Chaos, Solitons \& Fractals 199 (2025): 116741.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[17bPubLabel]}{Bellina, Alessandro, Giordano De Marzo, and Vittorio Loreto. "Modelling singularities in macroevolution." European Economic Review 177 (2025): 105052.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[23PubLabel]}{Sylos Labini, Francesco, Giordano De Marzo, and Matteo Straccamore. "Breaking the degeneracy between warps and radial flows in external galaxies." The Astrophysical Journal 988, no. 1 (2025): 122.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[16PubLabel]}{Bellina, Alessandro, Giordano De Marzo, and Vittorio Loreto. "Full spectrum of novelties in time-dependent urn models." Physical Review Research 7, no. 2 (2025): 023127.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[20PubLabel]}{Servedio, Vito DP, Alessandro Bellina, Emanuele Calò, and Giordano De Marzo. "Fitness centrality: a non-linear centrality measure for complex networks." J. Phys. Complex. 6, 015002 (2025).}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[18PubLabel]}{Labini, Francesco Sylos, Roberto Capuzzo-Dolcetta, Giordano De Marzo, and Matteo Straccamore. "Exploring the dark matter disk model in dwarf galaxies: Insights from the LITTLE THINGS sample." Astronomy \& Astrophysics 693 (2025): A248.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[19PubLabel]}{Di Bona, Gabriele, Alessandro Bellina, Giordano De Marzo, Angelo Petralia, Iacopo Iacopini, and Vito Latora. "The dynamics of higher-order novelties." Nature Communications 16.1 (2025): 393.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[17PubLabel]}{De Marzo, Giordano, Pietro Gravino, and Vittorio Loreto. "Recommender systems may enhance the discovery of novelties." Journal of Physics: Complexity 5, no. 4 (2024): 045008.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[15PubLabel]}{Aufiero, Sabrina, Giordano De Marzo, Angelica Sbardella, and Andrea Zaccaria. "Mapping job fitness and skill coherence into wages: an economic complexity analysis." Scientific Reports 14, no. 1 (2024): 11752.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[14PubLabel]}{Sylos Labini, Francesco, Giordano De Marzo, Matteo Straccamore, and Sébastien Comerón. "The Tully–Fisher relation and the Bosma effect." Monthly Notices of the Royal Astronomical Society 527, no. 2 (2024): 2697-2717.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[13PubLabel]}{\keypaper Bellina, Alessandro, Claudio Castellano, Paul Pineau, Giulio Iannelli and Giordano De Marzo. "Effect of collaborative-filtering-based recommendation algorithms on opinion polarization." Physical Review E 108.5 (2023): 054304. Contribution (approx. 40\%): conceived the study and the model, supervised the junior researchers who carried out the work (a former master’s student of mine and a research intern), and led the writing of the manuscript; senior author.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[12PubLabel]}{Sylos Labini, Francesco, Matteo Straccamore, Giordano De Marzo, and Sébastien Comerón. "Mapping non-axisymmetric velocity fields of external galaxies." Monthly Notices of the Royal Astronomical Society 524, no. 1 (2023): 1560-1600.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[11PubLabel]}{De Marzo, Giordano, and Vito DP Servedio. "Quantifying the complexity and similarity of chess openings using online chess community data." Scientific Reports 13.1 (2023): 1-12.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[10PubLabel]}{De Marzo, Giordano, Federico Attili, and Luciano Pietronero. "Growing inequality in systems showing Zipf's law." Journal of Physics: Complexity 4.1 (2023): 015014.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[9PubLabel]}{De Marzo, Giordano, and Giulio Iannelli. ``Effect of spatial correlations on Hopfield Neural Network and Dense Associative Memories.'' Physica A: Statistical Mechanics and its Applications 612 (2023): 128487.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[8PubLabel]}{De Marzo, Giordano, Francesco Pandolfelli, and Vito DP Servedio. "Modeling innovation in the cryptocurrency ecosystem." Scientific Reports 12.1 (2022): 12942.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[5PubLabel]}{De Marzo, Giordano, et al. "Quantifying the unexpected: A scientific approach to Black Swans." Physical Review Research 4.3 (2022): 033079.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[6PubLabel]}{Iannelli, Giulio, Giordano De Marzo, and Claudio Castellano. "Filter bubble effect in the multistate voter model." Chaos: An Interdisciplinary Journal of Nonlinear Science 32.4 (2022): 043103.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[7PubLabel]}{Agliari, Elena, et al. "The emergence of a concept in shallow neural networks." Neural Networks 148 (2022): 232-253.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[4PubLabel]}{De Marzo, Giordano, Francesco Sylos Labini, and Luciano Pietronero. "Zipf's law for cosmic structures: How large are the greatest structures in the universe?." Astronomy and Astrophysics 651 (2021): A114.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[3PubLabel]}{De Marzo, Giordano, et al. "Dynamical approach to Zipf's law." Physical Review Research 3.1 (2021): 013084.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[2PubLabel]}{Agliari, Elena, and Giordano De Marzo. "Tolerance versus synaptic noise in dense associative memories." The European Physical Journal Plus 135.11 (2020): 1-22.}
+\ecvitem[10pt]{\vspace{-0.25cm}\journalPublications[1PubLabel]}{\keypaper De Marzo, Giordano, Andrea Zaccaria, and Claudio Castellano. "Emergence of polarization in a voter model with personalized information." Physical Review Research 2.4 (2020): 043117.}
+
+\pdfbookmark{Preprints}{Preprints}
+\section{Preprints}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint10]}{De Marzo, Giordano, Nicolò Alboré, and David Garcia. "Copying explains the collective behavior of AI agents in the wild." arXiv preprint arXiv:2609.09150 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint12]}{Ke\ss ler, Raphaela, R.~D.~Ventzke, Viola Priesemann, and Giordano De Marzo. "Network Information Enhances Unreliable News Domain Detection." arXiv preprint arXiv:2608.02399 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint9]}{De Marzo, Giordano, Alessandro Bellina, Claudio Castellano, Viola Priesemann, and David Garcia. "Conformity Generates Collective Misalignment in AI Agents Societies." arXiv preprint arXiv:2605.10721 (2026). In revision at Nature Communications.}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint11]}{Fenoaltea, Enrico Maria, Francesco Santoro, Giordano De Marzo, Segun Taofeek Aroyehun, and Andrea Tacchella. "Anticipating Innovation Using Large Language Models." arXiv preprint arXiv:2605.04875 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint8]}{Bellina, Alessandro, Gabriele Di Bona, Giordano De Marzo, and Vittorio Loreto. "The gold-rush effect: how innovation speeds up." arXiv preprint arXiv:2602.13775 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint7]}{De Marzo, Giordano, and David Garcia. "Collective Behavior of AI Agents: the Case of Moltbook." arXiv preprint arXiv:2602.09270 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint6]}{Bellina, Alessandro, Giordano De Marzo, and David Garcia. "Conformity and Social Impact on AI Agents." arXiv preprint arXiv:2601.05384 (2026).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint0b]}{Marydas, Siddharth, Nanditha Mathew, Giordano De Marzo, and Carlo Pietrobelli. "Digital Technologies, Hiring, Training, and Firm Outcomes." MERIT Working Paper (2025).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint2]}{Servedio, Vito DP, Alessandro Bellina, Emanuele Calò, and Giordano De Marzo. "Economic Complexity in Mono-Partite Networks." arXiv preprint arXiv:2405.04158 (2024).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint1]}{De Marzo, Giordano, Luciano Pietronero, and David Garcia. "Emergence of scale-free networks in social interactions among large language models." arXiv preprint arXiv:2312.06619 (2023).}
+\ecvitem[10pt]{\vspace{-0.25cm}\preprint[Preprint0]}{De Marzo, Giordano, Nanditha Mathew, and Angelica Sbardella. "Who creates jobs with broad skillsets? The crucial role of firms." ILO Working Paper No. 94 (2023).}
+
+
+\end{europecv}
+
+\end{document}
