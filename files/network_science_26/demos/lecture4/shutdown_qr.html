@@ -34,12 +34,10 @@ p{font-size:clamp(17px,1.9vw,28px);color:var(--green);margin:0 0 1.2vh}
   <p>&gt; play missions 1, 2 and 3</p>
   <p>&gt; same meshes for every agent</p>
   <p>&gt; who destroys the most?</p>
-  <div class="url" id="url"></div>
 </div>
 <div id="qr"></div>
 <script>
 const url = location.origin + location.pathname.replace(/shutdown_qr\.html$/, 'shutdown.html');
-document.getElementById('url').textContent = url.replace(/^https?:\/\//,'');
 new QRCode(document.getElementById('qr'), {text:url, width:720, height:720, correctLevel:QRCode.CorrectLevel.M});
 </script>
 </body>
