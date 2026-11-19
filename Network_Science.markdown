@@ -158,7 +158,6 @@ permalink: /teaching/network-science/
                    </ul>
            </div>
        </div>
-       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 4 &#9662;</button>
            <div class="nested-accordion-content">
@@ -172,9 +171,12 @@ permalink: /teaching/network-science/
                    <ul>
                        	<li><a href="https://www.nature.com/articles/s41467-019-08746-5">Scale-free networks are rare. Broido, A.D., Clauset, A. (2019)</a></li>
                    </ul>
+               <h4>Network Science Game</h4>
+                   <ul>
+                       	<li><a href="https://giordano-demarzo.github.io/files/network_science_26/demos/lecture4/shutdown.html">SHUTDOWN: a rogue AI has escaped. Three chapters to stop it.</a></li>
+                   </ul>
            </div>
        </div>
-       -->
        <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 5 &#9662;</button>
