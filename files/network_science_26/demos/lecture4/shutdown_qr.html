@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>SHUTDOWN: join</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{ --bg:#070b12; --ink:#e6f1ff; --ink2:#8fa6c2; --cyan:#38e1ff; --mag:#ff3d81; --green:#3dff9a; --line:#1c2a3d; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace;display:flex;align-items:center;justify-content:center;gap:5vw;padding:4vh 4vw;flex-wrap:nowrap;
+  background-image:radial-gradient(circle at 50% -10%, rgba(56,225,255,.14), transparent 55%), linear-gradient(rgba(56,225,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,225,255,.04) 1px, transparent 1px);
+  background-size:auto, 36px 36px, 36px 36px}
+h1{font-family:Orbitron,sans-serif;font-weight:800;font-size:clamp(40px,5.6vw,96px);margin:0;line-height:1;letter-spacing:.04em;text-shadow:0 0 30px rgba(56,225,255,.35)}
+h1 span{color:var(--mag);text-shadow:0 0 30px rgba(255,61,129,.5)}
+.tag{color:var(--cyan);font-size:clamp(16px,1.8vw,26px);margin:1.5vh 0 4vh}
+p{font-size:clamp(17px,1.9vw,28px);color:var(--green);margin:0 0 1.2vh}
+.url{font-size:clamp(13px,1.3vw,19px);color:var(--ink2);word-break:break-all;margin-top:3vh}
+#qr{background:#fff;padding:18px;border-radius:18px;box-shadow:0 0 50px rgba(56,225,255,.35)}
+#qr{flex:none}
+#qr img,#qr canvas{width:min(38vw,70vh)!important;height:auto!important;display:block}
+@media (max-width:820px){ body{flex-wrap:wrap} }
+</style>
+</head>
+<body>
+<div>
+  <h1>SHUT<span>DOWN</span></h1>
+  <div class="tag">// a rogue AI has escaped into the servers</div>
+  <p>&gt; scan the code with your phone</p>
+  <p>&gt; play missions 1, 2 and 3</p>
+  <p>&gt; same meshes for every agent</p>
+  <p>&gt; who destroys the most?</p>
+  <div class="url" id="url"></div>
+</div>
+<div id="qr"></div>
+<script>
+const url = location.origin + location.pathname.replace(/shutdown_qr\.html$/, 'shutdown.html');
+document.getElementById('url').textContent = url.replace(/^https?:\/\//,'');
+new QRCode(document.getElementById('qr'), {text:url, width:720, height:720, correctLevel:QRCode.CorrectLevel.M});
+</script>
+</body>
+</html>

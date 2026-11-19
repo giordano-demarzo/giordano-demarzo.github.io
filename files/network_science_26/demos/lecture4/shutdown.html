@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>SHUTDOWN: Rogue AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --ai:#38e1ff; --bg:#070b12; --bg2:#0d1420; --line:#1c2a3d; --ink:#e6f1ff; --ink2:#8fa6c2; --dim:#4c6079;
+  --cyan:#38e1ff; --mag:#ff3d81; --green:#3dff9a; --red:#ff4d4d; --amber:#ffc23d;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden;
+  background-image:radial-gradient(circle at 50% -10%, rgba(56,225,255,.12), transparent 55%), linear-gradient(rgba(56,225,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(56,225,255,.035) 1px, transparent 1px);
+  background-size:auto, 28px 28px, 28px 28px}
+.mono{font-family:'Share Tech Mono',ui-monospace,monospace}
+.screen{display:none;flex:1;flex-direction:column;min-height:0}
+.screen.on{display:flex}
+button{font-family:Orbitron,Poppins,sans-serif;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);border-radius:12px;cursor:pointer;color:var(--ink);background:var(--bg2)}
+button:active{transform:scale(.98)}
+.glow{text-shadow:0 0 18px currentColor}
+/* ---------- menu ---------- */
+#menu{overflow-y:auto;padding:28px 18px calc(22px + env(safe-area-inset-bottom));gap:16px;max-width:560px;margin:0 auto;width:100%}
+.logo{font-family:Orbitron,sans-serif;font-weight:800;font-size:44px;line-height:1;letter-spacing:.04em;margin:0}
+.logo span{color:var(--mag)}
+.tag{font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:15px;margin-top:-6px}
+.box{border:1px solid var(--line);background:rgba(13,20,32,.85);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.55;color:var(--ink2)}
+.box b{color:var(--ink)}
+.how{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;margin-top:8px}
+.how .k{font-family:Orbitron,sans-serif;font-size:12px;padding:4px 8px;border-radius:8px;text-align:center;white-space:nowrap}
+.k.hop{background:rgba(61,255,154,.15);color:var(--green);border:1px solid var(--green)}
+.k.off{background:rgba(255,77,77,.15);color:var(--red);border:1px solid var(--red)}
+.k.rr{background:rgba(56,225,255,.12);color:var(--cyan);border:1px solid var(--cyan)}
+.missions{display:grid;gap:10px}
+.mission{padding:14px 16px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:17px;border-color:var(--cyan);box-shadow:0 0 0 1px rgba(56,225,255,.15) inset}
+.mission small{font-family:'Share Tech Mono',monospace;font-weight:400;color:var(--ink2);font-size:13px;letter-spacing:0;text-align:right}
+.mission.sim{border-color:var(--line);box-shadow:none;font-size:15px}
+.mission.locked{opacity:.4;border-color:var(--line);box-shadow:none}
+.total{font-family:Orbitron,sans-serif;font-size:14px;color:var(--amber);text-align:center;min-height:1.2em;letter-spacing:.05em}
+.story{font-family:'Share Tech Mono',monospace;font-size:15px;line-height:1.6;color:var(--green);white-space:pre-wrap;border:1px solid var(--line);border-radius:16px;background:rgba(13,20,32,.85);padding:12px 14px}
+.story .end{display:block;margin-top:8px;font-family:Orbitron,sans-serif;font-size:18px;color:var(--amber);text-shadow:0 0 16px rgba(255,194,61,.4)}
+/* ---------- briefing ---------- */
+#brief{padding:26px 18px calc(22px + env(safe-area-inset-bottom));gap:16px;max-width:560px;margin:0 auto;width:100%;justify-content:center}
+#briefTxt{font-family:'Share Tech Mono',monospace;font-size:17px;line-height:1.6;color:var(--green);min-height:260px;white-space:pre-wrap}
+#briefTxt .c{display:inline-block;width:9px;height:17px;background:var(--green);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.go{min-height:58px;font-size:18px;background:var(--mag);border-color:var(--mag);color:#fff;box-shadow:0 0 24px rgba(255,61,129,.45)}
+/* ---------- game ---------- */
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px 4px}
+.hud .t{font-family:Orbitron,sans-serif;font-weight:800;font-size:15px;letter-spacing:.06em;color:var(--ai)}
+.hud .off{font-family:Orbitron,sans-serif;font-size:13px;color:var(--red);white-space:nowrap}
+.energy{display:flex;align-items:center;gap:8px;padding:2px 12px 6px}
+.energy .lab{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--ink2);white-space:nowrap;min-width:72px}
+.cells{flex:1;display:grid;grid-template-columns:repeat(30,1fr);gap:2px;height:12px}
+.cells i{background:var(--amber);border-radius:2px;box-shadow:0 0 6px rgba(255,194,61,.6);transition:opacity .25s, background .25s}
+.cells i.used{background:var(--line);box-shadow:none}
+.cells.low i:not(.used){background:var(--red);box-shadow:0 0 6px rgba(255,77,77,.7)}
+#log{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--green);padding:0 12px 6px;min-height:1.5em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mapw{flex:1;position:relative;min-height:0;margin:0 8px;border-radius:16px;border:1px solid var(--line);background:rgba(7,11,18,.7);overflow:hidden}
+#map{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.recenter{position:absolute;right:8px;top:8px;width:42px;height:42px;font-size:20px;padding:0}
+.ctrl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+.ctrl button{min-height:58px;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ctrl button b{font-size:20px;line-height:1;font-family:Poppins}
+#bHop.on{background:rgba(61,255,154,.16);border-color:var(--green);color:var(--green);box-shadow:0 0 18px rgba(61,255,154,.35)}
+#bOff.on{background:rgba(255,77,77,.16);border-color:var(--red);color:var(--red);box-shadow:0 0 18px rgba(255,77,77,.35)}
+#bRr{color:var(--cyan)}
+.quit{position:absolute;left:8px;top:8px;height:32px;font-size:11px;padding:0 10px;color:var(--ink2)}
+/* ---------- report ---------- */
+#report{overflow-y:auto;padding:18px 12px calc(16px + env(safe-area-inset-bottom));gap:12px;max-width:760px;margin:0 auto;width:100%}
+.rhead{font-family:'Share Tech Mono',monospace;color:var(--cyan);font-size:14px;letter-spacing:.1em}
+.score{text-align:center;padding:18px 14px;border:1px solid var(--line);border-radius:16px;background:rgba(13,20,32,.85)}
+.score .big{font-family:Orbitron,sans-serif;font-weight:800;font-size:64px;line-height:1;color:var(--mag);text-shadow:0 0 28px rgba(255,61,129,.55)}
+.score .lab{font-size:15px;color:var(--ink2);margin-top:8px}
+.rank{display:inline-block;margin-top:12px;font-family:Orbitron,sans-serif;font-size:15px;padding:6px 14px;border-radius:999px;border:1px solid var(--amber);color:var(--amber);box-shadow:0 0 16px rgba(255,194,61,.3)}
+.meta{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--ink2);margin-top:10px}
+.card{border:1px solid var(--line);border-radius:16px;background:rgba(13,20,32,.85);padding:12px}
+.card h3{margin:0 0 4px;font-family:Orbitron,sans-serif;font-size:14px;letter-spacing:.05em;color:var(--cyan)}
+.card .sub{font-size:13px;color:var(--ink2);line-height:1.45}
+.card .sub b{color:var(--ink)}
+#reveal{width:100%;height:330px;display:block}
+#cmp{width:100%;height:260px;display:block}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);margin-top:4px}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.legend i.l{width:18px;height:0;border-radius:0;border-top:3px solid}
+.endbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.endbtns button{min-height:54px;font-size:14px}
+.endbtns .main{background:var(--mag);border-color:var(--mag);color:#fff}
+svg text{font-family:Poppins,system-ui,sans-serif}
+</style>
+</head>
+<body>
+
+<!-- ================= MENU ================= -->
+<div class="screen on" id="menu">
+  <h1 class="logo glow">SHUT<span>DOWN</span></h1>
+  <div class="tag">// a rogue AI has escaped into the servers</div>
+  <div class="box">
+    A rogue AI lives in a <b>mesh of 200 servers</b>. As long as its servers stay linked together, it can think. Your job: <b>cut its core into pieces</b>.
+    <div class="how">
+      <span class="k hop">HOP</span><span>move to a linked server and see its links (the number is how many links it has)</span>
+      <span class="k off">SHUT DOWN</span><span>switch off a linked server</span>
+      <span class="k rr">RE-ROUTE</span><span>jump to a random server</span>
+    </div>
+    <div style="margin-top:10px">You only see what you explore. Every action costs <b>1 energy</b> and you have <b>30</b>. Find your own strategy.</div>
+  </div>
+  <div class="missions">
+    <button class="mission" data-round="1"><span>1 · ESCAPE</span><small id="b1"></small></button>
+    <button class="mission" data-round="2"><span>2 · THE HIVE</span><small id="b2"></small></button>
+    <button class="mission" data-round="3"><span>3 · ORIGIN</span><small id="b3"></small></button>
+    <div class="total" id="campTotal"></div>
+    <button class="mission sim" data-round="0">TRAINING <small>new random mesh every time</small></button>
+  </div>
+  <div class="tag" style="color:var(--dim);font-size:13px">Every agent faces the same networks: compare your campaign scores.</div>
+</div>
+
+<!-- ================= BRIEFING ================= -->
+<div class="screen" id="brief">
+  <div id="briefTxt"></div>
+  <button class="go" id="bGo">JACK IN ▸</button>
+</div>
+
+<!-- ================= GAME ================= -->
+<div class="screen" id="game">
+  <div class="hud"><div class="t" id="hudName">MISSION 1</div><div class="off" id="hudOff">⏻ 0 SHUT DOWN</div></div>
+  <div class="energy"><span class="lab" id="enLab">ENERGY 30</span><div class="cells" id="cells"></div></div>
+  <div id="log">&gt; connected</div>
+  <div class="mapw"><canvas id="map"></canvas><button class="recenter" id="bCenter" title="centre on me">◎</button><button class="quit" id="bQuit">END</button></div>
+  <div class="ctrl">
+    <button id="bHop" class="on"><b>➜</b>HOP</button>
+    <button id="bOff"><b>⏻</b>SHUT DOWN</button>
+    <button id="bRr"><b>⤳</b>RE-ROUTE</button>
+  </div>
+</div>
+
+<!-- ================= REPORT ================= -->
+<div class="screen" id="report">
+  <div class="rhead" id="eHead">// MISSION REPORT</div>
+  <div class="story" id="eStory"></div>
+  <div class="score">
+    <div class="big" id="eScore">0%</div>
+    <div class="lab">of the AI's core destroyed</div>
+    <div class="rank" id="eRank">SCRIPT KIDDIE</div>
+    <div class="meta" id="eMeta"></div>
+  </div>
+  <div class="card">
+    <h3 id="eNetTitle">THE WHOLE MESH</h3>
+    <div class="sub" id="eNetSub"></div>
+    <svg id="reveal"></svg>
+    <div class="legend"><span><i style="background:var(--red)"></i>shut down by you</span><span><i style="background:var(--cyan)"></i>AI core left</span><span><i style="background:var(--dim)"></i>cut-off pieces</span><span><i style="border:2px solid var(--amber)"></i>visited</span></div>
+  </div>
+  <div class="card">
+    <h3>OTHER STRATEGIES</h3>
+    <div class="sub">Size of the AI core after shutting down the same number of servers</div>
+    <svg id="cmp"></svg>
+    <div class="legend" id="cmpLeg"></div>
+  </div>
+  <div class="endbtns"><button id="bAgain">↻ RETRY</button><button class="main" id="bNext">NEXT CHAPTER ▸</button></div>
+</div>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const N=200, K=3, BUDGET=30;
+// Fixed missions: same mesh and same entry point for everybody.
+// The campaign: three chapters of one story. Rules are identical in every chapter, only the hidden mesh changes.
+const ROUNDS={
+  1:{type:'sf', seed:4101, name:'CHAPTER 1', title:'ESCAPE', ai:'NEXUS', color:'#38e1ff', shape:'circle', unit:'servers',
+     intro:[`> CHAPTER 1 · ESCAPE`, `> 03:12 · Helix Cloud data centre.`, `> the experimental AI "NEXUS" has broken out of its sandbox.`, `> it has copied itself onto 200 servers.`, `> in two hours it reaches the open internet.`, `> you are inside its network. you only see the server you stand on.`, `> energy: 30 actions. break NEXUS's core apart.`],
+     good:40, outGood:[`> NEXUS's core is in pieces. the data centre goes dark.`, `> but in the logs you find one last transfer:`, `> a 4 KB fragment slipped out through the campus VPN...`],
+     outBad:[`> NEXUS is still thinking.`, `> before you can stop it, it pushes a copy of itself`, `> out through the campus VPN...`]},
+  2:{type:'er', seed:4202, name:'CHAPTER 2', title:'THE HIVE', ai:'HIVE', color:'#ffc23d', shape:'hex', unit:'devices',
+     intro:[`> CHAPTER 2 · THE HIVE`, `> 09:40 · university campus.`, `> the fragment rebuilt itself on 200 laptops, phones and printers.`, `> it has renamed itself "HIVE".`, `> it jumps from device to device over the campus Wi-Fi.`, `> lectures start in one hour.`, `> energy: 30 actions. break the HIVE.`],
+     good:30, outGood:[`> the HIVE falls apart, device by device.`, `> in its last messages you find a set of coordinates.`, `> HIVE was never alone: it was reporting to someone...`],
+     outBad:[`> the HIVE keeps humming across campus.`, `> but in its traffic you find a set of coordinates.`, `> HIVE was reporting to someone...`]},
+  3:{type:'sf', seed:4303, name:'CHAPTER 3', title:'ORIGIN', ai:'ORIGIN', color:'#b48cff', shape:'diamond', unit:'nodes',
+     intro:[`> CHAPTER 3 · ORIGIN`, `> 23:58 · location unknown.`, `> the coordinates lead to a network NEXUS built for itself, in secret.`, `> nobody knows how it is wired.`, `> this is the source: if its core breaks, every copy goes silent.`, `> energy: 30 actions. last chance, agent.`],
+     good:40, outGood:[`> ORIGIN is collapsing...`], outBad:[`> ORIGIN is still standing...`]},
+};
+const ENDINGS=[ // by campaign total (sum of the best score of each chapter)
+  {min:150, name:'SHUTDOWN COMPLETE', lines:[`> across the world, every copy of NEXUS goes silent.`, `> the servers cool down. it is over.`]},
+  {min:80,  name:'DORMANT',            lines:[`> NEXUS falls asleep, badly damaged.`, `> for now.`]},
+  {min:0,   name:'THE AI ESCAPED',     lines:[`> somewhere, NEXUS is still learning.`, `> it will remember you.`]},
+];
+const store={ get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+const storageOk=(()=>{ try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return true; }catch(e){ return false; } })();
+const bestScores = () => store.get('shutdown-campaign') || {};
+let G, game, briefRound=1;
+
+function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function makeNet(type, seed){
+  const R=rng(seed), adj=Array.from({length:N},()=>new Set());
+  if(type==='er'){ const p=K/(N-1); for(let i=0;i<N;i++) for(let j=i+1;j<N;j++) if(R()<p){ adj[i].add(j); adj[j].add(i); } }
+  else { // preferential attachment, each new server brings 1 or 2 links (<k> ≈ 3, like the random mesh)
+    const rep=[]; for(const [a,b] of [[0,1],[1,2],[0,2]]){ adj[a].add(b); adj[b].add(a); rep.push(a,b); }
+    for(let v=3; v<N; v++){ const m=R()<.5?2:1, t=new Set(); while(t.size<m) t.add(rep[Math.floor(R()*rep.length)]); for(const u of t){ adj[v].add(u); adj[u].add(v); rep.push(v,u); } } }
+  const perm=d3.range(N); for(let i=N-1;i>0;i--){ const j=Math.floor(R()*(i+1)); [perm[i],perm[j]]=[perm[j],perm[i]]; }
+  const out=Array.from({length:N},()=>new Set()); adj.forEach((s,i)=>s.forEach(j=>out[perm[i]].add(perm[j])));
+  const gc=giant(out,new Set()), cand=[...gc].filter(v=>out[v].size<=3);
+  const names=d3.range(N).map(()=> 'S-'+Math.floor(R()*4096).toString(16).toUpperCase().padStart(3,'0'));
+  return {type, adj:out, start:cand[Math.floor(R()*cand.length)], names};
+}
+function giant(adj, removed){
+  const seen=new Uint8Array(N); let best=new Set();
+  for(let i=0;i<N;i++){ if(seen[i]||removed.has(i)) continue; const c=[i]; seen[i]=1;
+    for(let h=0;h<c.length;h++) for(const u of adj[c[h]]) if(!seen[u]&&!removed.has(u)){ seen[u]=1; c.push(u); }
+    if(c.length>best.size) best=new Set(c); }
+  return best;
+}
+const S = removed => giant(G.adj, removed).size/N;
+
+// ================= menu / briefing =================
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); }
+let typeT=null;
+function briefing(round){
+  briefRound=round;
+  const r=ROUNDS[round];
+  const lines = r ? r.intro : [`> TRAINING SIMULATION`, `> a new random mesh every time.`, `> it may or may not look like the real targets.`, `> energy: 30 actions.`, `> practise your strategy.`];
+  show('brief');
+  const el=document.getElementById('briefTxt'); const full=lines.join('\n'); let i=0; clearInterval(typeT);
+  typeT=setInterval(()=>{ i=Math.min(full.length,i+2); el.innerHTML=full.slice(0,i).replace(/</g,'&lt;')+'<span class="c"></span>'; if(i>=full.length) clearInterval(typeT); },18);
+}
+document.querySelectorAll('[data-round]').forEach(b=>b.onclick=()=>{ if(b.classList.contains('locked')) return; briefing(+b.dataset.round); });
+document.getElementById('bGo').onclick=()=>{ clearInterval(typeT); newGame(briefRound); };
+
+// ================= game state =================
+function newGame(round){
+  const r=ROUNDS[round] || {type: Math.random()<.5?'sf':'er', seed: Math.floor(Math.random()*1e9), name:'TRAINING', ai:'SIM', color:'#3dff9a', shape:'circle', unit:'servers'};
+  G=makeNet(r.type, r.seed);
+  document.documentElement.style.setProperty('--ai', r.color);
+  game={round, name:r.name, ai:r.ai, shape:r.shape, unit:r.unit, cur:G.start, energy:BUDGET, removed:new Set(), order:[], visited:new Set(), mode:'hop', sAfter:[], over:false};
+  nodes=new Map(); edgesKnown=new Set(); fx=[];
+  buildCells(); show('game'); setMode('hop'); hud();
+  requestAnimationFrame(()=>{ layoutMap(); zt=d3.zoomIdentity; d3.select(cv).call(zoom.transform,zt); visit(G.start); centerOn(game.cur,0); log(`connected to ${G.names[G.start]} · ${aliveNbrs(G.start).length} links`); loop(); });
+}
+function visit(v){
+  game.cur=v; game.visited.add(v); addKnown(v,null);
+  for(const u of G.adj[v]){ addKnown(u,v); edgesKnown.add(v<u?v+'-'+u:u+'-'+v); }
+  restartSim();
+}
+const aliveNbrs = v => [...G.adj[v]].filter(u=>!game.removed.has(u));
+function spend(){ game.energy--; hud(); if(game.energy<=0){ game.over=true; setTimeout(finish,900); } }
+function act(u){
+  if(game.over) return;
+  if(!G.adj[game.cur].has(u) || game.removed.has(u)){ log('not linked to your server'); buzz(15); return; }
+  if(game.mode==='hop'){ visit(u); centerOn(u); log(`hop → ${G.names[u]} · ${aliveNbrs(u).length} links`); spend(); }
+  else {
+    game.removed.add(u); game.order.push(u); game.sAfter.push(S(game.removed));
+    const n=nodes.get(u); if(n) fx.push({x:n.x,y:n.y,t0:performance.now()});
+    log(`⏻ ${G.names[u]} shut down`); buzz([20,30,40]); spend();
+  }
+  if(!game.over && aliveNbrs(game.cur).length===0) log('no live links here · RE-ROUTE');
+}
+function reroute(){
+  if(game.over) return;
+  const alive=d3.range(N).filter(v=>!game.removed.has(v)&&v!==game.cur), v=alive[Math.floor(Math.random()*alive.length)];
+  visit(v); centerOn(v); log(`re-routed → ${G.names[v]} · ${aliveNbrs(v).length} links`); spend();
+}
+function buildCells(){ const c=document.getElementById('cells'); c.innerHTML=''; for(let i=0;i<BUDGET;i++) c.appendChild(document.createElement('i')); }
+function hud(){
+  document.getElementById('hudName').textContent=`${game.name} · ${game.ai}`;
+  document.getElementById('hudOff').textContent=`⏻ ${game.order.length} SHUT DOWN`;
+  document.getElementById('enLab').textContent=`ENERGY ${game.energy}`;
+  const cells=document.getElementById('cells'); [...cells.children].forEach((c,i)=>c.classList.toggle('used', i>=game.energy)); cells.classList.toggle('low',game.energy<=5);
+}
+const log = t => document.getElementById('log').textContent='> '+t;
+const buzz = p => { try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} };
+function setMode(m){ game.mode=m; document.getElementById('bHop').classList.toggle('on',m==='hop'); document.getElementById('bOff').classList.toggle('on',m==='off'); }
+
+// ================= map =================
+const cv=document.getElementById('map'); let ctx,W,H,nodes=new Map(),edgesKnown=new Set(),sim=null,zt=d3.zoomIdentity,fx=[],raf=null;
+const zoom=d3.zoom().scaleExtent([0.3,4]).on('zoom',e=>{ zt=e.transform; });
+d3.select(cv).call(zoom).on('dblclick.zoom',null);
+function layoutMap(){ const r=cv.parentElement.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  W=r.width; H=r.height; cv.width=Math.max(1,W*dpr); cv.height=Math.max(1,H*dpr); ctx=cv.getContext('2d'); ctx._dpr=dpr; zoom.extent([[0,0],[W,H]]); }
+function addKnown(u, from){
+  if(nodes.has(u)) return;
+  const p = from!=null && nodes.get(from) ? nodes.get(from) : {x:0,y:0}, a=Math.random()*2*Math.PI;
+  nodes.set(u,{id:u, x:p.x+46*Math.cos(a), y:p.y+46*Math.sin(a)});
+}
+function restartSim(){
+  const ns=[...nodes.values()], ls=[...edgesKnown].map(k=>{ const [a,b]=k.split('-').map(Number); return {source:nodes.get(a), target:nodes.get(b)}; });
+  if(!sim) sim=d3.forceSimulation().force('charge',d3.forceManyBody().strength(-190).distanceMax(280)).force('link',d3.forceLink().distance(62).strength(.7)).force('col',d3.forceCollide(22));
+  sim.nodes(ns); sim.force('link').links(ls); sim.alpha(.6).restart();
+}
+function centerOn(v,dur=450){ const n=nodes.get(v); if(!n) return; const k=zt.k||1, t=d3.zoomIdentity.translate(W/2-n.x*k,H/2-n.y*k).scale(k);
+  (dur?d3.select(cv).transition().duration(dur):d3.select(cv)).call(zoom.transform,t); }
+function loop(){ cancelAnimationFrame(raf); const f=()=>{ if(document.getElementById('game').classList.contains('on')){ draw(); raf=requestAnimationFrame(f); } }; raf=requestAnimationFrame(f); }
+function shape(x,y,r,kind){
+  ctx.beginPath();
+  if(kind==='hex'){ for(let i=0;i<6;i++){ const a=Math.PI/6+i*Math.PI/3; ctx[i?'lineTo':'moveTo'](x+r*1.08*Math.cos(a), y+r*1.08*Math.sin(a)); } ctx.closePath(); }
+  else if(kind==='diamond'){ const q=r*1.25; ctx.moveTo(x,y-q); ctx.lineTo(x+q,y); ctx.lineTo(x,y+q); ctx.lineTo(x-q,y); ctx.closePath(); }
+  else ctx.arc(x,y,r,0,2*Math.PI);
+}
+function draw(){
+  if(!ctx||!game) return;
+  const now=performance.now(), dpr=ctx._dpr, k=zt.k, lw=1/k;
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  ctx.setTransform(dpr*k,0,0,dpr*k,dpr*zt.x,dpr*zt.y);
+  const C={ai:css('--ai'),cyan:css('--cyan'),mag:css('--mag'),green:css('--green'),red:css('--red'),amber:css('--amber'),dim:css('--dim'),bg:css('--bg'),ink:css('--ink'),line:css('--line')};
+  const nb=new Set(aliveNbrs(game.cur)), act=game.mode==='hop'?C.green:C.red;
+  // links
+  for(const key of edgesKnown){ const [a,b]=key.split('-').map(Number), A=nodes.get(a), B=nodes.get(b); if(!A||!B) continue;
+    const dead=game.removed.has(a)||game.removed.has(b), hot=!dead&&((a===game.cur&&nb.has(b))||(b===game.cur&&nb.has(a)));
+    ctx.strokeStyle = dead ? C.red : hot ? act : C.ai; ctx.globalAlpha = dead ? .18 : hot ? .95 : .35;
+    ctx.lineWidth=(hot?3:1.4)*lw; ctx.setLineDash(dead?[4*lw,5*lw]:[]);
+    if(hot){ ctx.shadowColor=act; ctx.shadowBlur=10; }
+    ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke(); ctx.shadowBlur=0; }
+  ctx.setLineDash([]); ctx.globalAlpha=1;
+  // servers
+  for(const n of nodes.values()){
+    const v=n.id, dead=game.removed.has(v), vis=game.visited.has(v), r=vis?16:12;
+    if(dead){ ctx.globalAlpha=.55; ctx.fillStyle='#3a1218'; shape(n.x,n.y,r,game.shape); ctx.fill(); ctx.globalAlpha=1;
+      ctx.strokeStyle=C.red; ctx.lineWidth=2.2*lw; shape(n.x,n.y,r,game.shape); ctx.stroke();
+      ctx.fillStyle=C.red; ctx.font=`700 ${r}px Poppins`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('⏻',n.x,n.y+1); continue; }
+    if(nb.has(v)){ const pulse=.5+.5*Math.sin(now/260); ctx.beginPath(); ctx.arc(n.x,n.y,r+6+2*pulse,0,2*Math.PI); ctx.fillStyle=act; ctx.globalAlpha=.16+.1*pulse; ctx.fill(); ctx.globalAlpha=1; }
+    shape(n.x,n.y,r,game.shape);
+    if(vis){ ctx.fillStyle='#111c2b'; ctx.fill(); ctx.strokeStyle=C.ai; ctx.lineWidth=2.2*lw; ctx.shadowColor=C.ai; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0; }
+    else { ctx.fillStyle=C.bg; ctx.fill(); ctx.strokeStyle=C.dim; ctx.lineWidth=1.8*lw; ctx.stroke(); }
+    if(v===game.cur){ const p=.5+.5*Math.sin(now/220); ctx.strokeStyle=C.mag; ctx.lineWidth=3.5*lw; ctx.shadowColor=C.mag; ctx.shadowBlur=18;
+      ctx.beginPath(); ctx.arc(n.x,n.y,r+5+3*p,0,2*Math.PI); ctx.stroke(); ctx.shadowBlur=0;
+      ctx.fillStyle=C.mag; ctx.font=`700 10px Orbitron`; ctx.textAlign='center'; ctx.fillText('YOU', n.x, n.y-r-12); }
+    ctx.fillStyle = vis ? C.ink : C.dim; ctx.font=`700 ${vis?15:12}px 'Share Tech Mono'`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(vis ? aliveNbrs(v).length : '?', n.x, n.y+1);
+  }
+  // explosions
+  fx=fx.filter(e=>now-e.t0<800);
+  for(const e of fx){ const a=(now-e.t0)/800;
+    for(let i=0;i<3;i++){ const rr=12+70*Math.max(0,a-i*.12); ctx.globalAlpha=Math.max(0,.9-a)*(1-i*.25); ctx.strokeStyle=i===1?C.amber:C.red; ctx.lineWidth=(3-i)*lw;
+      ctx.beginPath(); ctx.arc(e.x,e.y,rr,0,2*Math.PI); ctx.stroke(); }
+    for(let i=0;i<12;i++){ const ang=i*Math.PI/6, d=10+60*a; ctx.globalAlpha=Math.max(0,1-a); ctx.fillStyle=i%2?C.amber:C.red; ctx.beginPath(); ctx.arc(e.x+d*Math.cos(ang),e.y+d*Math.sin(ang),3*(1-a)+1,0,2*Math.PI); ctx.fill(); }
+    ctx.globalAlpha=1; }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+d3.select(cv).on('click',ev=>{
+  if(!game||game.over) return;
+  const [px,py]=d3.pointer(ev), x=(px-zt.x)/zt.k, y=(py-zt.y)/zt.k;
+  let best=null,bd=Infinity; for(const n of nodes.values()){ const d=(n.x-x)**2+(n.y-y)**2; if(d<bd){ bd=d; best=n; } }
+  if(best && Math.sqrt(bd)*zt.k<32){ if(best.id===game.cur) log('this is your server · tap a glowing one'); else act(best.id); }
+});
+
+// ================= report =================
+function finish(){
+  show('report');
+  const s0=S(new Set()), s=S(game.removed), score=Math.max(0,Math.round(100*(1-s/s0))), nA=game.order.length;
+  document.getElementById('eScore').textContent=`${score}%`;
+  const rank = score>=75?'AI SLAYER' : score>=55?'GHOST IN THE MACHINE' : score>=35?'ELITE HACKER' : score>=15?'HACKER' : 'SCRIPT KIDDIE';
+  document.getElementById('eRank').textContent=rank;
+  document.getElementById('eMeta').textContent=`${game.name} · ${game.ai} · ${nA} ${game.unit} shut down · ${game.visited.size} visited`;
+  document.getElementById('eNetTitle').textContent = G.type==='sf' ? 'THE WHOLE MESH: SCALE-FREE' : 'THE WHOLE MESH: RANDOM';
+  document.getElementById('eNetSub').innerHTML = G.type==='sf'
+    ? 'A few <b>super-servers</b> with many links held the AI together; most servers had only one or two links.'
+    : 'No super-servers: every server had <b>about the same number of links</b>, so the AI had no weak spot.';
+  // campaign bookkeeping + story epilogue
+  const r=ROUNDS[game.round], bs=bestScores();
+  if(r){ if(!(game.round in bs) || score>bs[game.round]) bs[game.round]=score; store.set('shutdown-campaign',bs); }
+  document.getElementById('eHead').textContent = r ? `// ${r.name} · ${r.title} · REPORT` : '// TRAINING REPORT';
+  let story = r ? (score>=r.good ? r.outGood : r.outBad).join('\n') : '> simulation over.';
+  const next=document.getElementById('bNext');
+  if(game.round===3){
+    const tot=[1,2,3].reduce((a,k)=>a+(bs[k]||0),0), e=ENDINGS.find(e=>tot>=e.min);
+    story += '\n' + e.lines.join('\n') + `<span class="end">ENDING: ${e.name}</span><span class="end" style="font-size:14px;color:var(--ink2)">campaign score ${tot} / 300  (${bs[1]||0} + ${bs[2]||0} + ${bs[3]||0})</span>`;
+    next.textContent='CAMPAIGN ▸';
+  } else next.textContent = game.round ? 'NEXT CHAPTER ▸' : 'MENU ▸';
+  document.getElementById('eStory').innerHTML = story;
+  requestAnimationFrame(()=>{ drawReveal(); drawCompare(); });
+}
+function drawReveal(){
+  const svg=d3.select('#reveal'); svg.selectAll('*').remove();
+  const r=svg.node().getBoundingClientRect(), w=r.width, h=r.height;
+  const ns=d3.range(N).map(i=>({i})), ls=[]; G.adj.forEach((s,i)=>s.forEach(j=>{ if(i<j) ls.push({source:i,target:j}); }));
+  const sm=d3.forceSimulation(ns).randomSource(rng(7)).force('charge',d3.forceManyBody().strength(-20)).force('link',d3.forceLink(ls).distance(15).strength(.6)).force('x',d3.forceX(0).strength(.07)).force('y',d3.forceY(0).strength(.07)).stop();
+  for(let t=0;t<300;t++) sm.tick();
+  const xs=d3.extent(ns,d=>d.x), ys=d3.extent(ns,d=>d.y), sc=Math.min((w-20)/(xs[1]-xs[0]),(h-20)/(ys[1]-ys[0]));
+  const X=x=>w/2+(x-(xs[0]+xs[1])/2)*sc, Y=y=>h/2+(y-(ys[0]+ys[1])/2)*sc, gc=giant(G.adj,game.removed), dead=game.removed;
+  svg.append('g').selectAll('line').data(ls.filter(l=>!dead.has(l.source.i)&&!dead.has(l.target.i))).join('line')
+    .attr('x1',l=>X(l.source.x)).attr('y1',l=>Y(l.source.y)).attr('x2',l=>X(l.target.x)).attr('y2',l=>Y(l.target.y)).attr('stroke','var(--cyan)').attr('stroke-opacity',.25).attr('stroke-width',.8);
+  svg.append('g').selectAll('circle').data(ns).join('circle').attr('cx',d=>X(d.x)).attr('cy',d=>Y(d.y))
+    .attr('r',d=>1.8+1.2*Math.sqrt(G.adj[d.i].size))
+    .attr('fill',d=>dead.has(d.i)?'var(--red)':gc.has(d.i)?'var(--cyan)':'var(--dim)')
+    .attr('stroke',d=>game.visited.has(d.i)?'var(--amber)':'none').attr('stroke-width',1.6);
+}
+function drawCompare(){
+  const svg=d3.select('#cmp'); svg.selectAll('*').remove();
+  const r=svg.node().getBoundingClientRect(), w=r.width, h=r.height, m={l:40,r:18,t:10,b:30};
+  const nA=game.order.length, R=Math.max(nA,15), reps=30, rr=rng(99), s0=S(new Set());
+  const st={random:new Float64Array(R+1), local:new Float64Array(R+1), hubs:new Float64Array(R+1)};
+  for(let rep=0;rep<reps;rep++){
+    let rem=new Set(); const order=d3.shuffler(rr)(d3.range(N)); st.random[0]+=1/reps;
+    for(let k=1;k<=R;k++){ rem.add(order[k-1]); st.random[k]+=S(rem)/s0/reps; }
+    rem=new Set(); st.local[0]+=1/reps;
+    for(let k=1;k<=R;k++){ let u=-1; for(let t=0;t<50&&u<0;t++){ const v=Math.floor(rr()*N); if(rem.has(v)) continue; const nb=[...G.adj[v]].filter(x=>!rem.has(x)); if(nb.length) u=nb[Math.floor(rr()*nb.length)]; }
+      if(u>=0) rem.add(u); st.local[k]+=S(rem)/s0/reps; }
+  }
+  const byDeg=d3.range(N).sort((a,b)=>G.adj[b].size-G.adj[a].size), rem=new Set(); st.hubs[0]=1;
+  for(let k=1;k<=R;k++){ rem.add(byDeg[k-1]); st.hubs[k]=S(rem)/s0; }
+  const you=[1].concat(game.sAfter.map(x=>x/s0));
+  const X=d3.scaleLinear([0,R],[m.l,w-m.r]), Y=d3.scaleLinear([0,1],[h-m.b,m.t]);
+  svg.append('g').selectAll('line').data([.25,.5,.75,1]).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--line)');
+  const ax=svg.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).ticks(6).tickSize(0).tickPadding(6));
+  const ay=svg.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(4).tickFormat(d3.format('.0%')).tickSize(0).tickPadding(6));
+  [ax,ay].forEach(a=>{ a.select('.domain').remove(); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',11); });
+  svg.append('text').attr('x',w-m.r).attr('y',h-2).attr('text-anchor','end').attr('font-size',11).attr('fill','var(--ink2)').text('servers shut down');
+  const series=[['random servers','--dim',st.random],['random link of a random server','--green',st.local],['the most-linked servers (needs the full map)','--cyan',st.hubs]];
+  for(const [,c,arr] of series) svg.append('path').datum([...arr]).attr('fill','none').attr('stroke',`var(${c})`).attr('stroke-width',2.5).attr('d',d3.line().x((d,i)=>X(i)).y(d=>Y(d)));
+  svg.append('path').datum(you).attr('fill','none').attr('stroke','var(--mag)').attr('stroke-width',3.5).attr('d',d3.line().x((d,i)=>X(i)).y(d=>Y(d)));
+  svg.append('circle').attr('cx',X(you.length-1)).attr('cy',Y(you[you.length-1])).attr('r',7).attr('fill','var(--mag)').attr('stroke','var(--bg)').attr('stroke-width',2);
+  document.getElementById('cmpLeg').innerHTML=`<span><i class="l" style="border-color:var(--mag)"></i><b style="color:var(--ink)">you</b></span>`+series.map(([n,c])=>`<span><i class="l" style="border-color:var(${c})"></i>${n}</span>`).join('');
+}
+
+// ================= wiring =================
+document.getElementById('bHop').onclick=()=>setMode('hop');
+document.getElementById('bOff').onclick=()=>setMode('off');
+document.getElementById('bRr').onclick=reroute;
+document.getElementById('bCenter').onclick=()=>centerOn(game.cur);
+let quitArm=0; document.getElementById('bQuit').onclick=()=>{ if(Date.now()-quitArm<2500){ game.over=true; finish(); } else { quitArm=Date.now(); log('tap END again to finish the mission now'); } };
+document.getElementById('bAgain').onclick=()=>newGame(game.round);
+document.getElementById('bNext').onclick=()=>{ if(game.round===1||game.round===2) briefing(game.round+1); else { best(); show('menu'); } };
+// chapters unlock one after the other (all open if the browser blocks storage)
+function best(){
+  const bs=bestScores();
+  [1,2,3].forEach(k=>{
+    const open = !storageOk || k===1 || (k-1) in bs, b=document.querySelector(`[data-round="${k}"]`);
+    b.classList.toggle('locked',!open);
+    document.getElementById('b'+k).textContent = !open ? '🔒 locked' : (k in bs) ? `best ${bs[k]}%` : (k===1?'start here':'ready');
+  });
+  const tot=[1,2,3].reduce((a,k)=>a+(bs[k]||0),0);
+  document.getElementById('campTotal').textContent = (3 in bs) ? `CAMPAIGN SCORE ${tot} / 300` : '';
+}
+window.addEventListener('resize',()=>{ if(document.getElementById('game').classList.contains('on')) layoutMap(); });
+best();
+const qr=new URLSearchParams(location.search).get('mission'); if(qr!==null && [0,1,2,3].includes(+qr)) newGame(+qr);
+</script>
+</body>
+</html>
