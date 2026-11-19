@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>Gaussian vs Paretian World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --gauss:#4a5360; --pl:#3a7db8; --max:#d0453b; --theory:#111418; --bar:#5bc8f0;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --gauss:#c4ccd8; --pl:#5fa3dc; --max:#ec6a5f; --theory:#eef1f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:14px 32px 6px;border-left:6px solid var(--bar);display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(22px,2.4vw,36px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+.tabs{display:flex;gap:6px}
+.tabs button{font-size:15px;padding:7px 16px}
+main{flex:1;display:grid;gap:12px;padding:6px 32px 8px;min-height:0}
+main.ext{grid-template-columns:1fr 1fr}
+main.bin{grid-template-columns:1fr 1fr 1fr}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;display:flex;flex-direction:column;padding:10px 14px 8px;gap:4px}
+.ptitle{font-size:clamp(14px,1.2vw,18px);font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ptitle .st{font-weight:500;color:var(--ink2)}
+.sub{font-size:12px;color:var(--ink2);font-weight:500}
+.cvw{flex:1.1;position:relative;min-height:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+svg.chart{flex:1;width:100%;min-height:0;display:block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--bg);border-radius:10px;padding:4px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.stat .v{font-size:clamp(14px,1.25vw,19px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .l{font-size:12px;color:var(--ink2)}
+.note{font-size:clamp(12px,1vw,15px);color:var(--ink2);min-height:1.4em}
+.note b{color:var(--ink)}
+footer{padding:4px 32px 12px;display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+.pname{font-size:clamp(15px,1.3vw,20px);font-weight:700;min-width:100px;font-variant-numeric:tabular-nums}
+.pname span{color:var(--accent)}
+input[type=range]{flex:1;min-width:160px;max-width:420px;accent-color:var(--accent);height:28px}
+button{font-family:inherit;font-size:13px;font-weight:500;border:1px solid var(--grid);background:var(--panel);color:var(--ink);border-radius:9px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center}
+.group .lab{font-size:13px;color:var(--ink2);margin-right:2px}
+.keys{font-size:11px;color:var(--muted);width:100%}
+svg text{font-family:Poppins,system-ui,sans-serif}
+.hide{display:none!important}
+@media (max-width:820px){
+  html,body{height:auto}
+  header,main,footer{padding-left:16px;padding-right:16px}
+  main.ext,main.bin{grid-template-columns:1fr}
+  .cvw{flex:none;height:160px}
+  svg.chart{flex:none;height:200px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Gaussian vs <span class="hl">Paretian</span> World</h1>
+  <div class="tabs"><button data-mode="ext">Extreme events</button><button data-mode="bin">Binning</button></div>
+</header>
+
+<!-- MODE 1: extreme events -->
+<main class="ext" id="mExt">
+  <div class="panel">
+    <div class="ptitle"><span>Gaussian <span class="sub">· mean 170, sd 10 (e.g. heights in cm)</span></span></div>
+    <div class="sub">every sample, in order (red: the largest one so far)</div>
+    <div class="cvw"><canvas id="stripG"></canvas></div>
+    <svg class="chart" id="meanG"></svg>
+    <svg class="chart" id="sdG"></svg>
+    <div class="stats"><div class="stat"><span class="l">largest</span><span class="v" id="maxG">–</span></div><div class="stat"><span class="l">mean</span><span class="v" id="mG">–</span></div><div class="stat"><span class="l">std. dev.</span><span class="v" id="sG">–</span></div></div>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>Power law <span class="sub" id="plSub"></span></span></div>
+    <div class="sub">every sample, in order (red: the largest one so far)</div>
+    <div class="cvw"><canvas id="stripP"></canvas></div>
+    <svg class="chart" id="meanP"></svg>
+    <svg class="chart" id="sdP"></svg>
+    <div class="stats"><div class="stat"><span class="l">largest</span><span class="v" id="maxP">–</span></div><div class="stat"><span class="l">mean</span><span class="v" id="mP">–</span></div><div class="stat"><span class="l">std. dev.</span><span class="v" id="sP">–</span></div></div>
+  </div>
+</main>
+
+<!-- MODE 2: binning -->
+<main class="bin hide" id="mBin">
+  <div class="panel">
+    <div class="ptitle"><span>1 · Linear bins, linear axes</span></div>
+    <svg class="chart" id="h1"></svg>
+    <div class="note">Almost everything falls in the first bin: the tail is invisible.</div>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>2 · Linear bins, log–log axes</span></div>
+    <svg class="chart" id="h2"></svg>
+    <div class="note">The tail appears, but it is noisy: far bins hold 0, 1 or 2 events.</div>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>3 · Logarithmic bins, log–log axes</span></div>
+    <svg class="chart" id="h3"></svg>
+    <div class="note" id="fitNote"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="pname">γ = <span id="gv">2.5</span></div>
+  <input type="range" id="gS" min="1.5" max="4" step="0.05" value="2.5" aria-label="power-law exponent">
+  <div class="group ext"><button id="play">▶ Play</button><button id="p1">+1</button><button id="p100">+100</button><span class="lab" id="nLab">n = 0</span></div>
+  <div class="group bin hide"><span class="lab">samples</span><button data-n="1000">10³</button><button data-n="10000">10⁴</button><button data-n="100000">10⁵</button></div>
+  <button id="reset">↻ New samples</button>
+  <button id="theme">◐</button>
+  <div class="keys" id="keys"></div>
+</footer>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NMAX = 100000;
+let mode='ext', GAMMA=2.5, n=0, NB=10000, seed=7, playT=null;
+let U, Z, X, XB, G, XMIN=1;   // uniforms and normals (fixed per seed) -> samples; changing γ transforms the SAME draws
+
+function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function draw(){
+  const R=rng(seed); U=new Float64Array(NMAX); Z=new Float64Array(NMAX);
+  for(let i=0;i<NMAX;i++){ U[i]=1-R(); const a=1-R(), b=R(); Z[i]=Math.sqrt(-2*Math.log(a))*Math.cos(2*Math.PI*b); }
+  G=Z.map(z=>170+10*z);
+  transform();
+}
+// Pareto with x_min = 1:  P(x) = (γ-1) x^-γ  ->  x = U^(-1/(γ-1))
+// x_min is chosen so that the power law has the SAME mean as the Gaussian (170) whenever the mean is finite;
+// for γ ≤ 2 the mean is infinite, so x_min stays at its value for γ = 2.1.
+const MU=170;
+function transform(){
+  XMIN = MU*(Math.max(GAMMA,2.1)-2)/(Math.max(GAMMA,2.1)-1);
+  XB=U.map(u=>Math.pow(u,-1/(GAMMA-1)));        // x_min = 1, used for the binning panels (shape only)
+  X=XB.map(x=>XMIN*x);
+}
+const plMean = g => g>2 ? XMIN*(g-1)/(g-2) : Infinity;
+const plSd   = g => g>3 ? XMIN*Math.sqrt((g-1)/(g-3) - ((g-1)/(g-2))**2) : Infinity;
+
+// running statistics at log-spaced checkpoints
+function running(arr, upto){
+  const pts=[]; let m=0, s2=0, mx=-Infinity, next=1;
+  for(let i=0;i<upto;i++){
+    const x=arr[i], d=x-m; m+=d/(i+1); s2+=d*(x-m); if(x>mx) mx=x;
+    if(i+1>=next || i===upto-1){ pts.push({n:i+1, m, s:Math.sqrt(s2/Math.max(1,i)), mx}); next=Math.ceil((i+1)*1.04)+1; }
+  }
+  return pts;
+}
+
+// ---------------- strips (one bar per pixel column = largest sample in that chunk)
+function strip(id, arr, color){
+  const cv=document.getElementById(id), r=cv.parentElement.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  cv.width=Math.max(1,r.width*dpr); cv.height=Math.max(1,r.height*dpr);
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W=r.width, H=r.height, padT=16, padB=4, cols=Math.max(1,Math.floor(W));
+  ctx.clearRect(0,0,W,H);
+  if(n===0) return;
+  const isG = arr===G, lo = isG ? 120 : 0;
+  let mx=-Infinity, imx=0; for(let i=0;i<n;i++) if(arr[i]>mx){ mx=arr[i]; imx=i; }
+  const hi = isG ? 220 : mx;
+  const y = v => H-padB-(H-padT-padB)*Math.max(0,(v-lo))/(hi-lo);
+  const per = n/cols, bw = Math.max(1, W/Math.min(n,cols));
+  ctx.fillStyle=color;
+  for(let c=0;c<Math.min(n,cols);c++){
+    const a=Math.floor(c*Math.max(per,1)), b=Math.max(a+1,Math.floor((c+1)*Math.max(per,1)));
+    let v=-Infinity; for(let i=a;i<Math.min(b,n);i++) if(arr[i]>v) v=arr[i];
+    const x = n<=cols ? c*bw : c, yy=y(v);
+    ctx.fillRect(x, yy, Math.max(1,bw-(n<=cols&&bw>3?1:0)), H-padB-yy);
+  }
+  // the common mean (170)
+  const ym=y(MU); ctx.strokeStyle=css('--theory'); ctx.globalAlpha=.6; ctx.setLineDash([5,4]); ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(0,ym); ctx.lineTo(W,ym); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+  ctx.fillStyle=css('--ink2'); ctx.font='500 11px Poppins'; ctx.textAlign='left'; ctx.fillText('mean 170', 4, ym-4);
+  // largest sample in red
+  const xm = n<=cols ? imx*bw : imx/per;
+  ctx.fillStyle=css('--max'); ctx.fillRect(xm, y(mx), Math.max(2,Math.min(bw,6)), H-padB-y(mx));
+  ctx.font='600 12px Poppins'; ctx.textAlign = xm>W-140 ? 'right':'left';
+  ctx.fillText(`max = ${fmt(mx)}`, xm+(xm>W-140?-6:8), Math.max(12,y(mx)+12));
+}
+const fmt = v => !isFinite(v) ? '∞' : Math.abs(v)>=1e5 ? v.toExponential(1).replace('e+',' · 10^') : Math.abs(v)>=100 ? v.toFixed(0) : v.toFixed(2);
+
+// ---------------- running-mean / running-sd charts
+function runChart(id, pts, key, theory, color, label, isG){
+  const s=d3.select('#'+id); s.selectAll('*').remove();
+  const r=s.node().getBoundingClientRect(); if(!r.width||!r.height) return;
+  const m={l:58,r:12,t:16,b:22}, w=r.width, h=r.height;
+  const X=d3.scaleLog([1,NMAX],[m.l,w-m.r]);
+  const vals=pts.map(p=>p[key]).filter(isFinite);
+  let lo, hi;
+  if(isG){ lo = key==='m' ? 160 : 0; hi = key==='m' ? 180 : 20; }
+  else { lo=0; hi=Math.max(isFinite(theory)?theory*1.6:1, d3.max(vals)||1)*1.08; }
+  const Y=d3.scaleLinear([lo,hi],[h-m.b,m.t]).clamp(true);
+  s.append('g').selectAll('line').data(Y.ticks(3)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  const ax=s.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).tickValues([1,10,100,1000,1e4,1e5]).tickFormat(d=>({1:'1',10:'10',100:'10²',1000:'10³',10000:'10⁴',100000:'10⁵'})[d]).tickSize(0).tickPadding(5));
+  const ay=s.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(3).tickFormat(d3.format('~s')).tickSize(0).tickPadding(5));
+  [ax,ay].forEach(a=>{ a.select('.domain').remove(); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',11); });
+  s.append('text').attr('x',m.l+6).attr('y',m.t-4).attr('font-size',12).attr('font-weight',700).attr('fill','var(--ink)').text(label);
+  if(isFinite(theory)){
+    s.append('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y(theory)).attr('y2',Y(theory)).attr('stroke','var(--theory)').attr('stroke-dasharray','5 4').attr('opacity',.7);
+    s.append('text').attr('x',w-m.r).attr('y',Y(theory)-5).attr('text-anchor','end').attr('font-size',11).attr('fill','var(--ink2)').text(`true value ${fmt(theory)}`);
+  } else {
+    s.append('text').attr('x',w-m.r).attr('y',m.t+10).attr('text-anchor','end').attr('font-size',12).attr('font-weight',700).attr('fill','var(--max)').text('true value: ∞ (diverges)');
+  }
+  if(pts.length) s.append('path').datum(pts).attr('fill','none').attr('stroke',color).attr('stroke-width',2.5)
+    .attr('d',d3.line().x(p=>X(p.n)).y(p=>Y(p[key])));
+  s.append('text').attr('x',w-m.r).attr('y',h-m.b-4).attr('text-anchor','end').attr('font-size',10).attr('fill','var(--muted)').text('number of samples n');
+}
+
+function renderExt(){
+  const pg=running(G,n), pp=running(X,n);
+  strip('stripG',G,css('--gauss')); strip('stripP',X,css('--pl'));
+  runChart('meanG',pg,'m',170,'var(--gauss)','running mean',true);
+  runChart('sdG',pg,'s',10,'var(--gauss)','running std. dev.',true);
+  runChart('meanP',pp,'m',plMean(GAMMA),'var(--pl)','running mean',false);
+  runChart('sdP',pp,'s',plSd(GAMMA),'var(--pl)','running std. dev.',false);
+  const lg=pg[pg.length-1], lp=pp[pp.length-1];
+  document.getElementById('maxG').textContent = lg?fmt(lg.mx):'–';
+  document.getElementById('mG').textContent = lg?fmt(lg.m):'–';
+  document.getElementById('sG').textContent = lg&&n>1?fmt(lg.s):'–';
+  document.getElementById('maxP').textContent = lp?fmt(lp.mx):'–';
+  document.getElementById('mP').textContent = lp?fmt(lp.m):'–';
+  document.getElementById('sP').textContent = lp&&n>1?fmt(lp.s):'–';
+  document.getElementById('nLab').textContent = `n = ${n.toLocaleString('en')}`;
+  const reg = GAMMA<=2 ? 'mean and variance diverge' : GAMMA<=3 ? 'finite mean, diverging variance' : 'finite mean and variance';
+  document.getElementById('plSub').innerHTML = `· P(x) ∝ x<sup>−${GAMMA.toFixed(2)}</sup>, x ≥ ${XMIN.toFixed(0)} · ${GAMMA>2?'same mean (170) as the Gaussian · ':''}${reg}`;
+}
+
+// ---------------- histograms
+function histPanel(id, kind){
+  const s=d3.select('#'+id); s.selectAll('*').remove();
+  const r=s.node().getBoundingClientRect(); if(!r.width) return;
+  const m={l:56,r:12,t:12,b:36}, w=r.width, h=r.height;
+  const data=XB.subarray(0,NB), mx=d3.max(data);
+  let bins;
+  if(kind==='log'){
+    const f=Math.pow(10,0.1), edges=[1]; while(edges[edges.length-1]<mx) edges.push(edges[edges.length-1]*f);
+    bins=edges.slice(0,-1).map((a,i)=>({a,b:edges[i+1],c:0}));
+    for(const x of data){ const i=Math.min(bins.length-1,Math.floor(Math.log(x)/Math.log(f))); bins[i].c++; }
+  } else {
+    const nb=60, bw=(mx-1)/nb; bins=d3.range(nb).map(i=>({a:1+i*bw,b:1+(i+1)*bw,c:0}));
+    for(const x of data) bins[Math.min(nb-1,Math.floor((x-1)/bw))].c++;
+  }
+  bins.forEach(b=>b.p=b.c/(NB*(b.b-b.a)));          // probability density
+  const axis=(sel,sc,logScale,dir)=>{ const a=(dir==='x'?d3.axisBottom(sc):d3.axisLeft(sc)).tickSize(0).tickPadding(5);
+    if(logScale){ const t=sc.ticks().filter(v=>Math.abs(Math.log10(v)-Math.round(Math.log10(v)))<1e-9); a.tickValues(t).tickFormat(v=>{ const e=Math.round(Math.log10(v)); return e===0?'1':e===1?'10':'10'+String(e).split('').map(c=>'⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(c)]).join(''); }); }
+    else a.ticks(4).tickFormat(d3.format('~g'));
+    sel.call(a); sel.select('.domain').remove(); sel.selectAll('text').attr('fill','var(--ink2)').attr('font-size',11); };
+  let X_, Y_;
+  if(kind==='lin'){
+    X_=d3.scaleLinear([1,mx],[m.l,w-m.r]); Y_=d3.scaleLinear([0,d3.max(bins,b=>b.p)],[h-m.b,m.t]);
+    s.append('g').selectAll('rect').data(bins).join('rect').attr('x',b=>X_(b.a)).attr('width',b=>Math.max(1,X_(b.b)-X_(b.a)-1)).attr('y',b=>Y_(b.p)).attr('height',b=>h-m.b-Y_(b.p)).attr('fill','var(--pl)').attr('rx',2);
+  } else {
+    const nz=bins.filter(b=>b.c>0), pmin=d3.min(nz,b=>b.p);
+    X_=d3.scaleLog([1,mx*1.2],[m.l,w-m.r]); Y_=d3.scaleLog([pmin/2,d3.max(nz,b=>b.p)*2],[h-m.b,m.t]);
+    s.append('g').selectAll('line').data(Y_.ticks().filter(v=>Math.abs(Math.log10(v)-Math.round(Math.log10(v)))<1e-9)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y_).attr('y2',Y_).attr('stroke','var(--grid)');
+    // theory  (γ-1) x^-γ
+    const xs=d3.range(0,Math.log10(mx*1.2),0.02).map(v=>10**v);
+    s.append('clipPath').attr('id','cl'+id).append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',h-m.t-m.b);
+    s.append('path').attr('clip-path',`url(#cl${id})`).attr('fill','none').attr('stroke','var(--theory)').attr('stroke-width',1.5).attr('stroke-dasharray','6 4').attr('opacity',.75)
+      .attr('d',d3.line().x(x=>X_(x)).y(x=>Y_(Math.max(pmin/2,(GAMMA-1)*Math.pow(x,-GAMMA))))(xs));
+    if(kind==='linlog'){
+      s.append('g').selectAll('rect').data(nz).join('rect').attr('x',b=>X_(b.a)).attr('width',b=>Math.max(1,X_(b.b)-X_(b.a)-1)).attr('y',b=>Y_(b.p)).attr('height',b=>h-m.b-Y_(b.p)).attr('fill','var(--pl)').attr('opacity',.85);
+    } else {
+      s.append('g').selectAll('rect').data(nz).join('rect').attr('x',b=>X_(b.a)+1).attr('width',b=>Math.max(1,X_(b.b)-X_(b.a)-2)).attr('y',b=>Y_(b.p)).attr('height',b=>h-m.b-Y_(b.p)).attr('fill','var(--pl)').attr('opacity',.35);
+      s.append('g').selectAll('circle').data(nz).join('circle').attr('cx',b=>X_(Math.sqrt(b.a*b.b))).attr('cy',b=>Y_(b.p)).attr('r',4).attr('fill','var(--pl)');
+      // least-squares slope on bins with at least 5 events
+      const fitB=nz.filter(b=>b.c>=5), xs2=fitB.map(b=>Math.log10(Math.sqrt(b.a*b.b))), ys2=fitB.map(b=>Math.log10(b.p));
+      const mxs=d3.mean(xs2), mys=d3.mean(ys2), slope=d3.sum(xs2.map((x,i)=>(x-mxs)*(ys2[i]-mys)))/d3.sum(xs2.map(x=>(x-mxs)**2));
+      document.getElementById('fitNote').innerHTML = `A clean straight line. Fitted slope <b>${slope.toFixed(2)}</b> vs. −γ = <b>${(-GAMMA).toFixed(2)}</b>.`;
+    }
+  }
+  axis(s.append('g').attr('transform',`translate(0,${h-m.b})`),X_,kind!=='lin','x');
+  axis(s.append('g').attr('transform',`translate(${m.l},0)`),Y_,kind!=='lin','y');
+  s.append('text').attr('x',w-m.r).attr('y',h-4).attr('text-anchor','end').attr('font-size',12).attr('fill','var(--ink2)').text('size x');
+  s.append('text').attr('transform',`translate(12,${(m.t+h-m.b)/2}) rotate(-90)`).attr('text-anchor','middle').attr('font-size',12).attr('fill','var(--ink2)').text('P(x)');
+  if(kind!=='lin'){
+    const lg=s.append('g').attr('transform',`translate(${w-m.r-170},${m.t+12})`);
+    lg.append('line').attr('x2',22).attr('stroke','var(--theory)').attr('stroke-dasharray','6 4').attr('stroke-width',1.5);
+    const tt=lg.append('text').attr('x',28).attr('y',4).attr('font-size',12).attr('fill','var(--ink)');
+    tt.append('tspan').text('theory (γ−1) x'); tt.append('tspan').attr('dy',-6).attr('font-size',9).text('−γ');
+  }
+}
+function renderBin(){ histPanel('h1','lin'); histPanel('h2','linlog'); histPanel('h3','log'); }
+function render(){ mode==='ext' ? renderExt() : renderBin(); }
+
+// ---------------- controls
+const gS=document.getElementById('gS');
+function setGamma(g){ GAMMA=Math.round(Math.max(1.5,Math.min(4,g))*100)/100; gS.value=GAMMA; document.getElementById('gv').textContent=GAMMA.toFixed(2); transform(); render(); }
+gS.addEventListener('input',()=>setGamma(+gS.value));
+const playBtn=document.getElementById('play');
+function stopPlay(){ clearInterval(playT); playT=null; playBtn.textContent='▶ Play'; playBtn.classList.remove('on'); }
+function play(){
+  if(playT){ stopPlay(); return; }
+  if(n>=NMAX) n=0;
+  playBtn.textContent='❚❚ Pause'; playBtn.classList.add('on');
+  playT=setInterval(()=>{ n = n<60 ? n+1 : Math.min(NMAX, Math.ceil(n*1.04)); renderExt(); if(n>=NMAX) stopPlay(); }, n<60?120:60);
+}
+playBtn.onclick=play;
+document.getElementById('p1').onclick=()=>{ stopPlay(); n=Math.min(NMAX,n+1); renderExt(); };
+document.getElementById('p100').onclick=()=>{ stopPlay(); n=Math.min(NMAX,n+100); renderExt(); };
+document.getElementById('reset').onclick=()=>{ stopPlay(); seed=(seed*7919+13)%100003; if(mode==='ext') n=0; draw(); render(); };
+document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ NB=+b.dataset.n; marks(); renderBin(); });
+function marks(){
+  document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode));
+  document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',+b.dataset.n===NB));
+  document.getElementById('mExt').classList.toggle('hide',mode!=='ext');
+  document.getElementById('mBin').classList.toggle('hide',mode!=='bin');
+  document.querySelectorAll('.group.ext').forEach(e=>e.classList.toggle('hide',mode!=='ext'));
+  document.querySelectorAll('.group.bin').forEach(e=>e.classList.toggle('hide',mode!=='bin'));
+  document.getElementById('keys').textContent = mode==='ext'
+    ? 'Space play / pause · → +1 sample · Shift+→ +100 · ← → with Alt change γ · R new samples · M switch mode · D dark'
+    : '← → change γ · R new samples · M switch mode · D dark';
+}
+function setMode(m){ stopPlay(); mode=m; marks(); requestAnimationFrame(render); }
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{localStorage.setItem('ns-theme',r.dataset.theme);}catch(e){} render(); }
+document.getElementById('theme').onclick=toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')) e.preventDefault();
+  const dir=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+  if(dir && (mode==='bin' || e.altKey)) setGamma(GAMMA+dir*0.1);
+  else if(dir>0 && mode==='ext'){ stopPlay(); n=Math.min(NMAX,n+(e.shiftKey?100:1)); renderExt(); }
+  else if(e.key===' '&&mode==='ext'){ e.preventDefault(); play(); }
+  else if(e.key==='r'||e.key==='R') document.getElementById('reset').click();
+  else if(e.key==='m'||e.key==='M') setMode(mode==='ext'?'bin':'ext');
+  else if(e.key==='d'||e.key==='D') toggleTheme();
+});
+let rzT; new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(render,60); }).observe(document.body);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(render,30));
+
+// init: ?mode=bin&gamma=2.5&n=1000
+const qs=new URLSearchParams(location.search);
+if(qs.get('mode')==='bin') mode='bin';
+if(qs.has('gamma')) GAMMA=Math.max(1.5,Math.min(4,+qs.get('gamma')||2.5));
+if(qs.has('n')) n=Math.max(0,Math.min(NMAX,+qs.get('n')||0));
+gS.value=GAMMA; document.getElementById('gv').textContent=GAMMA.toFixed(2);
+marks(); draw(); render();
+</script>
+</body>
+</html>
