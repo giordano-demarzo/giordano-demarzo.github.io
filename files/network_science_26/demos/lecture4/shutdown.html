@@ -202,7 +202,7 @@ const ROUNDS={
             `> it rebuilt itself on 200 laptops, phones and printers, and now calls itself HIVE.`,
             `> the devices pass HIVE to each other over the campus Wi-Fi.`,
             `> the IT office lends you a new tool:`,
-            `> SCANNER (1 energy): on the device you stand on, it marks with ★ the link to the neighbour that has the most links.`,
+            `> SCANNER (1 energy): on the device you stand on, it marks with ★ the link to the unexplored neighbour that has the most links.`,
             `> lectures start at 10:30. energy: 50 actions. break the HIVE.`],
      good:25,
      outGood:[`> 10:29 · the HIVE falls apart, device by device.`, `> in the memory of the last infected laptop you find an address:`, `> the place where HIVE was sending its reports.`, `> someone has been hiding NEXUS all along...`, `> [ tool unlocked: HUB JUMP ]`],
@@ -305,7 +305,9 @@ function reroute(){
 function scan(){
   if(game.over||game.tools<1) return;
   if(game.scans.has(game.cur)){ log('already scanned here'); return; }
-  const nb=aliveNbrs(game.cur); if(!nb.length){ log('nothing to scan here'); return; }
+  // only neighbours you have not visited yet (whose number of links you do not know)
+  const nb=aliveNbrs(game.cur).filter(u=>!game.visited.has(u));
+  if(!nb.length){ log('all neighbours here are already explored'); return; }
   const best=nb.reduce((a,b)=>aliveNbrs(b).length>aliveNbrs(a).length?b:a);
   game.scans.set(game.cur,best); log(`scanner: the ★ link leads to the best-connected neighbour`); spend(1);
 }
