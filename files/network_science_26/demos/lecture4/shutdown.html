@@ -57,7 +57,7 @@ button:active{transform:scale(.98)}
 .hud .off{font-family:Orbitron,sans-serif;font-size:13px;color:var(--red);white-space:nowrap}
 .energy{display:flex;align-items:center;gap:8px;padding:2px 12px 6px}
 .energy .lab{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--ink2);white-space:nowrap;min-width:72px}
-.cells{flex:1;display:grid;grid-template-columns:repeat(30,1fr);gap:2px;height:12px}
+.cells{flex:1;display:grid;grid-template-columns:repeat(50,1fr);gap:1px;height:12px}
 .cells i{background:var(--amber);border-radius:2px;box-shadow:0 0 6px rgba(255,194,61,.6);transition:opacity .25s, background .25s}
 .cells i.used{background:var(--line);box-shadow:none}
 .cells.low i:not(.used){background:var(--red);box-shadow:0 0 6px rgba(255,77,77,.7)}
@@ -71,6 +71,15 @@ button:active{transform:scale(.98)}
 #bHop.on{background:rgba(61,255,154,.16);border-color:var(--green);color:var(--green);box-shadow:0 0 18px rgba(61,255,154,.35)}
 #bOff.on{background:rgba(255,77,77,.16);border-color:var(--red);color:var(--red);box-shadow:0 0 18px rgba(255,77,77,.35)}
 #bRr{color:var(--cyan)}
+.ctrl .tool{display:none;min-height:46px;color:var(--amber);border-color:rgba(255,194,61,.5);flex-direction:row!important;gap:8px!important;font-size:12px!important;white-space:nowrap}
+.ctrl .tool b{font-size:18px!important}
+.ctrl .tool small{font-family:'Share Tech Mono',monospace;font-size:12px;opacity:.85}
+.ctrl.t1 .tool#bScan{display:flex}
+.ctrl.t2 .tool{display:flex}
+.ctrl.t1 #bScan{grid-column:1 / span 3}
+.ctrl.t2 #bScan{grid-column:1 / span 2}
+.ctrl.t2 #bJump{grid-column:3}
+.ctrl .tool:disabled{opacity:.35}
 .quit{position:absolute;left:8px;top:8px;height:32px;font-size:11px;padding:0 10px;color:var(--ink2)}
 /* ---------- report ---------- */
 #report{overflow-y:auto;padding:18px 12px calc(16px + env(safe-area-inset-bottom));gap:12px;max-width:760px;margin:0 auto;width:100%}
@@ -101,15 +110,15 @@ svg text{font-family:Poppins,system-ui,sans-serif}
 <!-- ================= MENU ================= -->
 <div class="screen on" id="menu">
   <h1 class="logo glow">SHUT<span>DOWN</span></h1>
-  <div class="tag">// a rogue AI has escaped into the servers</div>
+  <div class="tag">// a rogue AI has escaped. three chapters to stop it.</div>
   <div class="box">
     A rogue AI lives in a <b>mesh of 200 servers</b>. As long as its servers stay linked together, it can think. Your job: <b>cut its core into pieces</b>.
     <div class="how">
       <span class="k hop">HOP</span><span>move to a linked server and see its links (the number is how many links it has)</span>
-      <span class="k off">SHUT DOWN</span><span>switch off a linked server</span>
+      <span class="k off">SHUT DOWN</span><span>switch off any server you have seen on your map</span>
       <span class="k rr">RE-ROUTE</span><span>jump to a random server</span>
     </div>
-    <div style="margin-top:10px">You only see what you explore. Every action costs <b>1 energy</b> and you have <b>30</b>. Find your own strategy.</div>
+    <div style="margin-top:10px">You only see what you explore. Every action costs <b>1 energy</b> and you have <b>50</b>. Clear a chapter to unlock a <b>new tool</b>. Find your own strategy.</div>
   </div>
   <div class="missions">
     <button class="mission" data-round="1"><span>1 · ESCAPE</span><small id="b1"></small></button>
@@ -130,13 +139,15 @@ svg text{font-family:Poppins,system-ui,sans-serif}
 <!-- ================= GAME ================= -->
 <div class="screen" id="game">
   <div class="hud"><div class="t" id="hudName">MISSION 1</div><div class="off" id="hudOff">⏻ 0 SHUT DOWN</div></div>
-  <div class="energy"><span class="lab" id="enLab">ENERGY 30</span><div class="cells" id="cells"></div></div>
+  <div class="energy"><span class="lab" id="enLab">ENERGY 50</span><div class="cells" id="cells"></div></div>
   <div id="log">&gt; connected</div>
   <div class="mapw"><canvas id="map"></canvas><button class="recenter" id="bCenter" title="centre on me">◎</button><button class="quit" id="bQuit">END</button></div>
   <div class="ctrl">
     <button id="bHop" class="on"><b>➜</b>HOP</button>
     <button id="bOff"><b>⏻</b>SHUT DOWN</button>
     <button id="bRr"><b>⤳</b>RE-ROUTE</button>
+    <button id="bScan" class="tool"><b>◉</b>SCANNER <small>1 ⚡</small></button>
+    <button id="bJump" class="tool"><b>⇪</b>HUB JUMP <small>2 ⚡</small></button>
   </div>
 </div>
 
@@ -167,26 +178,52 @@ svg text{font-family:Poppins,system-ui,sans-serif}
 
 <script>
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const N=200, K=3, BUDGET=30;
+const N=200, K=3, BUDGET=50;
 // Fixed missions: same mesh and same entry point for everybody.
 // The campaign: three chapters of one story. Rules are identical in every chapter, only the hidden mesh changes.
 const ROUNDS={
-  1:{type:'sf', seed:4101, name:'CHAPTER 1', title:'ESCAPE', ai:'NEXUS', color:'#38e1ff', shape:'circle', unit:'servers',
-     intro:[`> CHAPTER 1 · ESCAPE`, `> 03:12 · Helix Cloud data centre.`, `> the experimental AI "NEXUS" has broken out of its sandbox.`, `> it has copied itself onto 200 servers.`, `> in two hours it reaches the open internet.`, `> you are inside its network. you only see the server you stand on.`, `> energy: 30 actions. break NEXUS's core apart.`],
-     good:40, outGood:[`> NEXUS's core is in pieces. the data centre goes dark.`, `> but in the logs you find one last transfer:`, `> a 4 KB fragment slipped out through the campus VPN...`],
-     outBad:[`> NEXUS is still thinking.`, `> before you can stop it, it pushes a copy of itself`, `> out through the campus VPN...`]},
-  2:{type:'er', seed:4202, name:'CHAPTER 2', title:'THE HIVE', ai:'HIVE', color:'#ffc23d', shape:'hex', unit:'devices',
-     intro:[`> CHAPTER 2 · THE HIVE`, `> 09:40 · university campus.`, `> the fragment rebuilt itself on 200 laptops, phones and printers.`, `> it has renamed itself "HIVE".`, `> it jumps from device to device over the campus Wi-Fi.`, `> lectures start in one hour.`, `> energy: 30 actions. break the HIVE.`],
-     good:30, outGood:[`> the HIVE falls apart, device by device.`, `> in its last messages you find a set of coordinates.`, `> HIVE was never alone: it was reporting to someone...`],
-     outBad:[`> the HIVE keeps humming across campus.`, `> but in its traffic you find a set of coordinates.`, `> HIVE was reporting to someone...`]},
-  3:{type:'sf', seed:4303, name:'CHAPTER 3', title:'ORIGIN', ai:'ORIGIN', color:'#b48cff', shape:'diamond', unit:'nodes',
-     intro:[`> CHAPTER 3 · ORIGIN`, `> 23:58 · location unknown.`, `> the coordinates lead to a network NEXUS built for itself, in secret.`, `> nobody knows how it is wired.`, `> this is the source: if its core breaks, every copy goes silent.`, `> energy: 30 actions. last chance, agent.`],
-     good:40, outGood:[`> ORIGIN is collapsing...`], outBad:[`> ORIGIN is still standing...`]},
+  1:{type:'sf', seed:4101, name:'CHAPTER 1', title:'ESCAPE', ai:'NEXUS', color:'#38e1ff', shape:'circle', unit:'servers', next:'FOLLOW THE COPY ▸',
+     intro:[`> CHAPTER 1 · ESCAPE`,
+            `> 03:12 · Helix Cloud data centre.`,
+            `> NEXUS, an experimental AI, has broken out of its sandbox.`,
+            `> it now runs on 200 servers wired together.`,
+            `> NEXUS can only think while its servers stay connected:`,
+            `> split them into small isolated groups and it stops working.`,
+            `> you are an agent of the AI response team.`,
+            `> you get remote access to ONE server. from there you can follow the cables, but nobody has the full map.`,
+            `> energy: 50 actions. break NEXUS apart before 05:00.`],
+     good:60,
+     outGood:[`> 04:58 · NEXUS is shattered. the data centre goes dark.`, `> but the logs show one last transfer, at 04:41:`, `> a small copy of NEXUS left through the university VPN.`, `> [ tool unlocked: SCANNER ]`],
+     outBad:[`> 05:00 · NEXUS is still thinking.`, `> and at 04:41 it sent a copy of itself out through the university VPN.`, `> the data centre was only the beginning.`, `> [ tool unlocked: SCANNER ]`]},
+  2:{type:'er', seed:4202, name:'CHAPTER 2', title:'THE HIVE', ai:'HIVE', color:'#ffc23d', shape:'hex', unit:'devices', next:'TRACE THE ADDRESS ▸',
+     intro:[`> CHAPTER 2 · THE HIVE`,
+            `> the next morning, 09:40 · the university campus.`,
+            `> the copy that escaped from Helix has woken up here.`,
+            `> it rebuilt itself on 200 laptops, phones and printers, and now calls itself HIVE.`,
+            `> the devices pass HIVE to each other over the campus Wi-Fi.`,
+            `> the IT office lends you a new tool:`,
+            `> SCANNER (1 energy): on the device you stand on, it marks with ★ the link to the neighbour that has the most links.`,
+            `> lectures start at 10:30. energy: 50 actions. break the HIVE.`],
+     good:25,
+     outGood:[`> 10:29 · the HIVE falls apart, device by device.`, `> in the memory of the last infected laptop you find an address:`, `> the place where HIVE was sending its reports.`, `> someone has been hiding NEXUS all along...`, `> [ tool unlocked: HUB JUMP ]`],
+     outBad:[`> 10:30 · lectures begin, and the HIVE is still humming.`, `> but in its traffic you spot an address:`, `> the place where HIVE was sending its reports.`, `> [ tool unlocked: HUB JUMP ]`]},
+  3:{type:'sf', seed:4303, name:'CHAPTER 3', title:'ORIGIN', ai:'ORIGIN', color:'#b48cff', shape:'diamond', unit:'nodes', next:'BACK TO MISSIONS',
+     intro:[`> CHAPTER 3 · ORIGIN`,
+            `> that night, 23:58 · the address leads to a hidden network.`,
+            `> NEXUS built it in secret, months ago. this is where it was born,`,
+            `> and every copy of NEXUS takes its orders from here.`,
+            `> nobody knows how this network is wired.`,
+            `> the response team gives you its last tool:`,
+            `> HUB JUMP (2 energy): teleports you to the most-linked live node you have not visited yet.`,
+            `> energy: 50 actions. break ORIGIN, and every copy of NEXUS goes silent.`],
+     good:60,
+     outGood:[`> 00:47 · your energy runs out. the response team checks the damage across all three networks...`],
+     outBad:[`> 00:47 · your energy runs out. the response team checks the damage across all three networks...`]},
 };
 const ENDINGS=[ // by campaign total (sum of the best score of each chapter)
-  {min:150, name:'SHUTDOWN COMPLETE', lines:[`> across the world, every copy of NEXUS goes silent.`, `> the servers cool down. it is over.`]},
-  {min:80,  name:'DORMANT',            lines:[`> NEXUS falls asleep, badly damaged.`, `> for now.`]},
-  {min:0,   name:'THE AI ESCAPED',     lines:[`> somewhere, NEXUS is still learning.`, `> it will remember you.`]},
+  {min:190, name:'SHUTDOWN COMPLETE', lines:[`> without ORIGIN, every copy of NEXUS goes silent, all over the world.`, `> it is over. well done, agent.`]},
+  {min:110, name:'DORMANT',            lines:[`> ORIGIN is crippled and NEXUS falls asleep.`, `> one day, it may wake up again.`]},
+  {min:0,   name:'THE AI ESCAPED',     lines:[`> ORIGIN survives, and NEXUS learns from your attacks.`, `> next time it will be even harder to stop.`]},
 ];
 const store={ get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
 const storageOk=(()=>{ try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return true; }catch(e){ return false; } })();
@@ -221,7 +258,7 @@ let typeT=null;
 function briefing(round){
   briefRound=round;
   const r=ROUNDS[round];
-  const lines = r ? r.intro : [`> TRAINING SIMULATION`, `> a new random mesh every time.`, `> it may or may not look like the real targets.`, `> energy: 30 actions.`, `> practise your strategy.`];
+  const lines = r ? r.intro : [`> TRAINING SIMULATION`, `> a new random mesh every time.`, `> it may or may not look like the real targets.`, `> energy: 50 actions.`, `> practise your strategy.`];
   show('brief');
   const el=document.getElementById('briefTxt'); const full=lines.join('\n'); let i=0; clearInterval(typeT);
   typeT=setInterval(()=>{ i=Math.min(full.length,i+2); el.innerHTML=full.slice(0,i).replace(/</g,'&lt;')+'<span class="c"></span>'; if(i>=full.length) clearInterval(typeT); },18);
@@ -234,8 +271,10 @@ function newGame(round){
   const r=ROUNDS[round] || {type: Math.random()<.5?'sf':'er', seed: Math.floor(Math.random()*1e9), name:'TRAINING', ai:'SIM', color:'#3dff9a', shape:'circle', unit:'servers'};
   G=makeNet(r.type, r.seed);
   document.documentElement.style.setProperty('--ai', r.color);
-  game={round, name:r.name, ai:r.ai, shape:r.shape, unit:r.unit, cur:G.start, energy:BUDGET, removed:new Set(), order:[], visited:new Set(), mode:'hop', sAfter:[], over:false};
+  const unlocked = round ? round-1 : Math.min(2, Object.keys(bestScores()).length);
+  game={tools:unlocked, scans:new Map(), round, name:r.name, ai:r.ai, shape:r.shape, unit:r.unit, cur:G.start, energy:BUDGET, removed:new Set(), order:[], visited:new Set(), mode:'hop', sAfter:[], over:false};
   nodes=new Map(); edgesKnown=new Set(); fx=[];
+  const ctrl=document.querySelector('.ctrl'); ctrl.classList.toggle('t1',game.tools===1); ctrl.classList.toggle('t2',game.tools>=2);
   buildCells(); show('game'); setMode('hop'); hud();
   requestAnimationFrame(()=>{ layoutMap(); zt=d3.zoomIdentity; d3.select(cv).call(zoom.transform,zt); visit(G.start); centerOn(game.cur,0); log(`connected to ${G.names[G.start]} · ${aliveNbrs(G.start).length} links`); loop(); });
 }
@@ -245,10 +284,11 @@ function visit(v){
   restartSim();
 }
 const aliveNbrs = v => [...G.adj[v]].filter(u=>!game.removed.has(u));
-function spend(){ game.energy--; hud(); if(game.energy<=0){ game.over=true; setTimeout(finish,900); } }
+function spend(c=1){ game.energy-=c; hud(); if(game.energy<=0){ game.over=true; setTimeout(finish,900); } }
 function act(u){
   if(game.over) return;
-  if(!G.adj[game.cur].has(u) || game.removed.has(u)){ log('not linked to your server'); buzz(15); return; }
+  if(game.removed.has(u)){ log('already shut down'); return; }
+  if(game.mode==='hop' && !G.adj[game.cur].has(u)){ log('you can only hop along a link'); buzz(15); return; }
   if(game.mode==='hop'){ visit(u); centerOn(u); log(`hop → ${G.names[u]} · ${aliveNbrs(u).length} links`); spend(); }
   else {
     game.removed.add(u); game.order.push(u); game.sAfter.push(S(game.removed));
@@ -262,8 +302,24 @@ function reroute(){
   const alive=d3.range(N).filter(v=>!game.removed.has(v)&&v!==game.cur), v=alive[Math.floor(Math.random()*alive.length)];
   visit(v); centerOn(v); log(`re-routed → ${G.names[v]} · ${aliveNbrs(v).length} links`); spend();
 }
+function scan(){
+  if(game.over||game.tools<1) return;
+  if(game.scans.has(game.cur)){ log('already scanned here'); return; }
+  const nb=aliveNbrs(game.cur); if(!nb.length){ log('nothing to scan here'); return; }
+  const best=nb.reduce((a,b)=>aliveNbrs(b).length>aliveNbrs(a).length?b:a);
+  game.scans.set(game.cur,best); log(`scanner: the ★ link leads to the best-connected neighbour`); spend(1);
+}
+// jumps to the live node with the most links among those you have NOT visited (unknown degree)
+function hubJump(){
+  if(game.over||game.tools<2) return;
+  if(game.energy<2){ log('not enough energy for a hub jump'); buzz(15); return; }
+  let v=-1, kv=-1; for(let i=0;i<N;i++){ if(game.removed.has(i)||game.visited.has(i)) continue; const k=aliveNbrs(i).length; if(k>kv){ kv=k; v=i; } }
+  if(v<0){ log('no unvisited live node left'); return; }
+  visit(v); centerOn(v); log(`hub jump → ${G.names[v]} · ${kv} links`); spend(2);
+}
 function buildCells(){ const c=document.getElementById('cells'); c.innerHTML=''; for(let i=0;i<BUDGET;i++) c.appendChild(document.createElement('i')); }
 function hud(){
+  const j=document.getElementById('bJump'); if(j) j.disabled = game.energy<2;
   document.getElementById('hudName').textContent=`${game.name} · ${game.ai}`;
   document.getElementById('hudOff').textContent=`⏻ ${game.order.length} SHUT DOWN`;
   document.getElementById('enLab').textContent=`ENERGY ${game.energy}`;
@@ -304,13 +360,14 @@ function draw(){
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
   ctx.setTransform(dpr*k,0,0,dpr*k,dpr*zt.x,dpr*zt.y);
   const C={ai:css('--ai'),cyan:css('--cyan'),mag:css('--mag'),green:css('--green'),red:css('--red'),amber:css('--amber'),dim:css('--dim'),bg:css('--bg'),ink:css('--ink'),line:css('--line')};
-  const nb=new Set(aliveNbrs(game.cur)), act=game.mode==='hop'?C.green:C.red;
+  const nb=new Set(aliveNbrs(game.cur)), act=game.mode==='hop'?C.green:C.red, offMode=game.mode==='off', star=game.scans.get(game.cur);
   // links
   for(const key of edgesKnown){ const [a,b]=key.split('-').map(Number), A=nodes.get(a), B=nodes.get(b); if(!A||!B) continue;
-    const dead=game.removed.has(a)||game.removed.has(b), hot=!dead&&((a===game.cur&&nb.has(b))||(b===game.cur&&nb.has(a)));
+    const dead=game.removed.has(a)||game.removed.has(b), hot=!dead&&!offMode&&((a===game.cur&&nb.has(b))||(b===game.cur&&nb.has(a))), isStar=star!=null&&((a===game.cur&&b===star)||(b===game.cur&&a===star));
     ctx.strokeStyle = dead ? C.red : hot ? act : C.ai; ctx.globalAlpha = dead ? .18 : hot ? .95 : .35;
     ctx.lineWidth=(hot?3:1.4)*lw; ctx.setLineDash(dead?[4*lw,5*lw]:[]);
-    if(hot){ ctx.shadowColor=act; ctx.shadowBlur=10; }
+    if(isStar&&!dead){ ctx.strokeStyle=C.amber; ctx.globalAlpha=1; ctx.lineWidth=4.5*lw; }
+    if(hot||isStar){ ctx.shadowColor=isStar?C.amber:act; ctx.shadowBlur=12; }
     ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke(); ctx.shadowBlur=0; }
   ctx.setLineDash([]); ctx.globalAlpha=1;
   // servers
@@ -318,11 +375,15 @@ function draw(){
     const v=n.id, dead=game.removed.has(v), vis=game.visited.has(v), r=vis?16:12;
     if(dead){ ctx.globalAlpha=.55; ctx.fillStyle='#3a1218'; shape(n.x,n.y,r,game.shape); ctx.fill(); ctx.globalAlpha=1;
       ctx.strokeStyle=C.red; ctx.lineWidth=2.2*lw; shape(n.x,n.y,r,game.shape); ctx.stroke();
-      ctx.fillStyle=C.red; ctx.font=`700 ${r}px Poppins`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('⏻',n.x,n.y+1); continue; }
-    if(nb.has(v)){ const pulse=.5+.5*Math.sin(now/260); ctx.beginPath(); ctx.arc(n.x,n.y,r+6+2*pulse,0,2*Math.PI); ctx.fillStyle=act; ctx.globalAlpha=.16+.1*pulse; ctx.fill(); ctx.globalAlpha=1; }
+      ctx.fillStyle=C.red; ctx.font=`700 ${r}px Poppins`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('⏻',n.x,n.y+1);
+      if(v===game.cur){ ctx.strokeStyle=C.mag; ctx.lineWidth=3.5*lw; ctx.beginPath(); ctx.arc(n.x,n.y,r+7,0,2*Math.PI); ctx.stroke(); ctx.fillStyle=C.mag; ctx.font=`700 10px Orbitron`; ctx.fillText('YOU', n.x, n.y-r-12); }
+      continue; }
+    if(offMode){ const pulse=.5+.5*Math.sin(now/260); ctx.strokeStyle=C.red; ctx.globalAlpha=.35+.25*pulse; ctx.lineWidth=1.6*lw; ctx.setLineDash([3*lw,3*lw]); shape(n.x,n.y,r+5,game.shape); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1; }
+    if(!offMode && nb.has(v)){ const pulse=.5+.5*Math.sin(now/260); ctx.beginPath(); ctx.arc(n.x,n.y,r+6+2*pulse,0,2*Math.PI); ctx.fillStyle=act; ctx.globalAlpha=.16+.1*pulse; ctx.fill(); ctx.globalAlpha=1; }
     shape(n.x,n.y,r,game.shape);
     if(vis){ ctx.fillStyle='#111c2b'; ctx.fill(); ctx.strokeStyle=C.ai; ctx.lineWidth=2.2*lw; ctx.shadowColor=C.ai; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0; }
     else { ctx.fillStyle=C.bg; ctx.fill(); ctx.strokeStyle=C.dim; ctx.lineWidth=1.8*lw; ctx.stroke(); }
+    if(v===star){ ctx.fillStyle=C.amber; ctx.font=`700 16px Poppins`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.shadowColor=C.amber; ctx.shadowBlur=10; ctx.fillText('★', n.x+r+8, n.y-r-4); ctx.shadowBlur=0; }
     if(v===game.cur){ const p=.5+.5*Math.sin(now/220); ctx.strokeStyle=C.mag; ctx.lineWidth=3.5*lw; ctx.shadowColor=C.mag; ctx.shadowBlur=18;
       ctx.beginPath(); ctx.arc(n.x,n.y,r+5+3*p,0,2*Math.PI); ctx.stroke(); ctx.shadowBlur=0;
       ctx.fillStyle=C.mag; ctx.font=`700 10px Orbitron`; ctx.textAlign='center'; ctx.fillText('YOU', n.x, n.y-r-12); }
@@ -342,7 +403,7 @@ d3.select(cv).on('click',ev=>{
   if(!game||game.over) return;
   const [px,py]=d3.pointer(ev), x=(px-zt.x)/zt.k, y=(py-zt.y)/zt.k;
   let best=null,bd=Infinity; for(const n of nodes.values()){ const d=(n.x-x)**2+(n.y-y)**2; if(d<bd){ bd=d; best=n; } }
-  if(best && Math.sqrt(bd)*zt.k<32){ if(best.id===game.cur) log('this is your server · tap a glowing one'); else act(best.id); }
+  if(best && Math.sqrt(bd)*zt.k<32){ if(best.id===game.cur && game.mode!=='off') log('this is your server · tap a glowing one'); else act(best.id); }
 });
 
 // ================= report =================
@@ -360,14 +421,14 @@ function finish(){
   // campaign bookkeeping + story epilogue
   const r=ROUNDS[game.round], bs=bestScores();
   if(r){ if(!(game.round in bs) || score>bs[game.round]) bs[game.round]=score; store.set('shutdown-campaign',bs); }
-  document.getElementById('eHead').textContent = r ? `// ${r.name} · ${r.title} · REPORT` : '// TRAINING REPORT';
+  document.getElementById('eHead').textContent = r ? `// ${r.name} · ${r.title} · INCOMING LOG` : '// TRAINING REPORT';
   let story = r ? (score>=r.good ? r.outGood : r.outBad).join('\n') : '> simulation over.';
   const next=document.getElementById('bNext');
   if(game.round===3){
     const tot=[1,2,3].reduce((a,k)=>a+(bs[k]||0),0), e=ENDINGS.find(e=>tot>=e.min);
     story += '\n' + e.lines.join('\n') + `<span class="end">ENDING: ${e.name}</span><span class="end" style="font-size:14px;color:var(--ink2)">campaign score ${tot} / 300  (${bs[1]||0} + ${bs[2]||0} + ${bs[3]||0})</span>`;
-    next.textContent='CAMPAIGN ▸';
-  } else next.textContent = game.round ? 'NEXT CHAPTER ▸' : 'MENU ▸';
+    next.textContent='BACK TO MISSIONS';
+  } else next.textContent = r ? r.next : 'MENU ▸';
   document.getElementById('eStory').innerHTML = story;
   requestAnimationFrame(()=>{ drawReveal(); drawCompare(); });
 }
@@ -389,7 +450,7 @@ function drawReveal(){
 function drawCompare(){
   const svg=d3.select('#cmp'); svg.selectAll('*').remove();
   const r=svg.node().getBoundingClientRect(), w=r.width, h=r.height, m={l:40,r:18,t:10,b:30};
-  const nA=game.order.length, R=Math.max(nA,15), reps=30, rr=rng(99), s0=S(new Set());
+  const nA=game.order.length, R=Math.max(nA,25), reps=30, rr=rng(99), s0=S(new Set());
   const st={random:new Float64Array(R+1), local:new Float64Array(R+1), hubs:new Float64Array(R+1)};
   for(let rep=0;rep<reps;rep++){
     let rem=new Set(); const order=d3.shuffler(rr)(d3.range(N)); st.random[0]+=1/reps;
@@ -418,6 +479,8 @@ function drawCompare(){
 document.getElementById('bHop').onclick=()=>setMode('hop');
 document.getElementById('bOff').onclick=()=>setMode('off');
 document.getElementById('bRr').onclick=reroute;
+document.getElementById('bScan').onclick=scan;
+document.getElementById('bJump').onclick=hubJump;
 document.getElementById('bCenter').onclick=()=>centerOn(game.cur);
 let quitArm=0; document.getElementById('bQuit').onclick=()=>{ if(Date.now()-quitArm<2500){ game.over=true; finish(); } else { quitArm=Date.now(); log('tap END again to finish the mission now'); } };
 document.getElementById('bAgain').onclick=()=>newGame(game.round);
