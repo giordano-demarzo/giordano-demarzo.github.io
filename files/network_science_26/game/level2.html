@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pMat{height:min(30vh,260px);min-height:200px}
+#pMap{height:min(34vh,340px);min-height:230px}
+#pMap.big{height:min(58vh,520px)}
+.tools{display:flex;gap:8px}
+.tools button{flex:1;min-height:48px;font-size:14px}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 2</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l2', label:'LEVEL 2', chapter:'LECTURE 2 · THE MAP'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 2 (Lecture 2 · Network Theory Basics): THE MAP
+   ===================================================================== */
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> THREE DAYS LATER · 22:05`,
+    `VERA: NEXUS is a network. to fight it, we need its map.`,
+    `VERA: tonight we tapped into Helix Cloud, the data centre where NEXUS lives.`,
+    `VERA: the traffic comes out as raw tables and lists. useless, unless you can read them.`,
+    `VERA: and a map is not enough. we must measure it: how far, how connected, where the hubs are.`,
+    `VERA: let's start with the alphabet.`]},
+  {kind:'card', anim:'repr', tag:'TRAINING 1', title:'THREE WAYS TO WRITE IT',
+    vera:'on a hard drive a network is just numbers. here are three ways to write the same one.',
+    pts:[`<b>Adjacency matrix</b> A: an N×N table with A<sub>ij</sub> = 1 if i and j are linked, 0 otherwise (A<sub>ij</sub> = w<sub>ij</sub> if weighted). For an undirected network it is <b>symmetric</b>.`,
+         `<b>Adjacency list</b>: every node with the list of its neighbours. <b>Edge list</b>: the list of all linked pairs.`,
+         `A matrix always needs N² cells; lists only store the links that exist. Real networks are sparse, so lists usually win.`]},
+  {kind:'steps', key:'read', nm:'Challenge · Read the tables', tag:'CHALLENGE 1', title:'READ THE TABLES',
+    vera:'these tables came straight out of Helix Cloud. show me you can read them.', items:[] /* filled below */},
+  {kind:'card', anim:'degree', tag:'TRAINING 2', title:'DEGREE',
+    vera:'first measure: how connected is each node?',
+    pts:[`The <b>degree</b> k<sub>i</sub> is the number of links of node i: the sum of row i of the adjacency matrix.`,
+         `Directed networks have an <b>in-degree</b> (arrows in) and an <b>out-degree</b> (arrows out). In weighted networks the <b>strength</b> is the sum of the weights.`,
+         `The <b>degree distribution</b> P(k) is the histogram of all degrees: the probability that a random node has k links.`]},
+  {kind:'steps', key:'deg', nm:'Challenge · Degree detective', tag:'CHALLENGE 2', title:'DEGREE DETECTIVE',
+    vera:'NEXUS keeps statistics about itself. let\'s see if they match.', items:[]},
+  {kind:'card', anim:'paths', tag:'TRAINING 3', title:'PATHS AND DISTANCES',
+    vera:'to reach the core of NEXUS we have to move along its links. so: how far is far?',
+    pts:[`A <b>path</b> is a sequence of links; its <b>length</b> is the number of links.`,
+         `The <b>distance</b> d(i,j) is the length of the <b>shortest path</b> between i and j.`,
+         `The <b>diameter</b> D is the largest distance in the network; the <b>average distance</b> L is the mean over all pairs.`]},
+  {kind:'card', anim:'components', tag:'TRAINING 4', title:'COMPONENTS',
+    vera:'not every machine can reach every other one. that matters.',
+    pts:[`A <b>connected component</b> is a group of nodes that can all reach each other. Between different components there is no path.`,
+         `With directed links: a <b>strongly connected</b> component respects the arrows (like one-way streets); a <b>weakly connected</b> one only needs the links if you ignore the arrows.`]},
+  {kind:'steps', key:'meas', nm:'Challenge · Measure it', tag:'CHALLENGE 3', title:'MEASURE IT',
+    vera:'a small piece of the Helix network. measure it for me.', items:[]},
+  {kind:'card', anim:'tri', tag:'TRAINING 5', title:'FRIENDS OF FRIENDS',
+    vera:'NEXUS learned this from social networks: my friends\' friends tend to be my friends.',
+    pts:[`Real networks have many <b>closed triangles</b>: if B is linked to A and C, A and C are often linked too.`,
+         `The <b>local clustering</b> of node i is the fraction of pairs of its neighbours that are linked: C<sub>i</sub> = links among neighbours / [k<sub>i</sub>(k<sub>i</sub>−1)/2]. The <b>average clustering</b> averages it over nodes.`,
+         `<b>Assortativity</b> (or homophily): nodes tend to link to similar nodes, by features like opinions, or by degree.`]},
+  {kind:'steps', key:'clu', nm:'Challenge · Count the triangles', tag:'CHALLENGE 4', title:'COUNT THE TRIANGLES',
+    vera:'compute the clustering of these servers.', items:[]},
+  {kind:'card', anim:'real', tag:'TRAINING 6', title:'WHAT REAL NETWORKS LOOK LIKE',
+    vera:'Helix Cloud ticks every box below. so does almost every real network. why? that is the rest of the course.',
+    pts:[`<b>Sparse</b>: only a tiny fraction of the possible links exist (low density ρ).`,
+         `<b>Small world</b>: any two nodes are only a few steps apart. <b>High clustering</b>: many triangles.`,
+         `<b>Hubs</b>: a few nodes with a huge number of links (scale-free networks). <b>Homophily</b>: similar nodes stick together.`]},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> MISSION · 02:30`,
+    `VERA: we intercepted a piece of Helix Cloud's routing table. it's an adjacency matrix.`,
+    `VERA: step 1: decode it and draw the fragment.`,
+    `VERA: step 2: we place it into the full map. trace the shortest path from our entry point to the NEXUS core. every extra hop is a chance to get caught.`,
+    `VERA: step 3: find the relay, the server with the most links.`,
+    `VERA: 3 minutes, then the sysadmins rotate the keys.`]},
+  {kind:'boss', nm:'Mission · The map'},
+  {kind:'end', nm:'Debrief'},
+];
+const SC=k=>SCENES.find(s=>s.key===k);
+
+/* =====================================================================
+   CONCEPT ANIMATIONS
+   ===================================================================== */
+// --- the same network as drawing, matrix, adjacency list and edge list
+ANIM.repr=(C,cap)=>{
+  const L=['A','B','C','D','E'], P=[[.1,.15],[.1,.9],[.5,.52],[.9,.15],[.9,.9]], E=[[0,1],[0,2],[1,2],[2,3],[3,4]];
+  const M=matOf(5,E), adj=adjOf(5,E);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const k=Math.floor(t/1700)%E.length, [ea,eb]=E[k], isE=(i,j)=>(i===ea&&j===eb)||(i===eb&&j===ea);
+    const wide=w>=560;
+    const R1=wide?[0,0,w*.3,h]:[0,0,w*.44,h*.56], R2=wide?[w*.3,0,w*.36,h]:[w*.44,0,w*.56,h*.56],
+          R3=wide?[w*.66,0,w*.34,h*.5]:[0,h*.56,w*.5,h*.44], R4=wide?[w*.66,h*.5,w*.34,h*.5]:[w*.5,h*.56,w*.5,h*.44];
+    title(ctx,'NETWORK',R1); title(ctx,'ADJACENCY MATRIX',R2); title(ctx,'ADJACENCY LIST',R3); title(ctx,'EDGE LIST',R4);
+    const p=inBox(P,[R1[0],R1[1]+22,R1[2],R1[3]-22],22,1.3);
+    E.forEach(([a,b],i)=>seg(ctx,p[a],p[b],i===k?COL.mag:COL.cyan,i===k?3.5:2,i===k?1:.6));
+    p.forEach(([x,y],i)=>nodeL(ctx,x,y,11,(i===ea||i===eb)?COL.mag:COL.cyan,L[i]));
+    const cs=Math.min((R2[2]-16)/6,(R2[3]-30)/6), mx=R2[0]+(R2[2]-cs*6)/2, my=R2[1]+22+(R2[3]-22-cs*6)/2;
+    drawMatrix(ctx,M,mx,my,cs,L,(i,j)=>isE(i,j)?COL.mag:null);
+    const fs=w<420?12:14, lh=Math.min(22,(R3[3]-30)/5);
+    for(let i=0;i<5;i++){ const parts=[{t:L[i]+': ',c:COL.ink2}]; adj[i].forEach((j,q)=>{ parts.push({t:L[j],c:isE(i,j)?COL.mag:COL.cyan}); if(q<adj[i].length-1) parts.push({t:', ',c:COL.dim}); });
+      tokens(ctx,R3[0]+14,R3[1]+32+i*lh,parts,fs); }
+    E.forEach(([a,b],i)=>tokens(ctx,R4[0]+14,R4[1]+32+i*lh,[{t:`(${L[a]}, ${L[b]})`,c:i===k?COL.mag:COL.cyan}],fs));
+    cap.textContent='';
+  };
+};
+
+// --- degrees appear on the nodes, then the nodes drop into the histogram
+ANIM.degree=(C,cap)=>{
+  const E=[[0,1],[0,2],[0,3],[0,4],[1,2],[4,5],[5,6],[5,7],[3,8],[8,9],[8,10],[6,7],[10,11],[2,12],[9,13],[0,8]], n=14;
+  const deg=degrees(n,E), kmax=Math.max(...deg), P=bestLayout(n,E);
+  const slot=Array(n), cnt=Array(kmax+1).fill(0); for(let i=0;i<n;i++) slot[i]=cnt[deg[i]]++;
+  const maxc=Math.max(...cnt);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const wide=w>=560, NR=wide?[0,0,w*.55,h]:[0,14,w,h*.56], HR=wide?[w*.55,0,w*.45,h]:[0,h*.58,w,h*.42];
+    const p=inBox(P,NR,24,1.5);
+    const colW=(HR[2]-50)/kmax, base=HR[1]+HR[3]-22, r=Math.min(9,colW*.33,((HR[3]-50)/maxc-2)/2);
+    const hx=k=>HR[0]+40+colW*(k-.5), hp=i=>[hx(deg[i]), base-r-slot[i]*(2*r+2)];
+    const s=(t%11500)/1000, m=s<3.2?0:s<5.2?ease((s-3.2)/2):s<10?1:1-ease((s-10)/1.5);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.6,.6*(1-m*.75)));
+    ctx.save(); ctx.globalAlpha=.3+.7*m;
+    seg(ctx,[HR[0]+30,base],[HR[0]+HR[2]-8,base],COL.ink2,1);
+    for(let k=1;k<=kmax;k++){ label(ctx,String(k),hx(k),base+12,COL.ink2,12); if(m>.95&&cnt[k]){ ctx.save(); ctx.strokeStyle=COL.amber; ctx.globalAlpha=.8; ctx.strokeRect(hx(k)-r-4,base-cnt[k]*(2*r+2)-3,2*r+8,cnt[k]*(2*r+2)+3); ctx.restore(); } }
+    label(ctx,'k',HR[0]+HR[2]-12,base+12,COL.ink2,12); label(ctx,'P(k)',HR[0]+22,HR[1]+14,COL.amber,12);
+    ctx.restore();
+    for(let i=0;i<n;i++){ const a=p[i], b=hp(i), x=lerp(a[0],b[0],m), y=lerp(a[1],b[1],m), rr=lerp(11,r,m);
+      const show=s>.4+i*.12 || m>0; dot(ctx,x,y,rr,COL.cyan,10); if(show&&rr>7) label(ctx,String(deg[i]),x,y+1,COL.bg,Math.round(rr*1.05),'center','Orbitron'); }
+    cap.textContent = m<.5 ? 'degree k: the number on each node' : 'degree distribution P(k): how many nodes have k links';
+  };
+};
+
+// --- BFS wave, shortest path, diameter
+ANIM.paths=(C,cap)=>{
+  const G=commNet([9,9],5,2), n=G.n, E=G.edges, adj=adjOf(n,E), P=bestLayout(n,E);
+  const D=d3range(n).map(s=>bfs(adj,s));
+  let src=0, ecc=-1; D.forEach((r,s)=>{ const e=Math.max(...r.d); if(e>ecc){ecc=e;src=s;} });
+  const far=D[src].d.indexOf(ecc), sp=pathTo(D[src].par,far);
+  let du=0,dv=0,dm=-1, sum=0, pairs=0; for(let a=0;a<n;a++) for(let b=a+1;b<n;b++){ const d=D[a].d[b]; sum+=d; pairs++; if(d>dm){dm=d;du=a;dv=b;} }
+  const dp=pathTo(D[du].par,dv), Lavg=sum/pairs;
+  const onP=(path,a,b)=>{ for(let i=0;i<path.length-1;i++) if(ekey(path[i],path[i+1])===ekey(a,b)) return true; return false; };
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const p=inBox(P,[0,18,w,h-18],26,1.6), s=(t%13500)/1000;
+    if(s<5){ const wave=s/.7;
+      E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.dim,1.4,.7));
+      for(let i=0;i<n;i++){ const d=D[src].d[i], on=wave>=d; nodeL(ctx,p[i][0],p[i][1],10,on?(i===src?COL.mag:COL.green):COL.dim,on?String(d):''); }
+      cap.innerHTML=`distances from <span style="color:var(--mag)">one node</span>: the number on each node`;
+    } else if(s<9){
+      E.forEach(([a,b])=>{ const on=onP(sp,a,b); seg(ctx,p[a],p[b],on?COL.mag:COL.dim,on?3.5:1.4,on?1:.6); });
+      for(let i=0;i<n;i++){ const on=sp.includes(i); nodeL(ctx,p[i][0],p[i][1],on?11:8,on?COL.mag:COL.cyan,on?String(D[src].d[i]):''); }
+      cap.innerHTML=`shortest path: d(i, j) = <span style="color:var(--mag)">${ecc}</span>`;
+    } else {
+      E.forEach(([a,b])=>{ const on=onP(dp,a,b); seg(ctx,p[a],p[b],on?COL.amber:COL.dim,on?3.5:1.4,on?1:.6); });
+      for(let i=0;i<n;i++){ const end=i===du||i===dv; nodeL(ctx,p[i][0],p[i][1],end?12:8,end?COL.amber:dp.includes(i)?COL.amber:COL.cyan,''); }
+      cap.innerHTML=`diameter D = <span style="color:var(--amber)">${dm}</span> (the longest shortest path) · average distance L = ${Lavg.toFixed(1)}`;
+    }
+  };
+};
+
+// --- components merging, then strong vs weak connectivity
+ANIM.components=(C,cap)=>{
+  const P=[[.05,.3],[.2,.08],[.28,.42],[.12,.62],[.36,.72], [.62,.25],[.82,.12],[.95,.38],[.76,.5], [.55,.9],[.75,.92]];
+  const E=[[0,1],[1,2],[2,0],[0,3],[2,4],[5,6],[6,7],[7,8],[8,5],[9,10]], NEW=[4,9];
+  const comp=[0,0,0,0,0,1,1,1,1,2,2], cc=[COL.cyan,COL.violet,COL.green];
+  const DP=[[.15,.2],[.85,.2],[.5,.62],[.5,.98]], DE=[[0,1],[1,2],[2,0],[2,3]], DL=['A','B','C','D'];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%14000)/1000;
+    if(s<7){ const p=inBox(P,[0,20,w,h-20],26,1.6), k=clamp((s-3)/.8,0,1), merged=k>=1;
+      E.forEach(([a,b])=>seg(ctx,p[a],p[b],cc[comp[a]===2&&merged?0:comp[a]],2,.7));
+      if(k>0){ const [a,b]=NEW; seg(ctx,p[a],[lerp(p[a][0],p[b][0],k),lerp(p[a][1],p[b][1],k)],COL.mag,3,1); }
+      p.forEach(([x,y],i)=>dot(ctx,x,y,9,cc[comp[i]===2&&merged?0:comp[i]],10));
+      cap.innerHTML = merged?'one new link: <span style="color:var(--mag)">2 components</span>':'<span style="color:var(--cyan)">3 components</span>: no path between them';
+    } else {
+      const p=inBox(DP,[w*.2,24,w*.6,h-34],20,1.2), g=(s-7)/7;
+      ctx.save(); ctx.strokeStyle=COL.green; ctx.setLineDash([6,6]); ctx.lineWidth=1.5; ctx.globalAlpha=.6; const cx=(p[0][0]+p[1][0]+p[2][0])/3, cy=(p[0][1]+p[1][1]+p[2][1])/3, rr=Math.max(...[0,1,2].map(i=>Math.hypot(p[i][0]-cx,p[i][1]-cy)))+22;
+      ctx.beginPath(); ctx.arc(cx,cy,rr,0,7); ctx.stroke(); ctx.restore();
+      DE.forEach(([a,b])=>arrow(ctx,p[a],p[b],b===3?COL.ink2:COL.green,2,.85,13));
+      const cyc=[0,1,2,0], q=(t/700)%3, i0=Math.floor(q), f=q-i0; dot(ctx,lerp(p[cyc[i0]][0],p[cyc[i0+1]][0],f),lerp(p[cyc[i0]][1],p[cyc[i0+1]][1],f),3.5,COL.amber,12);
+      p.forEach(([x,y],i)=>nodeL(ctx,x,y,13,i===3?COL.ink2:COL.green,DL[i]));
+      cap.innerHTML='directed: <span style="color:var(--green)">A, B, C strongly connected</span> (a loop) · D only weakly: no way back';
+    }
+  };
+};
+
+// --- closing a triangle, local clustering, homophily
+ANIM.tri=(C,cap)=>{
+  const H=commNet([8,8],12,1), HP=layout(H.n,H.edges,3);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%18000)/1000;
+    if(s<5.5){ const p=inBox([[0,1],[.5,0],[1,1]],[w*.2,30,w*.6,h-50],10,1.2), k=clamp((s-2.2)/1,0,1), L=['A','B','C'];
+      if(k>=1){ ctx.save(); ctx.fillStyle=COL.cyan; ctx.globalAlpha=.12+.06*Math.sin(t/200); ctx.beginPath(); ctx.moveTo(...p[0]); ctx.lineTo(...p[1]); ctx.lineTo(...p[2]); ctx.closePath(); ctx.fill(); ctx.restore(); }
+      seg(ctx,p[1],p[0],COL.cyan,2.5,.8); seg(ctx,p[1],p[2],COL.cyan,2.5,.8);
+      if(k>0) seg(ctx,p[0],[lerp(p[0][0],p[2][0],k),lerp(p[0][1],p[2][1],k)],COL.mag,3,1); else seg(ctx,p[0],p[2],COL.ink2,1.5,.5,[5,6]);
+      p.forEach(([x,y],i)=>nodeL(ctx,x,y,15,COL.cyan,L[i]));
+      cap.innerHTML = k<1?'open triangle: A and C are both friends of B':'closed triangle: friends of friends become friends';
+    } else if(s<13){ const cx=w/2, cy=h/2+10, R=Math.min(w,h)*.33, nb=[0,1,2,3].map(i=>[cx+R*Math.cos(-Math.PI/2+i*Math.PI/2), cy+R*Math.sin(-Math.PI/2+i*Math.PI/2)]);
+      const pairs=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]], real=[[0,1],[1,2],[2,3]], f=s-5.5;
+      nb.forEach(q=>seg(ctx,[cx,cy],q,COL.cyan,2,.7));
+      if(f>1) pairs.forEach(([a,b])=>seg(ctx,nb[a],nb[b],COL.ink2,1.2,.5,[5,6]));
+      const shown=f<2.5?0:Math.min(3,Math.floor((f-2.5)/.9)+1);
+      real.slice(0,shown).forEach(([a,b])=>seg(ctx,nb[a],nb[b],COL.amber,3,1));
+      nb.forEach(([x,y])=>dot(ctx,x,y,10,COL.cyan,10)); nodeL(ctx,cx,cy,14,COL.mag,'i');
+      cap.innerHTML = f<1?'node i has k = 4 neighbours' : f<2.5?'possible links among them: k(k−1)/2 = 6' : `existing links among them: ${shown} → C<sub>i</sub> = ${shown}/6${shown===3?' = 0.5':''}`;
+    } else { const p=inBox(HP,[0,20,w,h-20],26,1.6), cc=[COL.cyan,COL.violet];
+      H.edges.forEach(([a,b])=>seg(ctx,p[a],p[b],H.comm[a]===H.comm[b]?cc[H.comm[a]]:COL.ink2,1.6,.65));
+      p.forEach(([x,y],i)=>dot(ctx,x,y,8,cc[H.comm[i]],10));
+      cap.innerHTML='homophily: similar nodes link to similar nodes';
+    }
+  };
+};
+
+// --- five properties of real networks
+ANIM.real=(C,cap)=>{
+  const G=commNet([10,10,10],31,6), n=G.n, E=G.edges.slice(), R=rng(4), has=new Set(E.map(([a,b])=>ekey(a,b)));
+  let adj=adjOf(n,E); for(let v=0;v<n;v++) for(let i=0;i<adj[v].length;i++) for(let j=i+1;j<adj[v].length;j++){ const a=adj[v][i], b=adj[v][j]; if(G.comm[a]===G.comm[b] && !has.has(ekey(a,b)) && R()<.3){ has.add(ekey(a,b)); E.push([a,b]); } }
+  adj=adjOf(n,E); const deg=degrees(n,E), hub=deg.indexOf(Math.max(...deg)), P=bestLayout(n,E,8);
+  const tris=[]; for(const [a,b] of E) for(const c of adj[a]) if(c>b && adj[b].includes(c) && a<b) tris.push([a,b,c]);
+  let du=0,dv=0,dm=-1; for(let a=0;a<n;a++){ const d=bfs(adj,a).d; d.forEach((x,b)=>{ if(x>dm){dm=x;du=a;dv=b;} }); }
+  const dp=pathTo(bfs(adj,du).par,dv), rho=E.length/(n*(n-1)/2);
+  const cc=[COL.cyan,COL.violet,COL.green];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const p=inBox(P,[0,22,w,h-22],24,1.6), ph=Math.floor(t/4200)%5;
+    if(ph===0){ for(let a=0;a<n;a++) for(let b=a+1;b<n;b++) seg(ctx,p[a],p[b],COL.ink2,.5,.07);
+      E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.8,.9)); p.forEach(([x,y])=>dot(ctx,x,y,4,COL.cyan,6));
+      cap.innerHTML=`<span style="color:var(--amber)">SPARSE</span> · ${E.length} links out of ${n*(n-1)/2} possible: ρ = ${rho.toFixed(2)}`; }
+    else if(ph===1){ E.forEach(([a,b])=>{ let on=false; for(let i=0;i<dp.length-1;i++) if(ekey(dp[i],dp[i+1])===ekey(a,b)) on=true; seg(ctx,p[a],p[b],on?COL.mag:COL.dim,on?3.5:1.2,on?1:.7); });
+      p.forEach(([x,y],i)=>dot(ctx,x,y,dp.includes(i)?7:4,dp.includes(i)?COL.mag:COL.cyan,6));
+      cap.innerHTML=`<span style="color:var(--amber)">SMALL WORLD</span> · the two farthest nodes are only ${dm} steps apart`; }
+    else if(ph===2){ tris.forEach(([a,b,c])=>{ ctx.save(); ctx.fillStyle=COL.amber; ctx.globalAlpha=.22; ctx.beginPath(); ctx.moveTo(...p[a]); ctx.lineTo(...p[b]); ctx.lineTo(...p[c]); ctx.closePath(); ctx.fill(); ctx.restore(); });
+      E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.4,.6)); p.forEach(([x,y])=>dot(ctx,x,y,4,COL.cyan,6));
+      cap.innerHTML=`<span style="color:var(--amber)">HIGH CLUSTERING</span> · ${tris.length} closed triangles`; }
+    else if(ph===3){ E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.2,.5)); p.forEach(([x,y],i)=>dot(ctx,x,y,2.5+Math.sqrt(deg[i])*2.4,i===hub?COL.mag:COL.cyan,i===hub?18:6));
+      cap.innerHTML=`<span style="color:var(--amber)">HUBS</span> · node size = degree, the biggest has ${deg[hub]} links`; }
+    else { E.forEach(([a,b])=>seg(ctx,p[a],p[b],G.comm[a]===G.comm[b]?cc[G.comm[a]]:COL.ink2,1.4,.6)); p.forEach(([x,y],i)=>dot(ctx,x,y,5,cc[G.comm[i]],8));
+      cap.innerHTML=`<span style="color:var(--amber)">HOMOPHILY</span> · similar nodes stick together`; }
+  };
+};
+
+/* =====================================================================
+   CHALLENGE CONTENT
+   ===================================================================== */
+// Challenge 1 · read the tables
+(()=>{
+  const L=['A','B','C','D','E'], P=[[.5,0],[.98,.38],[.8,1],[.2,1],[.02,.38]], E=[[0,1],[0,3],[1,2],[1,4],[2,3],[3,4]], MISS=[1,4], M=matOf(5,E);
+  const shown=E.filter(e=>ekey(...e)!==ekey(...MISS));
+  const DM=[[0,1,0,1],[0,0,1,0],[1,0,0,0],[0,0,0,0]], DL=['A','B','C','D'];
+  SC('read').items=[
+    {q:'One link of the matrix is <b>missing</b> from the drawing. Tap its two nodes.', h:'min(34vh,270px)',
+     canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h);
+       const MR=[0,0,w*.5,h], NR=[w*.5,0,w*.5,h]; title(ctx,'MATRIX',MR); title(ctx,'DRAWING',NR);
+       const cs=Math.min((MR[2]-12)/6,(MR[3]-28)/6), mx=(MR[2]-cs*6)/2, my=22+(MR[3]-22-cs*6)/2;
+       drawMatrix(ctx,M,mx,my,cs,L,(i,j)=>done&&ekey(i,j)===ekey(...MISS)?COL.green:null);
+       st.p=inBox(P,[NR[0],NR[1]+24,NR[2],NR[3]-28],20,1.2);
+       shown.forEach(([a,b])=>seg(ctx,st.p[a],st.p[b],COL.cyan,2,.7));
+       if(done) seg(ctx,st.p[MISS[0]],st.p[MISS[1]],COL.green,3.5,1);
+       if(st.bad && t-st.bad[2]<700) seg(ctx,st.p[st.bad[0]],st.p[st.bad[1]],COL.red,3,1);
+       st.p.forEach(([x,y],i)=>{ if(i===st.sel) ring(ctx,x,y,16,COL.mag,2.5); nodeL(ctx,x,y,12,COL.cyan,L[i]); }); },
+     tap:(x,y,st)=>{ const b=nearest(st.p||[],x,y,28); if(b<0) return null; if(st.sel==null||st.sel<0){ st.sel=b; return null; } if(st.sel===b){ st.sel=-1; return null; }
+       const a=st.sel; st.sel=-1; if(ekey(a,b)===ekey(...MISS)) return {ok:true};
+       st.bad=[a,b,performance.now()]; return {no: E.some(e=>ekey(...e)===ekey(a,b)) ? `${L[a]}–${L[b]} is already drawn.` : `the matrix has a 0 in row ${L[a]}, column ${L[b]}.`}; },
+     why:'B–E: row B, column E holds a 1 (and so does row E, column B).'},
+    {q:'Is the network behind this matrix <b>directed</b> or <b>undirected</b>?', h:'min(30vh,230px)',
+     canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const cs=Math.min((w-20)/5,(h-20)/5), mx=(w-cs*5)/2, my=(h-cs*5)/2;
+       drawMatrix(ctx,DM,mx,my,cs,DL,(i,j)=>done&&((i===0&&j===1)||(i===1&&j===0))?COL.amber:null); },
+     o:['Undirected','Directed'], a:1, why:'the matrix is not symmetric: A→B is 1 but B→A is 0, so links have a direction.'},
+    {icon:'🌐', sys:'THE WEB', q:'Billions of pages, each linking to only a handful of others. How would you store this network?', o:['Adjacency matrix','Adjacency list'], a:1,
+     why:'a matrix would need N² cells, almost all zeros. a list stores only the links that exist: perfect for sparse networks.'},
+  ];
+})();
+
+// Challenge 2 · degree detective
+(()=>{
+  const P=[[.5,.45],[.3,.1],[.68,.08],[.18,.62],[.82,.5],[.55,.88],[.02,.85],[.32,.98],[.62,1.12],[.86,.98]];
+  const E=[[0,1],[0,2],[0,3],[0,4],[0,5],[1,2],[3,6],[6,7],[7,8],[8,9],[5,9],[6,8]];
+  const H=[{1:1,2:6,3:2,5:1},{1:3,2:4,3:2,4:1},{2:7,3:2,4:1}], ORD=[1,0,2]; // displayed A,B,C → right one is B
+  const deg=degrees(10,E);
+  SC('deg').items=[
+    {q:'NEXUS claims this is the degree distribution of the fragment above. Which histogram is correct?', h:'min(44vh,360px)',
+     canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h);
+       const NR=[0,0,w,h*.56], p=inBox(P,NR,18,1.6); st.p=p;
+       E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.8,.65)); p.forEach(([x,y],i)=>nodeL(ctx,x,y,8,COL.cyan,done?String(deg[i]):''));
+       const gw=w/3; st.rects=[];
+       ORD.forEach((hi,k)=>{ const r=[gw*k+6,h*.58,gw-12,h*.42-6]; st.rects.push(r); const ok=done&&hi===0, bad=st.bad===k;
+         ctx.save(); ctx.strokeStyle=ok?COL.green:bad?COL.red:COL.line; ctx.lineWidth=ok||bad?2:1; ctx.strokeRect(r[0],r[1],r[2],r[3]); ctx.restore();
+         label(ctx,'ABC'[k],r[0]+10,r[1]+11,COL.ink2,12,'left','Orbitron');
+         const bw=(r[2]-20)/5, base=r[1]+r[3]-16, sc=(r[3]-36)/7;
+         for(let kk=1;kk<=5;kk++){ const c=H[hi][kk]||0; ctx.save(); ctx.fillStyle=ok?COL.green:COL.amber; ctx.globalAlpha=.85; ctx.fillRect(r[0]+10+(kk-1)*bw+2,base-c*sc,bw-4,c*sc); ctx.restore(); label(ctx,String(kk),r[0]+10+(kk-.5)*bw,base+8,COL.ink2,10); } }); },
+     tap:(x,y,st)=>{ const k=(st.rects||[]).findIndex(r=>x>=r[0]&&x<=r[0]+r[2]&&y>=r[1]&&y<=r[1]+r[3]); if(k<0) return null;
+       if(ORD[k]===0) return {ok:true}; st.bad=k; return {no: ORD[k]===1?'count the nodes with a single link: there is only one.':'look for a node with a single link: it\'s there.'}; },
+     why:'one node with k = 1, six with k = 2, two with k = 3 and one hub with k = 5.', pts:10},
+    {q:'How many links point <b>into</b> and <b>out of</b> the pink node?', h:'min(30vh,230px)',
+     canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h);
+       const c=[w/2,h/2], R=Math.min(w,h)*.36, q=[0,1,2,3].map(i=>[c[0]+R*Math.cos(-Math.PI/2+i*Math.PI/2)*1.3, c[1]+R*Math.sin(-Math.PI/2+i*Math.PI/2)]);
+       [0,1,2].forEach(i=>arrow(ctx,q[i],c,COL.cyan,2.2,.85,14)); arrow(ctx,c,q[3],COL.amber,2.2,.95,10);
+       q.forEach(([x,y])=>dot(ctx,x,y,9,COL.ink2,4)); nodeL(ctx,c[0],c[1],13,COL.mag,''); },
+     o:['in 3 · out 1','in 1 · out 3','in 4 · out 0'], a:0, why:'three arrows arrive, one leaves: in-degree 3, out-degree 1 (total degree 4).'},
+    {icon:'🖥️', sys:'WEIGHTED', q:'A server has three cables with bandwidth 10, 5 and 1 Gb/s. What is its <b>strength</b>?', o:['3','16','10'], a:1, why:'strength is the sum of the weights: 10 + 5 + 1 = 16 (its degree is 3).'},
+  ];
+})();
+
+// Challenge 3 · measure it
+const MEAS=(()=>{
+  const P=[[.04,.45],[.22,.3],[.42,.42],[.62,.3],[.8,.12],[.3,.06],[.52,.04],[.45,.72],[.63,.9],[.8,.6],[.96,.74],[.84,.95]];
+  const E=[[0,1],[1,2],[2,3],[3,4],[1,5],[5,6],[6,3],[2,7],[7,8],[9,10],[10,11]];
+  const adj=adjOf(12,E), dST=bfs(adj,0).d[4];
+  let D=0; for(let a=0;a<9;a++) bfs(adj,a).d.forEach((x,b)=>{ if(b<9) D=Math.max(D,x); });
+  return {P,E,dST,D};
+})();
+(()=>{
+  const {P,E,dST,D}=MEAS;
+  const draw=(mark)=>(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,0,w,h],24,1.7);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,2,.65));
+    p.forEach(([x,y],i)=>{ const lab=mark&&i===0?'S':mark&&i===4?'T':''; nodeL(ctx,x,y,lab?12:8,lab?COL.mag:(done&&!mark&&i>=9?COL.violet:COL.cyan),lab); }); };
+  const opt=(v,list)=>({o:list.map(String), a:list.indexOf(v)});
+  SC('meas').items=[
+    {q:'How many <b>connected components</b> does this network have?', canvas:draw(false), h:'min(32vh,250px)', o:['1','2','3'], a:1, why:'two groups, and no path joins them.'},
+    {q:'What is the <b>distance</b> d(S, T)?', canvas:draw(true), h:'min(32vh,250px)', ...opt(dST,[3,4,5,6]), why:`the shortest path from S to T has ${dST} links (the route over the top is longer).`},
+    {q:'What is the <b>diameter</b> of the big component?', canvas:draw(true), h:'min(32vh,250px)', ...opt(D,[3,4,5,6]), why:`no two nodes of the big component are more than ${D} steps apart (between different components the distance is infinite).`},
+  ];
+})();
+
+// Challenge 4 · clustering
+(()=>{
+  const star=(k,links,lab)=>(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const cx=w/2, cy=h/2, R=Math.min(w,h)*.36;
+    const q=d3range(k).map(i=>[cx+R*Math.cos(-Math.PI/2+i*2*Math.PI/k), cy+R*Math.sin(-Math.PI/2+i*2*Math.PI/k)]);
+    q.forEach(p=>seg(ctx,[cx,cy],p,COL.cyan,2,.7));
+    if(done) for(let a=0;a<k;a++) for(let b=a+1;b<k;b++) seg(ctx,q[a],q[b],COL.ink2,1.2,.5,[5,6]);
+    links.forEach(([a,b])=>seg(ctx,q[a],q[b],COL.amber,3,1));
+    q.forEach(([x,y])=>dot(ctx,x,y,10,COL.cyan,10)); nodeL(ctx,cx,cy,14,COL.mag,lab); };
+  SC('clu').items=[
+    {q:'What is the local clustering of server <b>X</b>?', canvas:star(4,[[0,1],[2,3]],'X'), h:'min(30vh,240px)', o:['1/3','1/2','2/3','1'], a:0, why:'k = 4, so 4·3/2 = 6 possible pairs of neighbours; 2 are linked: C = 2/6 = 1/3.'},
+    {q:'And the local clustering of server <b>Y</b>?', canvas:star(3,[[0,1],[1,2],[0,2]],'Y'), h:'min(30vh,240px)', o:['0','1/3','1'], a:2, why:'3 possible pairs of neighbours, all 3 linked: C = 1. Y sits inside a fully connected group.'},
+    {icon:'🎲', sys:'COMPARISON', q:'Where do you expect the <b>higher</b> clustering?', o:['A friendship network','A random network with the same N and E'], a:0, why:'friends of friends become friends; in a random network triangles appear only by chance.'},
+  ];
+})();
+
+/* =====================================================================
+   BOSS · THE MAP
+   ===================================================================== */
+const FL=['A','B','C','D','E','F','G'];
+const FP=[[.04,.4],[.32,.08],[.32,.68],[.64,.18],[.64,.82],[.96,.32],[.96,.92]];
+const FE=[[0,1],[0,2],[1,2],[1,3],[2,4],[3,4],[3,5],[4,6],[5,6]];
+const MAP=(()=>{ // fragment + 21 more servers attached by preferential attachment (seed chosen offline)
+  const R=rng(8), E=FE.map(e=>e.slice()), has=new Set(E.map(([a,b])=>ekey(a,b))), rep=[]; E.forEach(([a,b])=>rep.push(a,b));
+  const add=(a,b)=>{ const k=ekey(a,b); if(a===b||has.has(k)) return false; has.add(k); E.push([Math.min(a,b),Math.max(a,b)]); rep.push(a,b); return true; };
+  for(let v=7; v<28; v++){ const m=R()<.4?2:1; let c=0, g=0; while(c<m && g++<50){ if(add(v, rep[Math.floor(R()*rep.length)])) c++; } }
+  const n=28, adj=adjOf(n,E), deg=degrees(n,E), hub=deg.indexOf(Math.max(...deg)), CORE=6;
+  const dc=bfs(adj,CORE).d; let YOU=-1; for(let v=7;v<n;v++) if(deg[v]===1 && v!==hub && (YOU<0||dc[v]>dc[YOU])) YOU=v;
+  return {n,E,adj,deg,hub,CORE,YOU,dist:dc[YOU],P:bestLayout(n,E,16)};
+})();
+BUILD.boss=()=>{
+  const key='boss', done=key in S.xp;
+  setNext('DEBRIEF ▸', done);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// MISSION</small>THE MAP</div>`;
+  const timer=el('div','timer calm','3:00'); head.appendChild(timer); stage.appendChild(head);
+  if(done) stage.appendChild(el('div','badge',`✓ cleared · +${S.xp[key]} XP · replay for practice`));
+  const task=el('div','task'); stage.appendChild(task);
+  const pM=el('div','panel'); pM.id='pMat'; const cM=el('div','cap','ROUTING TABLE · tap a row to highlight it');
+  const pG=el('div','panel'); pG.id='pMap'; const cG=el('div','cap','');
+  stage.append(pM,pG);
+  const tools=el('div','tools'); const bUndo=el('button',null,'↶ UNDO HOP'); tools.appendChild(bUndo); tools.style.display='none'; stage.appendChild(tools);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const goB=el('button','btn-main',''); goB.style.cssText='min-height:54px;font-size:15px;display:none'; stage.appendChild(goB);
+  const M=matOf(7,FE);
+  let phase=1, sel=-1, drawn=new Set(), wrong=0, bad=null, hiRow=-1, pts=[0,0,0], path=[MAP.YOU], hubTries=0, missHub=-1, over=false;
+  const setTask=()=>{ task.innerHTML = phase===1 ? `<b>Step 1 · decode.</b> Draw every link of the matrix: tap two servers to link them. <span class="tip">A 1 in row X, column Y means X and Y are linked.</span>`
+    : phase===2 ? `<b>Step 2 · trace.</b> Hop from <b style="color:var(--amber)">YOU</b> to the <b style="color:var(--red)">CORE</b> along the links, in as few hops as possible. <span class="tip">Tap a neighbour of your last server to hop there; tap your last server again to step back.</span>`
+    : `<b>Step 3 · the relay.</b> Tap the server with the <b>highest degree</b>.`; };
+  setTask();
+  const T0=performance.now(), LIM=180; let left=LIM;
+  const tm=setInterval(()=>{ if(over) return; left=Math.max(0,LIM-Math.floor((performance.now()-T0)/1000)); timer.textContent=left?`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`:'KEYS ROTATED'; timer.classList.toggle('calm',left>40); },250);
+  cleanups.push(()=>clearInterval(tm));
+  let LM=null, LG=null, vM=-1, vG=-1, mapPos=null;
+  const layM=()=>{ const {w,h}=CM; if(w&&CM.v!==vM){ vM=CM.v; const cs=Math.min((w-16)/8,(h-30)/8); LM={cs,x0:(w-cs*8)/2,y0:24+(h-24-cs*8)/2}; } };
+  const layG=()=>{ const {w,h}=CG; if(w&&CG.v!==vG){ vG=CG.v; LG=inBox(FP,[0,22,w,h-30],30,1.3); mapPos=inBox(MAP.P,[0,20,w,h-24],22,1.6); } };
+  const CM=canvasIn(pM,(x,y)=>{ layM(); if(!LM) return; const i=Math.floor((y-LM.y0)/LM.cs)-1; hiRow = (i>=0&&i<7&&i!==hiRow)?i:-1; });
+  pM.appendChild(cM);
+  const CG=canvasIn(pG,(x,y)=>{ layG(); if(!LG||over&&phase!==3) return;
+    if(phase===1){ const b=nearest(LG,x,y,30); if(b<0){ sel=-1; return; } if(sel<0){ sel=b; return; } if(sel===b){ sel=-1; return; }
+      const a=sel, k=ekey(a,b); sel=-1;
+      if(drawn.has(k)){ info.textContent=`> ${FL[a]}–${FL[b]} is already drawn.`; return; }
+      if(FE.some(e=>ekey(...e)===k)){ drawn.add(k); info.className='fb ok'; info.textContent=`> ${FL[a]}–${FL[b]} decoded · ${drawn.size}/${FE.length} links`;
+        if(drawn.size===FE.length){ pts[0]=Math.max(10,40-5*wrong); info.innerHTML=`> fragment decoded with ${wrong} mistake${wrong===1?'':'s'}: <b>+${pts[0]}</b>`; goB.textContent='PLACE IT IN THE FULL MAP ▸'; goB.style.display=''; } }
+      else { wrong++; bad=[a,b,performance.now()]; info.className='fb no'; info.textContent=`> no: row ${FL[a]}, column ${FL[b]} is 0.`; } }
+    else if(phase===2 && prog2()>=1){ const b=nearest(mapPos,x,y,24); if(b<0) return; const last=path[path.length-1];
+      if(b===last && path.length>1){ path.pop(); info.className='fb info'; info.textContent=`> hops so far: ${path.length-1}`; }
+      else if(MAP.adj[last].includes(b) && !path.includes(b)){ path.push(b); info.className='fb info'; info.textContent=`> hops so far: ${path.length-1}`;
+        if(b===MAP.CORE){ const hops=path.length-1; pts[1]= hops===MAP.dist?30: hops===MAP.dist+1?15:5;
+          info.className=hops===MAP.dist?'fb ok':'fb info'; info.innerHTML=`> core reached in ${hops} hops · the shortest path has ${MAP.dist}: <b>+${pts[1]}</b>`; goB.textContent='FIND THE RELAY ▸'; goB.style.display=''; tools.style.display='none'; } }
+      else if(path.includes(b)){ info.className='fb no'; info.textContent='> you already passed there.'; }
+      else { info.className='fb no'; info.textContent='> no link from your server to that one.'; } }
+    else if(phase===3 && pts[2]===0 && hubTries<3 && missHub!==-2){ const b=nearest(mapPos,x,y,24); if(b<0) return; hubTries++;
+      if(MAP.deg[b]===MAP.deg[MAP.hub]){ pts[2]=hubTries===1?20:8; finish(`> relay found: ${MAP.deg[MAP.hub]} links.`); }
+      else if(hubTries>=3){ missHub=-2; finish(`> that one has ${MAP.deg[b]} link${MAP.deg[b]===1?'':'s'}. the relay was the pink one, with ${MAP.deg[MAP.hub]}.`); }
+      else { missHub=b; info.className='fb no'; info.textContent=`> that server has ${MAP.deg[b]} link${MAP.deg[b]===1?'':'s'}. look for a busier one.`; } }
+  });
+  pG.appendChild(cG);
+  const finish=msg=>{ over=true; const bonus=Math.round(left/6), tot=pts[0]+pts[1]+pts[2]+bonus, got=award(key,tot);
+    timer.textContent='DONE'; timer.classList.add('calm');
+    info.className='fb ok'; info.innerHTML=`${msg}<br>> decode ${pts[0]} · trace ${pts[1]} · relay ${pts[2]} · time bonus ${bonus} = <b>${tot} XP</b>${got?'':' (practice run, XP already earned)'}`;
+    setNext('DEBRIEF ▸',true); };
+  goB.onclick=()=>{ goB.style.display='none'; info.className='fb info'; info.textContent='';
+    if(phase===1){ phase=2; pM.style.display='none'; pG.classList.add('big'); tPh=performance.now(); tools.style.display=''; }
+    else if(phase===2){ phase=3; tools.style.display='none'; }
+    setTask(); stage.scrollTop=0; };
+  bUndo.onclick=()=>{ if(phase===2 && path.length>1 && path[path.length-1]!==MAP.CORE){ path.pop(); info.className='fb info'; info.textContent=`> hops so far: ${path.length-1}`; } };
+  let tPh=0; const prog2=()=>clamp((performance.now()-tPh)/1600,0,1);
+  cur.draw=t=>{
+    if(phase===1){ layM(); const {ctx,w,h}=CM; if(w&&LM){ ctx.clearRect(0,0,w,h);
+        drawMatrix(ctx,M,LM.x0,LM.y0,LM.cs,FL,(i,j)=>{ if(M[i][j]&&drawn.has(ekey(i,j))) return COL.green; if(i===hiRow) return 'rgba(56,225,255,.35)'; return null; }); } }
+    layG(); const {ctx,w,h}=CG; if(!w||!LG) return; ctx.clearRect(0,0,w,h);
+    if(phase===1){ cG.textContent='FRAGMENT · tap two servers to link them';
+      FE.forEach(e=>{ if(drawn.has(ekey(...e))) seg(ctx,LG[e[0]],LG[e[1]],COL.green,3,.9); });
+      if(bad && performance.now()-bad[2]<700) seg(ctx,LG[bad[0]],LG[bad[1]],COL.red,3,1);
+      LG.forEach(([x,y],i)=>{ if(i===sel){ const g=.5+.5*Math.sin(t/150); ring(ctx,x,y,18+g*3,COL.mag,2.5); } nodeL(ctx,x,y,13,COL.cyan,FL[i]); });
+      return; }
+    const m=ease(phase===2?prog2():1);
+    const pos=d3range(MAP.n).map(i=> i<7 ? [lerp(LG[i][0],mapPos[i][0],m), lerp(LG[i][1],mapPos[i][1],m)] : mapPos[i]);
+    const inPath=(a,b)=>{ for(let i=0;i<path.length-1;i++) if(ekey(path[i],path[i+1])===ekey(a,b)) return true; return false; };
+    MAP.E.forEach(([a,b])=>{ const frag=a<7&&b<7, alpha=(frag?1:m), on=phase>=2&&inPath(a,b);
+      seg(ctx,pos[a],pos[b],on?COL.mag:frag?COL.green:COL.cyan,on?3.5:1.5,(on?1:.5)*alpha); });
+    const last=path[path.length-1];
+    for(let i=0;i<MAP.n;i++){ const a=i<7?1:m; if(a<=0) continue; let col=COL.cyan, r=7, lab='';
+      if(i<7){ col=COL.green; lab=FL[i]; r=9; }
+      if(phase===2 && path.includes(i)) col=COL.mag;
+      if(phase===2 && MAP.adj[last].includes(i) && !path.includes(i) && last!==MAP.CORE){ ring(ctx,pos[i][0],pos[i][1],r+5,COL.mag,1.5,.6*a); }
+      if(phase===3 && i===missHub) col=COL.red;
+      if(phase===3 && (pts[2]>0||missHub===-2) && i===MAP.hub){ col=COL.mag; r=12; lab=String(MAP.deg[i]); }
+      dot(ctx,pos[i][0],pos[i][1],r,col,10,a); if(lab) label(ctx,lab,pos[i][0],pos[i][1]+1,COL.bg,r>10?12:10,'center','Orbitron'); }
+    const tag=(i,txt,col)=>{ ring(ctx,pos[i][0],pos[i][1],14,col,2.5,m); label(ctx,txt,pos[i][0],pos[i][1]-22,col,12); };
+    if(m>0){ tag(MAP.YOU,'YOU',COL.amber); tag(MAP.CORE,'CORE',COL.red); }
+    cG.textContent = phase===2 ? `FULL MAP · hops: ${path.length-1}` : 'FULL MAP · which server has the most links?';
+  };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=150?'CARTOGRAPHER':x>=100?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a);
+  const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: we have the map. and a path to the core of NEXUS.`,
+    `VERA: wait. the map is changing.`,
+    `VERA: new machines, appearing everywhere. NEXUS is copying itself, and wiring the copies at random.`,
+    `VERA: it noticed us.`,
+    `> [ LEVEL 2 COMPLETE ]`,
+    `VERA: next time: random networks. we need to know what a network wired by chance looks like.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `A network can be written as an <b>adjacency matrix</b> (symmetric if undirected), an <b>adjacency list</b> or an <b>edge list</b>.`,
+      `The <b>degree</b> k counts the links of a node (<b>in/out-degree</b> if directed, <b>strength</b> if weighted); <b>P(k)</b> is their distribution.`,
+      `<b>Distance</b> = shortest path; <b>diameter</b> = largest distance; <b>average distance</b> L.`,
+      `<b>Components</b> are groups of mutually reachable nodes: <b>strongly</b> or <b>weakly</b> connected if directed.`,
+      `<b>Clustering</b> measures closed triangles around a node; <b>assortativity</b> is the tendency of similar nodes to link.`,
+      `Real networks are <b>sparse</b>, <b>small world</b>, <b>clustered</b>, with <b>hubs</b> and <b>homophily</b>.`],
+      'level3.html', 'LEVEL 3 · THE SWARM');
+  });
+  // the map, while NEXUS adds copies wired at random
+  const R=rng(17); let v=-1, base=null, extra=[], t0=null;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return;
+    if(C.v!==v){ v=C.v; base=inBox(MAP.P,[w*.2,10,w*.6,h-20],10,1.6); extra=[]; }
+    const now=performance.now(); if(t0===null) t0=now; const el_=now-t0;
+    while(extra.length<Math.min(70,el_/120)){ const x=10+R()*(w-20), y=10+R()*(h-20), all=base.length+extra.length, ln=[];
+      for(let k=0;k<2;k++){ const j=Math.floor(R()*all); ln.push(j); } extra.push({x,y,ln,t:now}); }
+    ctx.clearRect(0,0,w,h);
+    const P=i=> i<base.length?base[i]:[extra[i-base.length].x,extra[i-base.length].y];
+    MAP.E.forEach(([a,b])=>seg(ctx,base[a],base[b],COL.cyan,1.2,.45));
+    extra.forEach((e,i)=>{ const k=clamp((now-e.t)/500,0,1); e.ln.forEach(j=>{ const q=P(j); seg(ctx,[e.x,e.y],[lerp(e.x,q[0],k),lerp(e.y,q[1],k)],COL.amber,1,.3); }); });
+    base.forEach(([x,y],i)=>dot(ctx,x,y,i===MAP.CORE?6:3.5,i===MAP.CORE?COL.red:COL.cyan,8));
+    extra.forEach(e=>dot(ctx,e.x,e.y,3,COL.amber,8,clamp((now-e.t)/300,0,1)));
+  };
+};
+
+start();
+</script>
+</body>
+</html>

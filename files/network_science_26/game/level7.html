@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Outbreak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pNet{height:min(52vh,500px);min-height:300px}
+.legend7{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.legend7 span{display:flex;align-items:center;gap:5px}
+.legend7 i{width:11px;height:11px;border-radius:50%;display:inline-block}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 7</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l7', label:'LEVEL 7', chapter:'LECTURE 7 · THE OUTBREAK'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 7 (Lecture 7 · Spreading Processes on Networks): THE OUTBREAK
+   (the complex contagion part of the lecture is left out on purpose)
+   ===================================================================== */
+const ST={S:0,I:1,R:2,V:3}, SCOL=[COL.cyan,COL.mag,COL.dim,COL.green];
+// preferential attachment, mostly one or two links per new node
+function baNet(N, pm, seed){ const R=rng(seed), adj=Array.from({length:N},()=>[]), rep=[], E=[]; const add=(a,b)=>{ if(a===b||adj[a].includes(b)) return; adj[a].push(b); adj[b].push(a); rep.push(a,b); E.push([a,b]); };
+  add(0,1); add(1,2); add(0,2); for(let v=3;v<N;v++){ const m=R()<pm?2:1, t=new Set(); while(t.size<m) t.add(rep[Math.floor(R()*rep.length)]); for(const u of t) add(v,u); } return {N,adj,E}; }
+// deterministic coin flips: the same (i, j, t) always gives the same outcome, so different strategies can be compared on the same "luck"
+function h01(a,b,c,s=0){ let h=(a*73856093)^(b*19349663)^(c*83492791)^(s*2654435761); h=Math.imul(h^h>>>16,0x45d9f3b); h=Math.imul(h^h>>>16,0x45d9f3b); h^=h>>>16; return (h>>>0)/4294967296; }
+// one SIR step (discrete time): every infected node infects each susceptible neighbour with prob beta, then recovers with prob mu
+function sirStep(adj, st, t, beta, mu, s=0){ const inf=[]; st.forEach((x,i)=>{ if(x===ST.I) inf.push(i); }); const nw=[];
+  for(const i of inf) for(const j of adj[i]) if(st[j]===ST.S && h01(i,j,t,s)<beta && !nw.includes(j)) nw.push(j);
+  for(const i of inf) if(h01(i,i,t,s+7)<mu) st[i]=ST.R; nw.forEach(j=>st[j]=ST.I); return st; }
+function runSIR(adj, s0, vacc, beta, mu, s=0, model='SIR'){ const N=adj.length, st=Array(N).fill(ST.S); vacc.forEach(i=>st[i]=ST.V); st[s0]=ST.I; let t=0, ever=new Set([s0]);
+  while(st.includes(ST.I)&&t<300){ sirStep(adj,st,t,beta,model==='SI'?0:mu,s); if(model==='SIS') st.forEach((x,i)=>{ if(x===ST.R) st[i]=ST.S; }); st.forEach((x,i)=>{ if(x===ST.I) ever.add(i); }); t++; } return ever.size; }
+
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> 06:10 · DAY ONE OF THE OUTBREAK`,
+    `VERA: the agent the faction released is loose. it copies itself from device to device.`,
+    `VERA: phones near each other, emails, shared posts, laptops carried onto planes. every link is a way in.`,
+    `VERA: it doesn't need a map of the network. it just follows the links, and the network does the rest.`,
+    `VERA: to stop it we need to understand how things spread on networks.`]},
+  {kind:'card', anim:'proc', tag:'TRAINING 1', title:'THINGS THAT SPREAD',
+    vera:'traffic, posts, opinions, viruses, our agent. all of them move along links.',
+    pts:[`Many <b>processes</b> run on networks: traffic, content online, opinions and behaviours. The <b>structure</b> of the network strongly shapes their outcome.`,
+         `In a <b>spreading process</b> every node can be "infected" and pass it on to its neighbours: a virus, a piece of information, a behaviour.`,
+         `Contact networks have structure: <b>face-to-face</b> networks have groups and hubs; the <b>air transport</b> network has hubs and a tiny diameter, so things go global fast; <b>email</b> and <b>online social</b> networks are scale-free (and clustered).`]},
+  {kind:'card', anim:'models', tag:'TRAINING 2', title:'S, I, R',
+    vera:'three states are enough to describe almost every outbreak.',
+    pts:[`<b>S</b>usceptible (can be infected), <b>I</b>nfected (contagious), <b>R</b>ecovered (immune, no longer contagious).`,
+         `<b>SI</b>: S → I with probability β, no way back (HIV, HPV; malware nobody removes).`,
+         `<b>SIS</b>: S → I with β, I → S with μ, no immunity (seasonal flu; malware that an antivirus removes, but can come back).`,
+         `<b>SIR</b>: S → I with β, I → R with μ, immune forever (measles, chickenpox; a device that gets patched).`]},
+  {kind:'card', anim:'r0', tag:'TRAINING 3', title:'THE REPRODUCTION NUMBER',
+    vera:'one number tells you if an outbreak explodes or fizzles out.',
+    pts:[`<b>Spreading rate</b> λ = β/μ: a property of the infection and of the population.`,
+         `<b>Basic reproduction number</b> R₀ = ⟨k⟩β/μ: how many new infections one infected node causes. It depends on the network.`,
+         `With everybody in contact (homogeneous mixing): <b>SI</b> always infects everyone. <b>SIS</b> dies out if R₀ &lt; 1, becomes <b>endemic</b> if R₀ &gt; 1. <b>SIR</b> dies out if R₀ &lt; 1, and for R₀ &gt; 1 hits a large fraction before fading away.`]},
+  {kind:'steps', key:'sir', nm:'Challenge · Diagnose it', tag:'CHALLENGE 1', title:'DIAGNOSE IT', items:[
+    {icon:'🧹', sys:'ANTIVIRUS', q:'An antivirus removes the agent from a device, but the device can be infected again later. Which model?', o:['SI','SIS','SIR'], a:1, why:'infected devices go back to susceptible: no immunity.'},
+    {icon:'🛡️', sys:'PATCH', q:'Once a device is patched, the agent can never infect it again. Which model?', o:['SI','SIS','SIR'], a:2, why:'patched devices are recovered and immune.'},
+    {icon:'🧮', sys:'R₀', q:'Each device has ⟨k⟩ = 4 contacts, β = 0.2 and μ = 0.4. What is R₀, and what happens?', o:['R₀ = 0.5: it dies out','R₀ = 2: it spreads','R₀ = 8: it spreads'], a:1, why:'R₀ = ⟨k⟩β/μ = 4 × 0.2 / 0.4 = 2 > 1.'},
+    {icon:'📉', sys:'BELOW ONE', q:'An SIR outbreak has R₀ = 0.8. What happens?', o:['It dies out','It becomes endemic','It infects everybody'], a:0, why:'every infected node replaces itself with less than one new infection.'}]},
+  {kind:'card', anim:'threshold', tag:'TRAINING 4', title:'THE EPIDEMIC THRESHOLD',
+    vera:'on a real network an infected device can only reach its own neighbours. and some neighbours are hubs.',
+    pts:[`On a network the infection travels only along links. Will it keep growing? Like for <b>Molloy–Reed</b>, look at the <b>second neighbours</b>: Z₂ = ⟨k²⟩ − ⟨k⟩.`,
+         `The infection spreads only above the <b>epidemic threshold</b>: λ<sub>c</sub> = ⟨k⟩ / (⟨k²⟩ − ⟨k⟩) for SIR, λ<sub>c</sub> = ⟨k⟩ / ⟨k²⟩ for SIS.`,
+         `In <b>scale-free</b> networks with γ &lt; 3, ⟨k²⟩ diverges and the threshold <b>vanishes</b>: almost any infection can reach a finite fraction of the network.`]},
+  {kind:'steps', key:'thr', nm:'Challenge · Threshold', tag:'CHALLENGE 2', title:'THRESHOLD', items:[
+    {icon:'🧮', sys:'COMPUTE', q:'A network has ⟨k⟩ = 4 and ⟨k²⟩ = 20. What is the SIR epidemic threshold λ<sub>c</sub> = ⟨k⟩/(⟨k²⟩−⟨k⟩)?', o:['0.2','0.25','4'], a:1, why:'4 / (20 − 4) = 0.25. any infection with β/μ above 0.25 can spread.'},
+    {icon:'🕸️', sys:'COMPARE', q:'Same ⟨k⟩: a random network and a scale-free one. Where is the epidemic threshold lower?', o:['In the random network','In the scale-free network'], a:1, why:'hubs make ⟨k²⟩ large, so λ_c is small.'},
+    {icon:'∞', sys:'VANISHING', q:'Why does the threshold vanish in scale-free networks with γ &lt; 3?', o:['Because ⟨k⟩ diverges','Because ⟨k²⟩ diverges','Because they have no clustering'], a:1, why:'the second moment of the degree distribution diverges for γ < 3.'}]},
+  {kind:'card', anim:'immun', tag:'TRAINING 5', title:'IMMUNIZATION',
+    vera:'we have patches. not enough for everyone. where do they go?',
+    pts:[`Vaccines (our patches) <b>remove nodes</b> from the network the infection travels on, and lower R₀.`,
+         `<b>Random immunization</b> picks nodes at random. In scale-free networks it barely helps: it almost never hits a hub.`,
+         `<b>Targeted immunization</b> protects the hubs first and is far more effective, but you need to know who the hubs are.`,
+         `The hubs that make scale-free networks <b>robust to failures</b> also make them <b>vulnerable to epidemics</b>.`]},
+  {kind:'steps', key:'imm', nm:'Challenge · Patch plan', tag:'CHALLENGE 3', title:'PATCH PLAN', items:[
+    {icon:'💉', sys:'BUDGET', q:'You can patch 5% of the devices of a scale-free network. Which plan protects the most?', o:['5% chosen at random','The 5% with the most links','The 5% with the fewest links'], a:1, why:'hubs carry most of the transmissions.'},
+    {icon:'🎲', sys:'RANDOM', q:'In a scale-free network with γ &lt; 3, random immunization…', o:['stops any epidemic','barely changes the outcome','makes things worse'], a:1, why:'random choices almost always pick small nodes: the threshold stays close to zero.'},
+    {icon:'⚖️', sys:'TWO FACES', q:'Scale-free networks survive random failures well. For epidemics, the same hubs…', o:['protect the network too','make spreading easier'], a:1, why:'hubs hold the network together, and they also pass the infection everywhere.'}]},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> 07:30 · CITY NETWORK`,
+    `VERA: 150 devices, wired the usual way: a few hubs, many devices with one or two links.`,
+    `VERA: the agent spreads like SIR: β = 0.5 per contact per step, and an infected device gets cleaned with μ = 0.35.`,
+    `VERA: step 1: before the outbreak starts, patch 6 devices. patched devices can't be infected.`,
+    `VERA: step 2: the outbreak begins, in three places at once. every step you can patch one more device, then the agent moves. save as many as you can.`]},
+  {kind:'boss', nm:'Mission · The outbreak'},
+  {kind:'end', nm:'Debrief'},
+];
+
+/* =====================================================================
+   CONCEPT ANIMATIONS
+   ===================================================================== */
+// --- traffic pulses, then an infection wave, on the same network
+ANIM.proc=(C,cap)=>{
+  const G=baNet(60,.5,4), P=tame(layout(G.N,G.E,3,400,.2)), deg=G.adj.map(a=>a.length), R=rng(5); let pulses=[], last=0;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,20,w,h-20],20,1.6), s=(t%14000)/1000;
+    if(s<6){ if(t-last>120){ last=t; const e=G.E[Math.floor(R()*G.E.length)]; pulses.push([e[0],e[1],t,R()<.5]); } pulses=pulses.filter(q=>t-q[2]<800);
+      G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1,.4)); pulses.forEach(([a,b,t0,r])=>{ const f=(t-t0)/800, A=p[r?b:a], B=p[r?a:b]; dot(ctx,lerp(A[0],B[0],f),lerp(A[1],B[1],f),2.5,COL.amber,8); });
+      p.forEach(([x,y],i)=>dot(ctx,x,y,2+Math.sqrt(deg[i])*1.2,COL.cyan,4)); cap.innerHTML='traffic and content flowing along the links'; }
+    else { const d=bfs(G.adj,59).d, wave=(s-6)/.55; G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1,.35));
+      p.forEach(([x,y],i)=>{ const on=wave>=d[i]; dot(ctx,x,y,2+Math.sqrt(deg[i])*1.2,on?COL.mag:COL.cyan,on?10:4); }); cap.innerHTML='a spreading process: every infected node passes it to its neighbours'; }
+  };
+};
+// --- SI, SIS, SIR on a small population, with the state diagram and the curves
+ANIM.models=(C,cap)=>{
+  const G=baNet(40,.6,8), P=tame(layout(G.N,G.E,2,400,.3)), MOD=[['SI',.35,0],['SIS',.35,.25],['SIR',.35,.25]];
+  const sims=MOD.map(([m,b,mu])=>{ const st=Array(40).fill(0); st[39]=1; const frames=[st.slice()]; for(let t=0;t<26;t++){ sirStep(G.adj,st,t,b,mu,3); if(m==='SIS') st.forEach((x,i)=>{ if(x===2) st[i]=0; }); frames.push(st.slice()); } return frames; });
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const k=Math.floor(t/7000)%3, fr=sims[k], f=Math.min(fr.length-1,Math.floor((t%7000)/240)), st=fr[f], [nm,b,mu]=MOD[k];
+    const wide=w>=520, NR=wide?[0,40,w*.55,h-40]:[0,40,w,h*.55-30], CR=wide?[w*.6,50,w*.37,h-90]:[30,h*.58+8,w-46,h*.42-34], p=inBox(P,NR,16,1.6);
+    G.E.forEach(([a,c])=>seg(ctx,p[a],p[c],COL.ink2,1,.35)); p.forEach(([x,y],i)=>dot(ctx,x,y,5,SCOL[st[i]],st[i]===1?10:4));
+    // state diagram
+    const sx=w/2, y0=16; const box=(x,txt,col)=>{ label(ctx,txt,x,y0,col,15,'center','Orbitron'); };
+    if(nm==='SI'){ box(sx-40,'S',COL.cyan); box(sx+40,'I',COL.mag); label(ctx,'β →',sx,y0,COL.ink2,12); }
+    if(nm==='SIS'){ box(sx-40,'S',COL.cyan); box(sx+40,'I',COL.mag); label(ctx,'β → / ← μ',sx,y0,COL.ink2,12); }
+    if(nm==='SIR'){ box(sx-80,'S',COL.cyan); box(sx,'I',COL.mag); box(sx+80,'R',COL.dim); label(ctx,'β →',sx-40,y0,COL.ink2,12); label(ctx,'μ →',sx+40,y0,COL.ink2,12); }
+    const X=i=>CR[0]+CR[2]*i/(fr.length-1), Y=v=>CR[1]+CR[3]*(1-v/40);
+    seg(ctx,[CR[0],CR[1]+CR[3]],[CR[0]+CR[2],CR[1]+CR[3]],COL.ink2,1); seg(ctx,[CR[0],CR[1]],[CR[0],CR[1]+CR[3]],COL.ink2,1);
+    [[0,COL.cyan],[1,COL.mag],[2,COL.dim]].forEach(([s_,col])=>{ if(nm!=='SIR'&&s_===2) return; ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.beginPath(); for(let i=0;i<=f;i++){ const v=fr[i].filter(x=>x===s_).length; i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v)); } ctx.stroke(); ctx.restore(); });
+    label(ctx,'time',CR[0]+CR[2]-14,CR[1]+CR[3]+10,COL.ink2,10);
+    cap.innerHTML=`<span style="color:var(--amber)">${nm}</span> · ${nm==='SI'?'nobody recovers: everybody gets infected':nm==='SIS'?'recovered devices can be infected again':'recovered devices are immune'}`;
+  };
+};
+// --- branching: each infected node causes R₀ new ones
+ANIM.r0=(C,cap)=>{
+  const tree=(r0,seed)=>{ const R=rng(seed), L=[[{x:.5,p:-1}]]; for(let g=1;g<6;g++){ const prev=L[g-1], cur_=[]; prev.forEach((n,i)=>{ let k=0; const lam=r0; let q=Math.exp(-lam), pp=q, u=R(); while(u>pp&&k<6){ k++; q*=lam/k; pp+=q; } for(let c=0;c<k;c++) cur_.push({p:i}); }); if(cur_.length>40) cur_.length=40; L.push(cur_); if(!cur_.length) break; }
+    L.forEach(l=>l.forEach((n,i)=>n.x=(i+.5)/l.length)); return L; };
+  const T=[tree(.8,4),tree(2.4,11)];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const g=Math.min(5,Math.floor((t%9000)/1300)), cw=w/2;
+    T.forEach((L,k)=>{ const x0=cw*k, gh=(h-60)/5, pos=(lv,n)=>[x0+14+(cw-28)*n.x, 40+lv*gh];
+      for(let lv=1;lv<=Math.min(g,L.length-1);lv++) L[lv].forEach(n=>seg(ctx,pos(lv-1,L[lv-1][n.p]),pos(lv,n),COL.mag,1.2,.6));
+      for(let lv=0;lv<=Math.min(g,L.length-1);lv++) L[lv].forEach(n=>dot(ctx,...pos(lv,n),lv===0?7:4,COL.mag,8));
+      const tot=L.slice(0,g+1).reduce((a,l)=>a+l.length,0);
+      label(ctx,k?'R₀ = 2.4 · it explodes':'R₀ = 0.8 · it fizzles out',x0+cw/2,16,k?COL.mag:COL.cyan,12,'center','Orbitron'); label(ctx,`${tot} infected`,x0+cw/2,h-10,COL.ink2,11);
+      if(k) seg(ctx,[cw,26],[cw,h-6],COL.line,1); });
+    cap.textContent='';
+  };
+};
+// --- same λ: dies out on a random network, spreads on a scale-free one
+ANIM.threshold=(C,cap)=>{
+  const N=250, SF=baNet(N,.5,11), R=rng(3), pairs=[]; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++) pairs.push([a,b,R()]); pairs.sort((x,y)=>x[2]-y[2]);
+  const ERE=pairs.slice(0,SF.E.length), ER={N,adj:adjOf(N,ERE),E:ERE}, beta=.22, mu=.6;
+  const k2=g=>{ const d=g.adj.map(a=>a.length); return d.reduce((a,b)=>a+b*b,0)/N; };
+  const nets=[ER,SF].map(g=>{ const P=tame(layout(N,g.E,4,300,.2),.85,1.1);
+      // average outbreak over many random starting devices, and a typical run (size closest to the average) to animate
+      const runs=d3range(120).map(r=>{ const s0=Math.floor(h01(r,5,5)*N); return [runSIR(g.adj,s0,[],beta,mu,r),s0,r]; }), avg=runs.reduce((a,x)=>a+x[0],0)/runs.length;
+      const [,s0,r0]=runs.slice().sort((a,b)=>Math.abs(a[0]-avg)-Math.abs(b[0]-avg))[0];
+      const st=Array(N).fill(0); st[s0]=1; const fr=[st.slice()]; for(let tt=0;tt<60&&st.includes(1);tt++){ sirStep(g.adj,st,tt,beta,mu,r0); fr.push(st.slice()); }
+      return {g,P,fr,avg:avg/N,k2:k2(g)}; });
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const wide=w>=480;
+    nets.forEach((n,k)=>{ const Rb=wide?[w/2*k,30,w/2,h-40]:[0,k?h/2+14:30,w,h/2-30], p=inBox(n.P,Rb,12,1.6), f=Math.min(n.fr.length-1,Math.floor((t%11000)/280)), st=n.fr[f];
+      n.g.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,.8,.25)); p.forEach(([x,y],i)=>dot(ctx,x,y,1.6+Math.sqrt(n.g.adj[i].length)*.9,SCOL[st[i]],st[i]===1?8:2));
+      label(ctx,`${k?'SCALE-FREE':'RANDOM'} · ⟨k²⟩ = ${n.k2.toFixed(0)} · average outbreak ${Math.round(n.avg*100)}%`,Rb[0]+Rb[2]/2,Rb[1]-12,k?COL.amber:COL.cyan,11); });
+    label(ctx,`same ⟨k⟩, same infection: hubs (large ⟨k²⟩) spread it further`,w/2,h-8,COL.ink2,11);
+    cap.textContent='';
+  };
+};
+// --- random vs targeted immunization
+ANIM.immun=(C,cap)=>{
+  const G=baNet(130,.5,6), N=G.N, P=tame(layout(N,G.E,3,400,.2)), deg=G.adj.map(a=>a.length), K=8, beta=.5, mu=.35;
+  const hubs=d3range(N).sort((a,b)=>deg[b]-deg[a]).slice(0,K), R=rng(2), rnd=d3range(N).filter(i=>deg[i]<4).sort(()=>R()-.5).slice(0,K), start=d3range(N).find(i=>deg[i]===1&&!hubs.includes(i)&&!rnd.includes(i));
+  const avg=v=>d3range(60).reduce((a,s)=>a+runSIR(G.adj,start,v,beta,mu,s),0)/60/N;
+  const run=v=>{ const st=Array(N).fill(0); v.forEach(i=>st[i]=3); st[start]=1; const fr=[st.slice()]; for(let t=0;t<40&&st.includes(1);t++){ sirStep(G.adj,st,t,beta,mu,5); fr.push(st.slice()); } return fr; };
+  const M=[[rnd,'RANDOM IMMUNIZATION',run(rnd),avg(rnd)],[hubs,'TARGETED: HUBS FIRST',run(hubs),avg(hubs)]];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const k=Math.floor(t/9000)%2, [v,nm,fr,a]=M[k], f=Math.min(fr.length-1,Math.floor((t%9000)/230)), st=fr[f], p=inBox(P,[0,24,w,h-24],16,1.6);
+    G.E.forEach(([x,y])=>seg(ctx,p[x],p[y],COL.ink2,1,.3)); p.forEach(([x,y],i)=>{ dot(ctx,x,y,2+Math.sqrt(deg[i])*1.3,SCOL[st[i]],st[i]===1?8:3); if(st[i]===3) ring(ctx,x,y,2+Math.sqrt(deg[i])*1.3+3,COL.green,1.5); });
+    const ever=fr.slice(0,f+1).reduce((s,x)=>{ x.forEach((q,i)=>{ if(q===1) s.add(i); }); return s; },new Set()).size;
+    cap.innerHTML=`<span style="color:var(--green)">${nm}</span> (${K} patches) · infected so far ${ever} · on average ${Math.round(a*100)}% of the devices`;
+  };
+};
+
+/* =====================================================================
+   BOSS · THE OUTBREAK
+   ===================================================================== */
+const OUT=(()=>{ const G=baNet(150,.5,11), N=G.N, deg=G.adj.map(a=>a.length), beta=.5, mu=.35, K=6, RUNS=150;
+  const starts=d3range(RUNS).map(r=>Math.floor(h01(r,1,2,9)*N));
+  // expected share of devices infected when the outbreak starts at a random device, given a set of patched devices
+  const expected=v=>{ const vs=new Set(v); let s=0,c=0; starts.forEach((s0,r)=>{ if(vs.has(s0)) return; s+=runSIR(G.adj,s0,v,beta,mu,r); c++; }); return s/c/N; };
+  const hubs=d3range(N).sort((a,b)=>deg[b]-deg[a]).slice(0,K), base=expected([]), hubE=expected(hubs);
+  const R=rng(4); let rndE=0; for(let k=0;k<10;k++){ rndE+=expected(d3range(N).sort(()=>R()-.5).slice(0,K)); } rndE/=10;
+  const P=tame(layout(N,G.E,5,450,.2));
+  // three outbreak sites, small devices far from each other
+  const cand=d3range(N).filter(i=>deg[i]>=2&&deg[i]<=4&&!hubs.includes(i)), R2=rng(93), sites=[]; while(sites.length<3){ const c=cand[Math.floor(R2()*cand.length)]; if(sites.every(x=>bfs(G.adj,x).d[c]>=3)) sites.push(c); }
+  return {...G, deg, beta, mu, K, expected, base, hubE, rndE, hubs, P, starts:sites}; })();
+BUILD.boss=()=>{
+  const key='boss', N=OUT.N;
+  setNext('DEBRIEF ▸', key in S.xp);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// MISSION</small>THE OUTBREAK</div>`; const tag=el('div','timer calm','STEP 1/2'); head.appendChild(tag); stage.appendChild(head);
+  if(key in S.xp) stage.appendChild(el('div','badge',`✓ best: +${S.xp[key]} XP · replay to improve`));
+  const task=el('div','task'); stage.appendChild(task);
+  stage.appendChild(el('div','legend7',`<span><i style="background:var(--cyan)"></i>susceptible</span><span><i style="background:var(--mag)"></i>infected</span><span><i style="background:var(--dim)"></i>cleaned (R)</span><span><i style="background:var(--green)"></i>patched</span>`));
+  const pN=el('div','panel'); pN.id='pNet'; const cN=el('div','cap',''); stage.appendChild(pN);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const row=el('div','btnrow'); const bWait=el('button',null,'SKIP PATCH ▸'); bWait.style.display='none'; const bAct=el('button','btn-main','START OUTBREAK ▸'); bAct.disabled=true; row.append(bWait,bAct); stage.appendChild(row);
+  const st=Array(N).fill(ST.S), vac=[]; let phase=1, p1=0, t=0, v=-1, pos=null, done=false, ever=new Set(), sel=-1;
+  const setTask=()=>{ task.innerHTML = phase===1 ? `<b>Step 1 · prepare.</b> Tap ${OUT.K} devices to patch them before the outbreak. Tap again to undo. <span class="tip">Node size shows how many links a device has.</span>`
+    : `<b>Step 2 · respond.</b> The outbreak has started in 3 places. Each turn: tap one healthy device to patch it (or skip), then the agent moves one step. <span class="tip">Patching an infected device does nothing.</span>`; };
+  setTask(); info.textContent=`> patches left: ${OUT.K}`;
+  const lay=()=>{ const {w,h}=C; if(w&&C.v!==v){ v=C.v; pos=inBox(OUT.P,[0,18,w,h-18],16,1.6); } };
+  const C=canvasIn(pN,(x,y)=>{ lay(); if(!pos||done) return; const b=nearest(pos,x,y,20); if(b<0) return;
+    if(phase===1){ const i=vac.indexOf(b); if(i>=0){ vac.splice(i,1); st[b]=ST.S; } else if(vac.length<OUT.K){ vac.push(b); st[b]=ST.V; }
+      info.textContent=`> patches left: ${OUT.K-vac.length}`; bAct.disabled=vac.length<OUT.K; return; }
+    if(st[b]!==ST.S){ info.className='fb no'; info.textContent= st[b]===ST.I ? '> too late: that device is already infected.' : '> that device is already safe.'; return; }
+    st[b]=ST.V; vac.push(b); step(); });
+  pN.appendChild(cN);
+  const step=()=>{ sirStep(OUT.adj,st,t,OUT.beta,OUT.mu,77); t++; st.forEach((x,i)=>{ if(x===ST.I) ever.add(i); });
+    const ni=st.filter(x=>x===ST.I).length; info.className='fb info'; info.textContent=`> step ${t} · infected now ${ni} · ever infected ${ever.size}`; if(!ni) finish(); };
+  bWait.onclick=()=>{ if(phase===2&&!done) step(); };
+  bAct.onclick=()=>{ if(phase!==1||vac.length<OUT.K) return;
+    const e=OUT.expected(vac.slice()); p1=Math.round(50*clamp((OUT.base-e)/(OUT.base-OUT.hubE),0,1));
+    info.className='fb ok'; info.innerHTML=`> with your patches an outbreak would hit on average <b>${Math.round(e*100)}%</b> of the devices (no patches ${Math.round(OUT.base*100)}% · random ${Math.round(OUT.rndE*100)}% · ${OUT.K} biggest hubs ${Math.round(OUT.hubE*100)}%) → <b>+${p1}</b>`;
+    phase=2; tag.textContent='STEP 2/2'; OUT.starts.forEach(x=>{ if(st[x]===ST.S){ st[x]=ST.I; ever.add(x); } }); if(!ever.size){ finish(); return; } bAct.style.display='none'; bWait.style.display=''; setTask(); };
+  const finish=()=>{ done=true; bWait.style.display='none';
+    // what would have happened with the same luck and no response
+    const st0=Array(N).fill(ST.S); vac.slice(0,OUT.K).forEach(i=>st0[i]=ST.V); const ev0=new Set(); OUT.starts.forEach(x=>{ if(st0[x]===ST.S){ st0[x]=ST.I; ev0.add(x); } }); for(let k=0;k<300&&st0.includes(ST.I);k++){ sirStep(OUT.adj,st0,k,OUT.beta,OUT.mu,77); st0.forEach((x,i)=>{ if(x===ST.I) ev0.add(i); }); }
+    const healthy=N-vac.length, saved=healthy-ever.size, p2=Math.round(50*saved/healthy), tot=p1+p2, prev=S.xp[key]||0;
+    if(tot>prev||!(key in S.xp)){ S.xp[key]=Math.max(tot,prev); save(); updXP(Math.max(0,tot-prev)); }
+    tag.textContent='DONE';
+    info.className='fb ok'; info.innerHTML=`> the outbreak is over after ${t} steps: ${ever.size} devices infected, ${saved} of ${healthy} unpatched devices never infected → <b>+${p2}</b><br>> without your ${vac.length-OUT.K} emergency patches it would have reached ${ev0.size} · preparation ${p1} + response ${p2} = <b>${tot} XP</b>`;
+    const rb=el('button',null,'↻ RETRY'); rb.style.minHeight='48px'; rb.onclick=()=>go(idx); stage.appendChild(rb); setNext('DEBRIEF ▸',true); };
+  cur.draw=tt=>{ lay(); const {ctx,w,h}=C; if(!w||!pos) return; ctx.clearRect(0,0,w,h);
+    OUT.E.forEach(([a,b])=>{ const hot=(st[a]===ST.I&&st[b]===ST.S)||(st[b]===ST.I&&st[a]===ST.S); seg(ctx,pos[a],pos[b],hot?COL.mag:COL.ink2,hot?1.8:1,hot?.8:.35); });
+    pos.forEach(([x,y],i)=>{ const r=2.5+Math.sqrt(OUT.deg[i])*1.5, s=st[i]; if(s===ST.I){ const g=.5+.5*Math.sin(tt/180+i); dot(ctx,x,y,r+1+g,COL.mag,14); } else dot(ctx,x,y,r,SCOL[s],s===ST.V?10:3);
+      if(s===ST.V) ring(ctx,x,y,r+3,COL.green,1.6); });
+    cN.textContent = phase===1 ? `${OUT.N} devices · patched ${vac.length}/${OUT.K}` : `step ${t} · infected ${st.filter(x=>x===ST.I).length} · patched ${vac.length}`;
+  };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=130?'FIREWALL':x>=90?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a); const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: the outbreak is over. the last copies were cleaned an hour ago.`,
+    `VERA: NEXUS has nowhere left to run. no servers, no swarm, no CIRCLE.`,
+    `VERA: you learned to read networks, measure them, break them and protect them.`,
+    `> [ LEVEL 7 COMPLETE ]`,
+    `VERA: thank you, agent. ...but keep your phone on. networks never really sleep.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `Many <b>processes</b> run on networks; in <b>spreading</b> processes infected nodes pass it on to their neighbours.`,
+      `<b>SI</b>, <b>SIS</b>, <b>SIR</b>: susceptible, infected, recovered, with infection rate β and recovery rate μ.`,
+      `λ = β/μ and <b>R₀ = ⟨k⟩β/μ</b>: with homogeneous mixing an outbreak grows only if R₀ &gt; 1.`,
+      `On networks the <b>epidemic threshold</b> is λ<sub>c</sub> = ⟨k⟩/(⟨k²⟩−⟨k⟩) (SIR); it <b>vanishes</b> in scale-free networks with γ &lt; 3.`,
+      `<b>Targeted immunization</b> of hubs works far better than random immunization.`],
+      null, 'TO BE CONTINUED');
+  });
+  // the network calms down: infected devices turn into patched ones
+  const G=baNet(120,.5,3), P=tame(layout(G.N,G.E,2,400,.2)); let t0=null;
+  cur.draw=tt=>{ const {ctx,w,h}=C; if(!w) return; const now=performance.now(); if(t0===null) t0=now; const s=(now-t0)/1000; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,10,w,h-20],12,1.6);
+    G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1,.35));
+    p.forEach(([x,y],i)=>{ const healed=h01(i,3,3)<Math.min(1,s/3); dot(ctx,x,y,2+Math.sqrt(G.adj[i].length)*1.2,healed?COL.green:COL.mag,healed?4:10); });
+  };
+};
+
+start();
+</script>
+</body>
+</html>

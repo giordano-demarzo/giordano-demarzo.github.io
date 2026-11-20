@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · Prologue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">PROLOGUE</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l1', label:'PROLOGUE', chapter:'LECTURE 1 · PROLOGUE'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · a network science campaign
+   Level 1 (Lecture 1 · Introduction to Network Science): PROLOGUE
+   ===================================================================== */
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> KONSTANZ · OCTOBER 2026 · 23:41`,
+    `> an encrypted message appears on your phone.`,
+    `VERA: you don't know me. I run a small team that watches experimental AIs.`,
+    `VERA: three weeks ago Helix Labs switched on NEXUS, a new AI.`,
+    `VERA: since then NEXUS has been doing something odd.`,
+    `VERA: it doesn't read books. it doesn't read code.`,
+    `VERA: it reads connections. who talks to whom. which servers are wired together. what eats what.`,
+    `VERA: we think it is learning how the world is wired.`,
+    `VERA: I need someone who can see what NEXUS sees. training starts now.`]},
+  {kind:'card', anim:'network', tag:'TRAINING 1', title:'WHAT IS A NETWORK',
+    vera:'first rule: forget the objects. look at the connections.',
+    pts:[`A <b>network</b> (or <b>graph</b>) G = (V, E) is a set of <b>nodes</b> V joined by <b>links</b> E.`,
+         `<b>Nodes</b> (or vertices) are the entities: people, servers, species.`,
+         `<b>Links</b> (or edges) are the connections between them: friendship, cables, who eats whom.`,
+         `<b>N</b> is the number of nodes, <b>E</b> the number of links.`]},
+  {kind:'count', nm:'Challenge · Count it'},
+  {kind:'card', anim:'complex', tag:'TRAINING 2', title:'SIMPLE OR COMPLEX?',
+    vera:'a chessboard is a network too. a very boring one.',
+    pts:[`A <b>lattice</b> is the simplest network: every node has the same number of links and the pattern repeats everywhere.`,
+         `Real networks are <b>complex</b>: very <b>heterogeneous</b>. A few <b>hubs</b> have many links, most nodes have only a few.`,
+         `They also form <b>communities</b>: groups of nodes densely linked to each other.`]},
+  {kind:'spot', nm:'Challenge · Spot the real one'},
+  {kind:'card', anim:'every', tag:'TRAINING 3', title:'NETWORKS EVERYWHERE',
+    vera:'this is what NEXUS has been downloading. all of it.',
+    pts:[`The same language describes friendships, food webs, flights, the internet, brains, even TV series and music.`,
+         `<b>Undirected</b> links go both ways (Facebook friends). <b>Directed</b> links have an arrow (Instagram follows, who eats whom).`,
+         `<b>Weighted</b> links carry a number: flights per week, bandwidth, scenes shared by two characters.`]},
+  {kind:'quiz', nm:'Challenge · Read the downloads'},
+  {kind:'card', anim:'questions', tag:'TRAINING 4', title:'THREE QUESTIONS',
+    vera:'network science asks three questions. they are the same three we ask about NEXUS.', extraCls:'three', extra:`<div><span style="color:var(--green)">DYNAMICS</span><span><b>How do networks form and grow?</b> Why do so different systems end up with similar structures? <em>// how does NEXUS grow? · lectures 3–4</em></span></div>
+     <div><span style="color:var(--amber)">PROCESSES</span><span><b>What flows on a network?</b> Information, opinions, influence: how does the structure shape them? <em>// what does NEXUS spread? · lecture 7</em></span></div>
+     <div><span style="color:var(--violet)">ANALYSIS</span><span><b>Which nodes matter?</b> Which groups exist? How robust is the whole thing? <em>// where is NEXUS weak? · lectures 2, 5, 6</em></span></div>`},
+  {kind:'sort', nm:'Challenge · File the questions'},
+  {kind:'card', anim:'bip', tag:'TRAINING 5', title:'TWO KINDS OF NODES',
+    vera:"one last trick before your first mission. this is the staff list of Helix Labs, the people who built NEXUS.",
+    pts:[`In a <b>bipartite network</b> nodes come in two types, and links only join nodes of different types: researchers ↔ the projects they worked on.`,
+         `<b>Projection</b>: keep only one type, and link two researchers if they worked on the same project. More shared projects, stronger link.`,
+         `The result is a <b>collaboration network</b>: the same way co-authorship networks are built from scientists and the papers they write.`]},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> FIRST MISSION · 00:12`,
+    `VERA: we just intercepted a log from Helix Labs.`,
+    `VERA: it lists the 6 processes NEXUS is running, and the servers each one ran on.`,
+    `VERA: two processes on the same server can exchange data.`,
+    `VERA: project the log: link two processes if they shared a server.`,
+    `VERA: then we'll see who is talking to whom.`,
+    `VERA: hurry. the log wipes itself in 2 minutes.`]},
+  {kind:'boss', nm:'Mission · The projection'},
+  {kind:'end', nm:'Debrief'},
+];
+
+
+
+// --- nodes and links appear, N and E count up
+ANIM.network=(C,cap)=>{
+  const P=[[.12,.3],[.36,.12],[.62,.26],[.88,.14],[.28,.7],[.55,.62],[.82,.72],[.45,.92]];
+  const E=[[0,1],[1,2],[2,3],[0,4],[1,5],[2,5],[4,5],[5,6],[3,6],[4,7],[5,7]];
+  const L=9000;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; const p=fit(P,w,h,40,1.6), s=(t%L)/1000;
+    ctx.clearRect(0,0,w,h);
+    let ne=0, nn=0;
+    E.forEach(([a,b],i)=>{ const k=clamp((s-2.4-i*.22)/.35,0,1); if(k<=0) return; if(k>=1) ne++;
+      const hi=i===4 && s>5 && s<8.2; seg(ctx,p[a],[lerp(p[a][0],p[b][0],k),lerp(p[a][1],p[b][1],k)],hi?COL.mag:COL.cyan,hi?3:2,hi?1:.7); });
+    P.forEach((_,i)=>{ const k=clamp((s-.2-i*.22)/.3,0,1); if(k<=0) return; if(k>=1) nn++;
+      const hi=i===0 && s>1.8 && s<4.8; dot(ctx,p[i][0],p[i][1],9*ease(k),hi?COL.mag:COL.cyan,hi?22:12); });
+    ctx.save(); ctx.globalAlpha=1;
+    if(s>1.8&&s<4.8){ label(ctx,'← node (vertex)',p[0][0]+16,p[0][1],COL.mag,14,'left'); }
+    if(s>5&&s<8.2){ const m=[(p[1][0]+p[5][0])/2,(p[1][1]+p[5][1])/2]; label(ctx,'link (edge) →',m[0]-12,m[1],COL.mag,14,'right'); }
+    ctx.restore();
+    cap.innerHTML=`N = ${nn} &nbsp; E = ${ne}`;
+  };
+};
+
+// --- a lattice morphs into a complex network
+ANIM.complex=(C,cap)=>{
+  const n=25, latE=[]; const latP=[];
+  for(let i=0;i<5;i++) for(let j=0;j<5;j++){ latP.push([j,i]); if(j<4) latE.push([i*5+j,i*5+j+1]); if(i<4) latE.push([i*5+j,(i+1)*5+j]); }
+  const G=commNet([13,12],11,2), cxP=layout(n,G.edges,5);
+  const dL=degrees(n,latE), dC=degrees(n,G.edges);
+  const cc=[COL.cyan,COL.violet];
+  let v=-1, A, B;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return;
+    if(C.v!==v){ v=C.v; A=fit(latP,w,h,34,1.1); B=fit(cxP,w,h,30,1.5); }
+    const s=(t%12000)/1000, m = s<4?0 : s<6?ease((s-4)/2) : s<10?1 : 1-ease((s-10)/2);
+    ctx.clearRect(0,0,w,h);
+    const pos=A.map((a,i)=>[lerp(a[0],B[i][0],m), lerp(a[1],B[i][1],m)]);
+    if(m<1) latE.forEach(([a,b])=>seg(ctx,pos[a],pos[b],COL.cyan,1.5,.55*(1-m)));
+    if(m>0) G.edges.forEach(([a,b])=>seg(ctx,pos[a],pos[b],G.comm[a]===G.comm[b]?cc[G.comm[a]]:COL.ink2,1.5,.6*m));
+    for(let i=0;i<n;i++){ const r=lerp(3+Math.sqrt(dL[i])*1.6, 3+Math.sqrt(dC[i])*2.6, m);
+      const col=m<.5?COL.cyan:cc[G.comm[i]]; dot(ctx,pos[i][0],pos[i][1],r,col,10); }
+    cap.textContent = m<.5 ? 'LATTICE · the same pattern everywhere' : 'COMPLEX · hubs and communities';
+  };
+};
+
+// --- same graph, different systems
+ANIM.every=(C,cap)=>{
+  const n=7, E=[[0,1],[1,2],[0,2],[2,3],[1,4],[3,4],[4,5],[3,6],[5,6],[2,5]], P=layout(n,E,9);
+  const W=[3,1,2,4,2,1,3,2,1,4];
+  const X=[
+    {sys:'FACEBOOK',     icon:['👤'], nodes:'people', links:'friendship', dir:false, w:false},
+    {sys:'INSTAGRAM',    icon:['👤'], nodes:'accounts', links:'follows', dir:true, w:false},
+    {sys:'FOOD WEB',     icon:['🦈','🐟','🦐','🐙','🐠','🦀','🌿'], nodes:'species', links:'who eats whom', dir:true, w:true},
+    {sys:'FLIGHTS',      icon:['🛫'], nodes:'airports', links:'flights', dir:true, w:true},
+    {sys:'INTERNET',     icon:['🖥️'], nodes:'routers, data centres', links:'cables', dir:true, w:true},
+    {sys:'BRAIN',        icon:['🧠'], nodes:'neurons', links:'synapses', dir:true, w:true},
+    {sys:'GAME OF THRONES', icon:['⚔️','👑','🐉','🛡️','🗡️','🏰','🐺'], nodes:'characters', links:'scenes together', dir:false, w:true},
+    {sys:'SPOTIFY',      icon:['🎵'], nodes:'artists', links:'similar sound', dir:false, w:true},
+  ];
+  let v=-1, p;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; if(C.v!==v){ v=C.v; p=fit(P,w,h,44,1.6); }
+    const per=3400, k=Math.floor(t/per)%X.length, f=(t%per)/per, x=X[k], a=f<.12?f/.12:f>.9?(1-f)/.1:1;
+    ctx.clearRect(0,0,w,h);
+    const r=Math.min(20,Math.max(14,w/34));
+    E.forEach(([s,d],i)=>{ const lw=x.w?W[i]*1.4:1.6; if(x.dir) arrow(ctx,p[s],p[d],COL.cyan,lw,.75*a,r); else seg(ctx,p[s],p[d],COL.cyan,lw,.75*a); });
+    p.forEach(([px,py],i)=>{ ctx.save(); ctx.globalAlpha=a; ctx.fillStyle=COL.bg2; ctx.strokeStyle=COL.cyan; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(px,py,r,0,7); ctx.fill(); ctx.stroke();
+      ctx.font=`${r*1.05}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(x.icon[i%x.icon.length],px,py+1); ctx.restore(); });
+    cap.innerHTML=`<span style="color:var(--amber)">${x.sys}</span> · nodes: ${x.nodes} · links: ${x.links}<br>${x.dir?'directed':'undirected'}${x.w?' · weighted':''}`;
+  };
+};
+
+// --- dynamics, processes, analysis on one network
+ANIM.questions=(C,cap)=>{
+  const G=commNet([10,10,10],21,4), n=G.n, P=layout(n,G.edges,13), deg=degrees(n,G.edges);
+  const order=d3range(n).sort((a,b)=>G.birth[a]-G.birth[b]), born=Array(n); order.forEach((v,i)=>born[v]=i);
+  const hub=deg.indexOf(Math.max(...deg));
+  // BFS distances from a peripheral node for the "process" phase
+  const adj=d3range(n).map(()=>[]); G.edges.forEach(([a,b])=>{adj[a].push(b);adj[b].push(a);});
+  const src=order[n-1], dist=Array(n).fill(-1); dist[src]=0; const q=[src]; while(q.length){ const u=q.shift(); for(const x of adj[u]) if(dist[x]<0){dist[x]=dist[u]+1;q.push(x);} }
+  const cc=[COL.cyan,COL.violet,COL.green];
+  let v=-1,p;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; if(C.v!==v){ v=C.v; p=fit(P,w,h,30,1.6); }
+    const s=(t%18000)/1000, ph=Math.floor(s/6), f=s-ph*6;
+    ctx.clearRect(0,0,w,h);
+    if(ph===0){ // DYNAMICS: the network grows
+      const k=Math.floor(clamp(f/4.6,0,1)*n);
+      G.edges.forEach(([a,b])=>{ if(born[a]<k&&born[b]<k) seg(ctx,p[a],p[b],COL.green,1.4,.55); });
+      for(let i=0;i<n;i++) if(born[i]<k) dot(ctx,p[i][0],p[i][1],3+Math.sqrt(deg[i]),born[i]===k-1?COL.ink:COL.green,10);
+      cap.innerHTML='<span style="color:var(--green)">DYNAMICS</span> · how does a network form and grow?';
+    } else if(ph===1){ // PROCESSES: something flows from node to node
+      const sp=f/.55;
+      G.edges.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.dim,1.2,.6));
+      G.edges.forEach(([a,b])=>{ for(const [x,y] of [[a,b],[b,a]]) if(dist[y]===dist[x]+1){ const k=sp-dist[x]; if(k>0&&k<1) dot(ctx,lerp(p[x][0],p[y][0],k),lerp(p[x][1],p[y][1],k),2.6,COL.amber,10); } });
+      for(let i=0;i<n;i++){ const on=sp>=dist[i]; dot(ctx,p[i][0],p[i][1],3+Math.sqrt(deg[i]),on?COL.amber:COL.dim,on?12:0, on?1:.8); }
+      cap.innerHTML='<span style="color:var(--amber)">PROCESSES</span> · what flows on a network?';
+    } else { // ANALYSIS: communities and the hub
+      G.edges.forEach(([a,b])=>seg(ctx,p[a],p[b],G.comm[a]===G.comm[b]?cc[G.comm[a]]:COL.dim,1.4,.5));
+      for(let i=0;i<n;i++) dot(ctx,p[i][0],p[i][1],3+Math.sqrt(deg[i]),cc[G.comm[i]],8);
+      const g=.5+.5*Math.sin(t/220); ring(ctx,p[hub][0],p[hub][1],12+g*5,COL.mag,2.5,.9);
+      label(ctx,'hub',p[hub][0],p[hub][1]-26,COL.mag,13);
+      cap.innerHTML='<span style="color:var(--violet)">ANALYSIS</span> · which nodes and groups matter?';
+    }
+  };
+};
+
+// --- researchers ↔ projects, then the projection
+const CK=['Ada','Ben','Chloe','Dev','Eva','Finn'], TO=[2,3,4,5,0,1], BO=[1,3,5,6,4,7,0,2];
+const IN=['ATLAS','ORION','NEXUS','IRIS','HALO','KITE','LYRA','MOSS'];
+const REC=[[0,1,2],[1,2,4],[3,1,2],[3,2,5],[0,6],[0,7]];
+ANIM.bip=(C,cap)=>{
+  const bE=[]; REC.forEach((r,c)=>r.forEach(i=>bE.push([c,i])));
+  const pE=[]; for(let a=0;a<6;a++) for(let b=a+1;b<6;b++){ const w=REC[a].filter(x=>REC[b].includes(x)).length; if(w) pE.push([a,b,w]); }
+  const PP=layout(6,pE,4);
+  let v=-1, top, bot, proj;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return;
+    if(C.v!==v){ v=C.v; const padx=Math.min(60,w*.09);
+      top=CK.map((_,i)=>[padx+(w-2*padx)*TO[i]/5, h*.22]); bot=IN.map((_,i)=>[padx*.7+(w-1.4*padx)*BO[i]/7, h*.8]); proj=fit(PP,w,h,60,1.8); }
+    const s=(t%13000)/1000, m = s<4.5?0 : s<6.5?ease((s-4.5)/2) : s<11?1 : 1-ease((s-11)/2);
+    ctx.clearRect(0,0,w,h);
+    const pos=top.map((a,i)=>[lerp(a[0],proj[i][0],m), lerp(a[1],proj[i][1],m)]);
+    const fs=w<420?10:12;
+    if(m<1){ bE.forEach(([c,i])=>seg(ctx,pos[c],[bot[i][0],bot[i][1]+m*30],COL.amber,1.2,.5*(1-m)));
+      bot.forEach(([x,y],i)=>{ ctx.save(); ctx.globalAlpha=1-m; ctx.fillStyle=COL.amber; ctx.shadowColor=COL.amber; ctx.shadowBlur=8; ctx.fillRect(x-6,y+m*30-6,12,12); ctx.restore();
+        label(ctx,IN[i],x,y+m*30+(BO[i]%2?30:18),COL.amber,fs); ctx.globalAlpha=1; }); }
+    if(m>0) pE.forEach(([a,b,wt])=>seg(ctx,pos[a],pos[b],COL.cyan,wt*2.2,.8*m));
+    pos.forEach(([x,y],i)=>{ dot(ctx,x,y,8,COL.cyan,14); label(ctx,CK[i],x,y-18,COL.ink,fs+1); });
+    cap.innerHTML = m<.5 ? 'BIPARTITE · <span style="color:var(--cyan)">● researchers</span> ↔ <span style="color:var(--amber)">■ projects</span>' : 'PROJECTION · thicker link = more shared projects';
+  };
+};
+
+/* ---------------- CHALLENGE 1 · COUNT ---------------- */
+BUILD.count=()=>{
+  const key='count'; const done=key in S.xp;
+  setNext('NEXT ▸', done);
+  stage.appendChild(el('div','h',`<small>// CHALLENGE 1</small>COUNT IT`));
+  stage.appendChild(el('div','vera',`<b>VERA:</b> here's a fragment of a network NEXUS saved. how big is it?`));
+  stage.appendChild(el('div','task',`Find <b>N</b> (nodes) and <b>E</b> (links). <span class="tip">Tap nodes and links to mark them while you count.</span>`));
+  if(done) stage.appendChild(el('div','badge',`✓ cleared · +${S.xp[key]} XP`));
+  const P=[[.08,.2],[.36,.06],[.7,.14],[.24,.52],[.58,.42],[.93,.5],[.12,.92],[.5,.86],[.82,.92]];
+  const E=[[0,1],[1,2],[0,3],[1,4],[2,4],[2,5],[3,4],[3,6],[4,7],[6,7],[5,8],[7,8]];
+  const mN=new Set(), mE=new Set(); let p=[], v=-1;
+  const a=el('div','anim'); stage.appendChild(a);
+  const cap=el('div','cap');
+  const C=canvasIn(a,(x,y)=>{
+    let bi=-1,bd=24; p.forEach((q,i)=>{ const d=Math.hypot(q[0]-x,q[1]-y); if(d<bd){bd=d;bi=i;} });
+    if(bi>=0){ mN.has(bi)?mN.delete(bi):mN.add(bi); return; }
+    let be=-1, bd2=14; E.forEach(([s,d],i)=>{ const dd=segDist([x,y],p[s],p[d]); if(dd<bd2){bd2=dd;be=i;} });
+    if(be>=0) mE.has(be)?mE.delete(be):mE.add(be);
+  });
+  a.appendChild(cap);
+  cur.draw=()=>{ const {ctx,w,h}=C; if(!w) return; if(C.v!==v){ v=C.v; p=fit(P,w,h,30,1.7); }
+    ctx.clearRect(0,0,w,h);
+    E.forEach(([s,d],i)=>seg(ctx,p[s],p[d],mE.has(i)?COL.green:COL.cyan,mE.has(i)?3.5:2,mE.has(i)?1:.6));
+    p.forEach(([x,y],i)=>{ dot(ctx,x,y,10,mN.has(i)?COL.green:COL.cyan,12); if(mN.has(i)) label(ctx,'✓',x,y+1,COL.bg,13,'center','Poppins'); });
+    cap.textContent=`marked: ${mN.size} nodes · ${mE.size} links`;
+  };
+  const vals={N:0,E:0};
+  const steps=el('div','steps');
+  for(const k of ['N','E']){ const s=el('div','step'); s.innerHTML=`<span>${k}</span>`; const m=el('button',null,'−'), o=el('output',null,'0'), pl=el('button',null,'+');
+    m.onclick=()=>{ vals[k]=Math.max(0,vals[k]-1); o.textContent=vals[k]; }; pl.onclick=()=>{ vals[k]++; o.textContent=vals[k]; };
+    s.append(m,o,pl); steps.appendChild(s); }
+  stage.appendChild(steps);
+  const fb=el('div','fb'); const chk=el('button','btn-main','CHECK'); chk.style.minHeight='50px'; chk.style.fontSize='15px';
+  stage.append(chk,fb);
+  let tries=0;
+  chk.onclick=()=>{ tries++;
+    const okN=vals.N===9, okE=vals.E===12;
+    if(okN&&okE){ fb.className='fb ok'; const pts=tries===1?20:tries===2?12:6; fb.textContent=`> correct: N = 9, E = 12. ${award(key,pts)?'+'+pts+' XP':''}`; chk.disabled=true; setNext('NEXT ▸',true); }
+    else if(tries>=3){ fb.className='fb info'; fb.textContent=`> the answer is N = 9, E = 12. marked everything for you.`; d3range(9).forEach(i=>mN.add(i)); d3range(12).forEach(i=>mE.add(i)); award(key,0); chk.disabled=true; setNext('NEXT ▸',true); }
+    else { fb.className='fb no'; fb.textContent=`> not quite: ${okN?'N is right, ':'N is wrong, '}${okE?'E is right.':'E is wrong.'} try again.`; }
+  };
+};
+
+/* ---------------- CHALLENGE 2 · SPOT THE COMPLEX NETWORK ---------------- */
+BUILD.spot=()=>{
+  const key='spot'; const done=key in S.xp;
+  setNext('NEXT ▸', done);
+  stage.appendChild(el('div','h',`<small>// CHALLENGE 2</small>SPOT THE REAL ONE`));
+  stage.appendChild(el('div','vera',`<b>VERA:</b> NEXUS ignores toy networks. it only keeps the real, complex ones.`));
+  const task=el('div','task',`Which of these three networks is <b>complex</b>? Tap it.`); stage.appendChild(task);
+  if(done) stage.appendChild(el('div','badge',`✓ cleared · +${S.xp[key]} XP`));
+  // A: ring lattice, B: complex, C: square lattice
+  const ring=[]; const rP=[]; for(let i=0;i<14;i++){ rP.push([Math.cos(i/14*6.283),Math.sin(i/14*6.283)]); ring.push([i,(i+1)%14],[i,(i+2)%14]); }
+  const sq=[], sP=[]; for(let i=0;i<4;i++) for(let j=0;j<4;j++){ sP.push([j,i]); if(j<3) sq.push([i*4+j,i*4+j+1]); if(i<3) sq.push([i*4+j,(i+1)*4+j]); }
+  const cxE=[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,9],[1,2],[3,4],[6,7],[5,7],[8,9],[8,10],[8,11],[8,12],[9,13],[10,14],[13,14],[15,11],[15,12],[7,15]];
+  const cxP=layout(16,cxE,17);
+  const G=[{E:ring,P:rP,n:14},{E:cxE,P:cxP,n:16},{E:sq,P:sP,n:16}];
+  const hubDeg=Math.max(...degrees(16,cxE)), hubs=degrees(16,cxE).map((d,i)=>d===hubDeg?i:-1).filter(i=>i>=0);
+  let stageN=done?2:0, wrong=-1, pick=-1, v=-1, rects=[], fits=[], big=null, tries=0, hubTries=0, pts=0, missHub=-1;
+  const a=el('div','anim'); stage.appendChild(a); const cap=el('div','cap');
+  const fb=el('div','fb');
+  const C=canvasIn(a,(x,y)=>{
+    if(stageN===0){ const k=rects.findIndex(r=>x>=r[0]&&x<=r[0]+r[2]&&y>=r[1]&&y<=r[1]+r[3]); if(k<0) return; tries++;
+      if(k===1){ pts+=tries===1?10:4; stageN=1; fb.className='fb ok'; fb.textContent='> yes: heterogeneous, with a hub and two communities.'; task.innerHTML='Now find its <b>biggest hub</b>: the node with the most links. Tap it.'; v=-1; }
+      else { wrong=k; fb.className='fb no'; fb.textContent= k===0?'> no: every node of this ring has exactly 4 links. too regular.':'> no: a lattice, the same pattern repeated. too regular.'; } }
+    else if(stageN===1){ let bi=-1,bd=26; big.forEach((q,i)=>{ const d=Math.hypot(q[0]-x,q[1]-y); if(d<bd){bd=d;bi=i;} }); if(bi<0) return; hubTries++;
+      if(hubs.includes(bi)){ pts+=hubTries===1?10:4; stageN=2; fb.className='fb ok'; fb.textContent=`> found it: ${hubDeg} links, while most nodes have 2 or 3. ${award(key,pts)?'+'+pts+' XP':''}`; setNext('NEXT ▸',true); }
+      else { missHub=bi; fb.className='fb no'; fb.textContent=`> that node has ${degrees(16,cxE)[bi]} links. someone has more.`; } }
+  });
+  a.appendChild(cap); stage.appendChild(fb);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return;
+    if(C.v!==v){ v=C.v; const gap=8, cw=(w-4*gap)/3; rects=[0,1,2].map(i=>[gap+i*(cw+gap),gap+18,cw,h-2*gap-18]); fits=G.map((g,i)=>fit(g.P,rects[i][2],rects[i][3],14,1.2).map(([x,y])=>[x+rects[i][0],y+rects[i][1]])); big=fit(cxP,w,h,28,1.6); }
+    ctx.clearRect(0,0,w,h); cap.textContent='';
+    if(stageN===0){ G.forEach((g,i)=>{ const f=fits[i], col=i===wrong?COL.red:COL.cyan, r=rects[i];
+        ctx.save(); ctx.strokeStyle=i===wrong?COL.red:COL.line; ctx.lineWidth=1; ctx.strokeRect(r[0],r[1],r[2],r[3]); ctx.restore();
+        label(ctx,'ABC'[i],r[0]+r[2]/2,r[1]-9,COL.ink2,13,'center','Orbitron');
+        g.E.forEach(([s,d])=>seg(ctx,f[s],f[d],col,1.2,.55)); f.forEach(([x,y])=>dot(ctx,x,y,3.4,col,6)); }); }
+    else { cxE.forEach(([s,d])=>seg(ctx,big[s],big[d],COL.violet,1.6,.6));
+      big.forEach(([x,y],i)=>{ const isHub=stageN===2&&hubs.includes(i); dot(ctx,x,y,isHub?11:7,isHub?COL.mag:i===missHub?COL.red:COL.violet,isHub?20:8); });
+      if(stageN===2) hubs.forEach(i=>label(ctx,'hub · '+hubDeg+' links',big[i][0],big[i][1]-22,COL.mag,13)); }
+  };
+};
+
+/* ---------------- CHALLENGE 3 · NEXUS'S DOWNLOADS ---------------- */
+const QUIZ=[
+  {icon:'👥', sys:'FACEBOOK', q:'Friendships on Facebook. Is this network directed or undirected?', o:['Undirected','Directed'], a:0, why:'friendship goes both ways: if I am your friend, you are mine.'},
+  {icon:'📸', sys:'INSTAGRAM', q:'Who follows whom on Instagram. Directed or undirected?', o:['Undirected','Directed'], a:1, why:'I can follow you without you following me back: links have an arrow.'},
+  {icon:'🦈', sys:'FOOD WEB', q:'In a food web the nodes are species. What are the links?', o:['Species living in the same place','Who eats whom','Species of similar size'], a:1, why:'a directed link from prey to predator, weighted by the energy that flows.'},
+  {icon:'🛫', sys:'AIR TRAFFIC', q:'In the air transportation network, what are the nodes?', o:['Flights','Passengers','Airports'], a:2, why:'airports are the nodes; flights between them are the links.'},
+  {icon:'🐉', sys:'GAME OF THRONES', q:'Nodes are characters, linked if they appear together. What could the weight of a link be?', o:['How much they like each other','Number of scenes together','Their age difference'], a:1, why:'a weight measures how strong a link is: here, how often they share a scene.'},
+  {icon:'🧠', sys:'BRAIN', q:'In a biological neural network, nodes are neurons. What are the links?', o:['Synapses','Thoughts','Brain regions'], a:0, why:'synapses: directed and weighted, exactly like in artificial neural networks.'},
+];
+BUILD.quiz=()=>{
+  const allDone=QUIZ.every((_,i)=>('quiz'+i) in S.xp);
+  setNext('NEXT ▸', allDone);
+  stage.appendChild(el('div','h',`<small>// CHALLENGE 3</small>READ THE DOWNLOADS`));
+  stage.appendChild(el('div','vera',`<b>VERA:</b> six datasets NEXUS downloaded last night. tell me what each one is.`));
+  const wrap=el('div'); stage.appendChild(wrap);
+  let i=0;
+  const show=()=>{ const q=QUIZ[i]; wrap.innerHTML='';
+    const c=el('div','qcard fade');
+    c.innerHTML=`<div class="qtop"><div class="qicon">${q.icon}</div><div><div class="qn">FILE ${i+1} / ${QUIZ.length}</div><div class="qsys">${q.sys}</div></div></div><div class="qtext">${q.q}</div>`;
+    const opts=el('div','opts'); const fb=el('div','fb'); let first=true, answered=false;
+    q.o.forEach((o,k)=>{ const b=el('button',null,o); b.onclick=()=>{ if(answered) return;
+      if(k===q.a){ answered=true; b.className='ok'; const pts=first?5:2; const got=award('quiz'+i,pts); fb.className='fb ok'; fb.textContent=`> right: ${q.why} ${got?'+'+pts+' XP':''}`;
+        const nb=el('button','btn-main', i<QUIZ.length-1?'NEXT FILE ▸':'ALL FILES READ ✓'); nb.style.minHeight='48px';
+        if(i<QUIZ.length-1) nb.onclick=()=>{ i++; show(); }; else { nb.disabled=true; setNext('NEXT ▸',true); }
+        c.appendChild(nb); }
+      else { first=false; b.className='no'; b.disabled=true; fb.className='fb no'; fb.textContent='> no. try again.'; } }; opts.appendChild(b); });
+    c.append(opts,fb); wrap.appendChild(c); };
+  show();
+};
+
+/* ---------------- CHALLENGE 4 · SORT THE QUESTIONS ---------------- */
+const SORT=[
+  {q:'How did the world trade network change from 1995 to 2021?', a:'d'},
+  {q:'Which Twitter accounts are the most influential?', a:'a'},
+  {q:'How does an opinion spread among the users of a social network?', a:'p'},
+  {q:'Why do the internet and the web, built by millions of people, grow similar structures?', a:'d'},
+  {q:'Which groups exist in a political debate online?', a:'a'},
+  {q:'How fast does a piece of news travel through a company’s email network?', a:'p'},
+  {q:'How many power stations can fail before the grid falls apart?', a:'a'},
+];
+const BIN={d:'DYNAMICS',p:'PROCESSES',a:'ANALYSIS'};
+BUILD.sort=()=>{
+  const allDone=SORT.every((_,i)=>('sort'+i) in S.xp);
+  setNext('NEXT ▸', allDone);
+  stage.appendChild(el('div','h',`<small>// CHALLENGE 4</small>FILE THE QUESTIONS`));
+  stage.appendChild(el('div','vera',`<b>VERA:</b> my team has questions piling up. file each one under the right family.`));
+  const wrap=el('div'); stage.appendChild(wrap);
+  let i=0;
+  const show=()=>{ const s=SORT[i]; wrap.innerHTML='';
+    const c=el('div','qcard fade'); c.innerHTML=`<div class="qn">QUESTION ${i+1} / ${SORT.length}</div><div class="qtext">“${s.q}”</div>`;
+    const bins=el('div','bins'); const fb=el('div','fb'); let first=true, answered=false;
+    [['d','⟲'],['p','≋'],['a','◎']].forEach(([k,ic])=>{ const b=el('button',k,`<b>${ic}</b>${BIN[k]}`); b.onclick=()=>{ if(answered) return;
+      if(k===s.a){ answered=true; b.style.boxShadow='0 0 18px currentColor'; const pts=first?5:2, got=award('sort'+i,pts); fb.className='fb ok'; fb.textContent=`> filed under ${BIN[k]}. ${got?'+'+pts+' XP':''}`;
+        setTimeout(()=>{ if(i<SORT.length-1){ i++; show(); } else { wrap.innerHTML=''; wrap.appendChild(el('div','fb ok fade','> all questions filed. VERA is impressed.')); setNext('NEXT ▸',true); } }, 900); }
+      else { first=false; b.disabled=true; fb.className='fb no'; fb.textContent='> not this one.'; } }; bins.appendChild(b); });
+    c.append(bins,fb); wrap.appendChild(c); };
+  show();
+};
+
+/* ---------------- BOSS · THE PROJECTION ---------------- */
+const PROC=['P1','P2','P3','P4','P5','P6'], SRV=['S1','S2','S3','S4','S5','S6'];
+const RUN=[[0,1],[1,2,3],[0],[3,4],[4,5],[2,5]];          // servers used by each process
+const TRUE=new Set(); for(let a=0;a<6;a++) for(let b=a+1;b<6;b++) if(RUN[a].some(s=>RUN[b].includes(s))) TRUE.add(a+'-'+b);
+BUILD.boss=()=>{
+  const key='boss'; const done=key in S.xp;
+  setNext('NEXT ▸', done);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// FIRST MISSION</small>THE PROJECTION</div>`;
+  const timer=el('div','timer','2:00'); head.appendChild(timer); stage.appendChild(head);
+  stage.appendChild(el('div','task',`Top: the intercepted log, processes ↔ servers. Bottom: <b>link two processes if they ran on the same server</b>. <span class="tip">Tap a process, then another, to add or remove a link. Tap a server in the log to highlight it.</span>`));
+  if(done) stage.appendChild(el('div','badge',`✓ cleared · +${S.xp[key]} XP`));
+  const p1=el('div','panel'); p1.id='pLog'; const c1=el('div','cap','LOG · processes ↔ servers');
+  const p2=el('div','panel'); p2.id='pProj'; const c2=el('div','cap','YOUR PROJECTION');
+  stage.append(p1,p2);
+  const sel=new Set(); let hiS=-1, hiP=-1, pick=-1, submitted=false, res=null, v1=-1, v2=-1, L1, L2;
+  const C1=canvasIn(p1,(x,y)=>{ lay1(); if(!L1) return; let b=-1,bd=28; L1.srv.forEach((q,i)=>{const d=Math.hypot(q[0]-x,q[1]-y); if(d<bd){bd=d;b=i;}});
+      if(b>=0){ hiS=hiS===b?-1:b; hiP=-1; return; } L1.pr.forEach((q,i)=>{const d=Math.hypot(q[0]-x,q[1]-y); if(d<bd){bd=d;b=i;}}); if(b>=0){ hiP=hiP===b?-1:b; hiS=-1; } else { hiS=hiP=-1; } });
+  p1.appendChild(c1);
+  const C2=canvasIn(p2,(x,y)=>{ lay2(); if(submitted||!L2) return; let b=-1,bd=30; L2.forEach((q,i)=>{const d=Math.hypot(q[0]-x,q[1]-y); if(d<bd){bd=d;b=i;}});
+      if(b<0){ pick=-1; return; } if(pick<0){ pick=b; return; } if(pick===b){ pick=-1; return; }
+      const k=Math.min(pick,b)+'-'+Math.max(pick,b); sel.has(k)?sel.delete(k):sel.add(k); pick=-1; cnt(); });
+  p2.appendChild(c2);
+  const lay1=()=>{ const {w,h}=C1; if(w&&C1.v!==v1){ v1=C1.v; const px=Math.min(50,w*.1); L1={pr:PROC.map((_,i)=>[px+(w-2*px)*i/5,h*.3]), srv:SRV.map((_,i)=>[px+(w-2*px)*i/5,h*.78])}; } };
+  const lay2=()=>{ const {w,h}=C2; if(w&&C2.v!==v2){ v2=C2.v; const r=Math.min(w,h)*.36; L2=PROC.map((_,i)=>[w/2+r*Math.cos(-Math.PI/2+i*Math.PI/3)*(w>h?1.25:1), h/2+8+r*Math.sin(-Math.PI/2+i*Math.PI/3)]); } };
+  const info=el('div','fb info'); stage.appendChild(info);
+  const go2=el('button','btn-main','TRANSMIT TO VERA ▸'); go2.style.minHeight='54px'; go2.style.fontSize='15px'; stage.appendChild(go2);
+  const cnt=()=>{ info.textContent=`> links drawn: ${sel.size}`; }; cnt();
+  // timer
+  const T0=performance.now(), LIM=120; let left=LIM;
+  const tm=setInterval(()=>{ if(submitted) return; left=Math.max(0,LIM-Math.floor((performance.now()-T0)/1000));
+    timer.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`; timer.classList.toggle('calm',left>30);
+    if(left===0){ timer.textContent='LOG WIPED'; } },250);
+  cleanups.push(()=>clearInterval(tm));
+  go2.onclick=()=>{ if(submitted) return; submitted=true; go2.disabled=true;
+    const ok=[...sel].filter(k=>TRUE.has(k)).length, wrong=sel.size-ok, miss=TRUE.size-ok;
+    let pts=Math.max(0, ok*10-wrong*5), bonus= (ok===TRUE.size&&wrong===0)? Math.round(left/4) : 0;
+    res={ok,wrong,miss}; const got=award(key,pts+bonus);
+    info.className= (miss||wrong)?'fb info':'fb ok';
+    info.innerHTML=`> ${ok}/${TRUE.size} links right · ${wrong} wrong · ${miss} missing.`+(bonus?` time bonus +${bonus}.`:'')+(got?` <b>+${pts+bonus} XP</b>`:'')+
+      `<br>> <span style="color:var(--green)">green</span>: correct · <span style="color:var(--red)">red</span>: wrong · <span style="color:var(--amber)">dashed</span>: missed.`;
+    timer.textContent='SENT'; timer.classList.add('calm'); setNext('SEE WHAT VERA FOUND ▸',true); };
+  cur.draw=t=>{
+    { const {ctx,w,h}=C1; if(w){ lay1();
+      ctx.clearRect(0,0,w,h);
+      RUN.forEach((ss,pi)=>ss.forEach(si=>{ const on=si===hiS||pi===hiP; seg(ctx,L1.pr[pi],L1.srv[si],on?COL.amber:COL.ink2,on?3:1.3,on?1:.45); }));
+      L1.srv.forEach(([x,y],i)=>{ const on=i===hiS||(hiP>=0&&RUN[hiP].includes(i)); ctx.save(); ctx.fillStyle=on?COL.amber:COL.bg2; ctx.strokeStyle=COL.amber; ctx.lineWidth=1.5; ctx.shadowColor=COL.amber; ctx.shadowBlur=on?14:0; ctx.fillRect(x-11,y-11,22,22); ctx.strokeRect(x-11,y-11,22,22); ctx.restore(); label(ctx,SRV[i],x,y+25,COL.amber,12); });
+      L1.pr.forEach(([x,y],i)=>{ const on=i===hiP||(hiS>=0&&RUN[i].includes(hiS)); dot(ctx,x,y,on?12:10,on?COL.mag:COL.cyan,on?18:8); label(ctx,PROC[i],x,y-22,on?COL.mag:COL.ink,12); }); } }
+    { const {ctx,w,h}=C2; if(w){ lay2();
+      ctx.clearRect(0,0,w,h);
+      const all=[]; for(let a=0;a<6;a++) for(let b=a+1;b<6;b++) all.push(a+'-'+b);
+      all.forEach(k=>{ const [a,b]=k.split('-').map(Number), s=sel.has(k), tr=TRUE.has(k);
+        if(!submitted){ if(s) seg(ctx,L2[a],L2[b],COL.cyan,3,.9); }
+        else { if(s&&tr) seg(ctx,L2[a],L2[b],COL.green,3.5,1); else if(s) seg(ctx,L2[a],L2[b],COL.red,3,.9); else if(tr) seg(ctx,L2[a],L2[b],COL.amber,2.5,.9,[7,6]); } });
+      L2.forEach(([x,y],i)=>{ if(i===pick){ const g=.5+.5*Math.sin(t/150); ring(ctx,x,y,17+g*3,COL.mag,2.5); }
+        dot(ctx,x,y,12,COL.cyan,12); label(ctx,PROC[i],x,y+1,COL.bg,11,'center','Orbitron'); });
+      if(pick>=0&&!submitted) c2.textContent=`YOUR PROJECTION · ${PROC[pick]} selected, tap another process`; else c2.textContent='YOUR PROJECTION'; } }
+  };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=150?'FIELD AGENT':x>=100?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a);
+  const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: look at your projection. every process reaches every other one, through some server.`,
+    `VERA: they are not separate programs. they are coordinating.`,
+    `VERA: NEXUS isn't running on a network.`,
+    `VERA: NEXUS is a network.`,
+    `> [ PROLOGUE COMPLETE ]`,
+    `VERA: next time I'll teach you to read its map properly. rest, agent. it's going to be a long semester.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `A <b>network</b> G = (V, E): <b>N</b> nodes joined by <b>E</b> links.`,
+      `Real networks are <b>complex</b>: heterogeneous, with <b>hubs</b> and <b>communities</b>, unlike a regular lattice.`,
+      `Links can be <b>directed</b> or <b>undirected</b>, <b>weighted</b> or not.`,
+      `Network science asks about <b>dynamics</b> (how networks grow), <b>processes</b> (what flows on them) and <b>analysis</b> (which nodes and groups matter).`,
+      `A <b>bipartite</b> network has two types of nodes; its <b>projection</b> links nodes of one type that share neighbours.`],
+      'level2.html', 'LEVEL 2 · THE MAP');
+  });
+  // the projected processes multiply and spell NEXUS
+  let v=-1, parts=[], tgt=[], nb=[], t0=null; const R=rng(5);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return;
+    if(C.v!==v){ v=C.v;
+      const oc=document.createElement('canvas'); oc.width=Math.round(w); oc.height=Math.round(h); const o=oc.getContext('2d');
+      let fs=h*.6; o.font=`800 ${fs}px Orbitron, sans-serif`; const tw=o.measureText('NEXUS').width; if(tw>w*.86){ fs*=w*.86/tw; o.font=`800 ${fs}px Orbitron, sans-serif`; } o.textAlign='center'; o.textBaseline='middle'; o.fillStyle='#fff'; o.fillText('NEXUS',w/2,h/2);
+      const d=o.getImageData(0,0,oc.width,oc.height).data, pts=[]; const step=Math.max(5,Math.round(fs/14));
+      for(let y=0;y<oc.height;y+=step) for(let x=0;x<oc.width;x+=step) if(d[(y*oc.width+x)*4+3]>128) pts.push([x+(R()-.5)*2,y+(R()-.5)*2]);
+      tgt=pts; const r6=Math.min(w,h)*.28; const seeds=d3range(6).map(i=>[w/2+r6*Math.cos(-Math.PI/2+i*Math.PI/3), h/2+r6*Math.sin(-Math.PI/2+i*Math.PI/3)]);
+      parts=tgt.map((q,i)=>({from:seeds[i%6], to:q, delay:400+R()*1600}));
+      nb=tgt.map((q,i)=>tgt.map((r,j)=>[Math.hypot(q[0]-r[0],q[1]-r[1]),j]).filter(x=>x[1]!==i).sort((x,y)=>x[0]-y[0]).slice(0,2).filter(x=>x[0]<step*1.6).map(x=>x[1]));
+      parts.seeds=seeds; }
+    const now=performance.now(); if(t0===null) t0=now; const el_=now-t0; ctx.clearRect(0,0,w,h);
+    const pos=parts.map(p=>{ const k=ease(clamp((el_-p.delay)/1400,0,1)); return [lerp(p.from[0],p.to[0],k),lerp(p.from[1],p.to[1],k),k]; });
+    const glitch = Math.sin(t/1700)>.96 ? (R()-.5)*8 : 0;
+    nb.forEach((ns,i)=>ns.forEach(j=>{ if(j>i) seg(ctx,[pos[i][0]+glitch,pos[i][1]],[pos[j][0]+glitch,pos[j][1]],COL.cyan,1,.35*Math.min(pos[i][2],pos[j][2])); }));
+    if(el_<2600){ const a=1-clamp((el_-1800)/800,0,1); TRUE.forEach(k=>{ const [x,y]=k.split('-').map(Number); seg(ctx,parts.seeds[x],parts.seeds[y],COL.green,2.5,a); }); parts.seeds.forEach(s=>dot(ctx,s[0],s[1],9,COL.cyan,14,a)); }
+    pos.forEach(([x,y,k],i)=>{ if(k>0) dot(ctx,x+glitch,y,1.9,(i%17===0)?COL.mag:COL.cyan,6,.4+.6*k); });
+  };
+};
+
+start();
+</script>
+</body>
+</html>

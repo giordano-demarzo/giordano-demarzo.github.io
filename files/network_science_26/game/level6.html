@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Factions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pSoc{height:min(50vh,480px);min-height:300px}
+.brushes{display:flex;gap:6px}
+.brushes button{flex:1;min-height:44px;font-size:11px;padding:0;display:flex;align-items:center;justify-content:center;gap:6px}
+.brushes button i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.brushes button.on{box-shadow:0 0 0 2px var(--ink) inset}
+.qmeter{display:flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--ink2)}
+.qmeter .bar{flex:1;height:12px;border-radius:6px;background:var(--line);position:relative;overflow:hidden}
+.qmeter .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--green);box-shadow:0 0 10px var(--green);transition:width .25s}
+.qmeter .bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--amber)}
+.qmeter span{min-width:72px;text-align:right;color:var(--ink)}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 6</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l6', label:'LEVEL 6', chapter:'LECTURE 6 · THE FACTIONS'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 6 (Lecture 6 · Communities in Networks): THE FACTIONS
+   ===================================================================== */
+const PAL=[COL.cyan,COL.amber,COL.violet,COL.green,COL.mag,COL.red,'#7aa2ff','#ff9f6b'];
+// modularity of a partition (array of labels; any label values)
+function modularity(N, E, lab){ const m=E.length; if(!m) return 0; const deg=degrees(N,E), L={}, K={};
+  E.forEach(([a,b])=>{ if(lab[a]===lab[b]) L[lab[a]]=(L[lab[a]]||0)+1; }); for(let i=0;i<N;i++) K[lab[i]]=(K[lab[i]]||0)+deg[i];
+  let q=0; for(const c in K) q+=(L[c]||0)/m-Math.pow(K[c]/(2*m),2); return q; }
+// stochastic block model
+function sbm(sizes, pin, pout, seed){ const R=rng(seed), grp=[], E=[]; sizes.forEach((s,g)=>{ for(let i=0;i<s;i++) grp.push(g); });
+  const N=grp.length; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++) if(R()<(grp[a]===grp[b]?pin:pout)) E.push([a,b]); return {N,E,grp}; }
+// Louvain, first phase only (local moving), best of several random orders: plenty for small networks
+function localMoving(N, E, restarts=25, seed=1){ const adj=adjOf(N,E), deg=degrees(N,E), m=E.length, R=rng(seed); let best=null, bq=-1, trace=null;
+  for(let r=0;r<restarts;r++){ const lab=d3range(N), tot=deg.slice(), moves=[]; let moved=true, sweeps=0;
+    while(moved&&sweeps<30){ moved=false; sweeps++; const ord=d3range(N).sort(()=>R()-.5);
+      for(const i of ord){ const c0=lab[i], kin={}; adj[i].forEach(j=>{ kin[lab[j]]=(kin[lab[j]]||0)+1; }); tot[c0]-=deg[i];
+        let bc=c0, bg=(kin[c0]||0)-tot[c0]*deg[i]/(2*m); for(const c in kin){ const g=kin[c]-tot[c]*deg[i]/(2*m); if(g>bg+1e-12){ bg=g; bc=+c; } }
+        tot[bc]+=deg[i]; if(bc!==c0){ lab[i]=bc; moved=true; moves.push([i,bc]); } } }
+    const q=modularity(N,E,lab); if(q>bq){ bq=q; best=lab.slice(); trace=moves; } }
+  return {lab:best, q:bq, moves:trace}; }
+// edge betweenness (Brandes), for Girvan–Newman
+function edgeBetweenness(N, adj){ const C={};
+  for(let s=0;s<N;s++){ const St=[], P=Array.from({length:N},()=>[]), sig=Array(N).fill(0), d=Array(N).fill(-1); sig[s]=1; d[s]=0; const Q=[s];
+    while(Q.length){ const v=Q.shift(); St.push(v); for(const w of adj[v]){ if(d[w]<0){ d[w]=d[v]+1; Q.push(w); } if(d[w]===d[v]+1){ sig[w]+=sig[v]; P[w].push(v); } } }
+    const dl=Array(N).fill(0); while(St.length){ const w=St.pop(); for(const v of P[w]){ const c=sig[v]/sig[w]*(1+dl[w]); C[ekey(v,w)]=(C[ekey(v,w)]||0)+c; dl[v]+=c; } } }
+  return C; }
+const compLabels=(N,E)=>comps(N,E).lab;
+const overlap=(adj,i,j)=>{ const ni=new Set(adj[i]), c=adj[j].filter(x=>ni.has(x)).length, den=(adj[i].length-1)+(adj[j].length-1)-c; return den>0?c/den:0; };
+
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> THREE DAYS LATER`,
+    `VERA: the mastermind's files contain the social network of Helix: who works, eats and chats with whom.`,
+    `VERA: the CIRCLE recruited inside it. nobody wears a badge, but loyal groups talk mostly among themselves.`,
+    `VERA: groups densely linked inside and loosely linked to the outside: in network science they are called communities.`,
+    `VERA: let's learn to find them.`]},
+  {kind:'card', anim:'comm', tag:'TRAINING 1', title:'COMMUNITIES',
+    vera:'same people, same links. just look at them the right way.',
+    pts:[`A <b>community</b> is a group of nodes densely linked to each other and sparsely linked to the rest. They come from <b>clustering</b> and <b>homophily</b>: friend circles, research groups, modules in cells.`,
+         `<b>Strong</b> community: every node has more links inside than outside. <b>Weak</b> community: only the group as a whole has more links inside than outside.`,
+         `<b>Community detection</b> splits a network into communities automatically, from its structure alone. It is hard: communities overlap, boundaries are fuzzy, networks are huge. Unlike clustering, there is no distance between points, only links.`]},
+  {kind:'card', anim:'mod', tag:'TRAINING 2', title:'MODULARITY',
+    vera:'a network can be cut in a million ways. we need a score.',
+    pts:[`<b>Modularity</b> Q compares the links inside the communities with those expected in a <b>random network</b> with the same degrees.`,
+         `Q = Σ<sub>c</sub> [ L<sub>c</sub>/E − (K<sub>c</sub>/2E)² ], with L<sub>c</sub> the links inside community c and K<sub>c</sub> the total degree of its nodes.`,
+         `<b>Q &lt; 0</b>: badly grouped. <b>Q = 0</b>: everything in one community. <b>Q &gt; 0</b>: some structure. The <b>maximum</b> of Q marks the best partition.`]},
+  {kind:'steps', key:'q', nm:'Challenge · Score the split', tag:'CHALLENGE 1', title:'SCORE THE SPLIT', items:[] /* filled below */},
+  {kind:'card', anim:'gn', tag:'TRAINING 3', title:'GIRVAN–NEWMAN',
+    vera:'the links between groups carry all the traffic. cut those first.',
+    pts:[`Compute the <b>edge betweenness</b> of every link: how many shortest paths use it. Links between communities have the highest values.`,
+         `<b>Remove</b> the link with the highest betweenness, <b>recompute</b>, repeat: the network falls apart into its communities.`,
+         `The sequence of splits forms a <b>dendrogram</b>; cut it where the <b>modularity</b> is highest.`]},
+  {kind:'card', anim:'louvain', tag:'TRAINING 4', title:'GREEDY AND LOUVAIN',
+    vera:'or the other way around: start from tiny groups and grow them.',
+    pts:[`<b>Greedy modularity</b>: start with every node alone, keep merging the pair of communities that increases Q the most, stop when Q stops growing.`,
+         `<b>Louvain</b>: move single nodes to the neighbouring community that increases Q most, then <b>aggregate</b> each community into a meta-node and repeat. <b>Leiden</b> adds a refinement step that keeps communities well connected.`,
+         `Limits: many different partitions have almost the same Q, and even <b>random</b> networks can reach high Q. Different algorithms can disagree, especially on <b>bridge</b> nodes: test more than one. Community sizes are often <b>fat-tailed</b>.`]},
+  {kind:'steps', key:'alg', nm:'Challenge · Algorithms', tag:'CHALLENGE 2', title:'ALGORITHMS', items:[] /* filled below */},
+  {kind:'card', anim:'form', tag:'TRAINING 5', title:'WHY GROUPS FORM',
+    vera:'the CIRCLE did not need a secret handshake. similar people just stick together.',
+    pts:[`<b>Stochastic block model</b>: assign nodes to groups, then link them at random, with a high probability <b>p<sub>in</sub></b> inside groups and a low <b>p<sub>out</sub></b> between them.`,
+         `<b>Homophily + popularity</b>: new nodes link to nodes that are popular <b>and</b> similar to them. The result is scale-free with communities. In <b>spatial networks</b> (airports, roads, power grids) closeness in space plays the role of similarity.`,
+         `<b>Coevolution</b>: similarity creates links, and links make people more similar over time. Shared <b>affiliations</b> (workplace, school, hobbies) also create groups: a bipartite network and its projection.`]},
+  {kind:'card', anim:'weak', tag:'TRAINING 6', title:'THE STRENGTH OF WEAK TIES',
+    vera:'how does news leave a closed group? not through best friends.',
+    pts:[`<b>Granovetter</b>: people find jobs mostly through <b>acquaintances</b>, not close friends. Close friends know the same things you know.`,
+         `<b>Strong ties</b> sit inside dense groups (triadic closure): they are <b>embedded</b> and redundant. <b>Weak ties</b> are the <b>bridges</b> between groups and bring new information.`,
+         `<b>Edge overlap</b> O<sub>ij</sub> = common neighbours of i and j / [(k<sub>i</sub>−1) + (k<sub>j</sub>−1) − common]. In real phone networks, stronger ties have higher overlap, and removing the <b>low-overlap</b> links first breaks the network fastest.`]},
+  {kind:'steps', key:'ties', nm:'Challenge · Weak or strong', tag:'CHALLENGE 3', title:'WEAK OR STRONG', items:[] /* filled below */},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> 23:30 · HELIX SOCIAL NETWORK`,
+    `VERA: 48 Helix employees and who talks to whom. the CIRCLE recruited one of their groups.`,
+    `VERA: step 1: paint the communities. the modularity meter tells you how good your partition is.`,
+    `VERA: step 2: split the network into its groups, cutting as few links as possible. look for the links that hold the groups together.`]},
+  {kind:'boss', nm:'Mission · The factions'},
+  {kind:'end', nm:'Debrief'},
+];
+const SC=k=>SCENES.find(s=>s.key===k);
+
+/* =====================================================================
+   CONCEPT ANIMATIONS
+   ===================================================================== */
+// --- scrambled nodes settle into coloured communities
+ANIM.comm=(C,cap)=>{
+  const G=sbm([9,9,9],.45,.03,4), P=tame(layout(G.N,G.E,3,400,.3)), R=rng(2), S0=d3range(G.N).map(()=>[R(),R()]);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%10000)/1000, m=s<2?0:s<4?ease((s-2)/2):s<8.5?1:1-ease((s-8.5)/1.5), col=clamp((s-4)/.8,0,1)*(s<8.5?1:1-ease((s-8.5)/1.5));
+    const a=inBox(S0,[0,20,w,h-20],24,1.8), b=inBox(P,[0,20,w,h-20],24,1.6), p=a.map((q,i)=>[lerp(q[0],b[i][0],m),lerp(q[1],b[i][1],m)]);
+    G.E.forEach(([x,y])=>{ const inside=G.grp[x]===G.grp[y]; seg(ctx,p[x],p[y],inside&&col>.5?PAL[G.grp[x]]:COL.ink2,1.3,inside?.6:.35); });
+    p.forEach(([x,y],i)=>dot(ctx,x,y,6,col>.5?PAL[G.grp[i]]:COL.ink2,col>.5?8:2));
+    cap.innerHTML = col>.5 ? '3 communities: dense inside, few links between' : 'a network… are there groups?';
+  };
+};
+// --- four partitions of the same network and their modularity
+ANIM.mod=(C,cap)=>{
+  const G=sbm([8,8,8],.5,.04,6), N=G.N, P=tame(layout(N,G.E,5,400,.3)), R=rng(3);
+  const parts=[[d3range(N).map(()=>0),'everything in one community'],[d3range(N).map(()=>Math.floor(R()*3)),'random groups'],[G.grp.map(g=>g===2?1:g),'two groups merged'],[G.grp.slice(),'the planted communities']].map(([l,nm])=>({l,nm,q:modularity(N,G.E,l)}));
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const k=Math.floor(t/3000)%4, pt=parts[k], p=inBox(P,[0,20,w*.72,h-20],20,1.5);
+    G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],pt.l[a]===pt.l[b]?PAL[pt.l[a]]:COL.ink2,1.2,pt.l[a]===pt.l[b]?.6:.3));
+    p.forEach(([x,y],i)=>dot(ctx,x,y,5.5,PAL[pt.l[i]],6));
+    const x0=w*.8, bw=Math.min(40,w*.12), y0=h*.12, H=h*.72, zero=y0+H*.7, sc=H*.7/.7;
+    seg(ctx,[x0-8,zero],[x0+bw+8,zero],COL.ink2,1);
+    const bh=pt.q*sc; ctx.save(); ctx.fillStyle=pt.q<0?COL.red:COL.green; ctx.globalAlpha=.85; ctx.fillRect(x0,bh>0?zero-bh:zero,bw,Math.abs(bh)); ctx.restore();
+    label(ctx,`Q = ${pt.q.toFixed(2)}`,x0+bw/2,y0-4,pt.q<0?COL.red:COL.green,13); label(ctx,'0',x0-16,zero,COL.ink2,10);
+    cap.textContent=pt.nm;
+  };
+};
+// --- Girvan–Newman: remove the link with the highest edge betweenness, recompute
+const GNDATA=(()=>{ const G=sbm([7,7,7],.6,.06,11), N=G.N; let E=G.E.slice(); const steps=[]; const qs=[];
+  for(let s=0;s<G.E.length&&E.length;s++){ const eb=edgeBetweenness(N,adjOf(N,E)); let bk=null,bv=-1; for(const k in eb) if(eb[k]>bv){ bv=eb[k]; bk=k; }
+    const [a,b]=bk.split('-').map(Number); steps.push({E:E.slice(),eb,cut:[a,b]}); E=E.filter(([x,y])=>ekey(x,y)!==bk); qs.push(modularity(N,G.E,compLabels(N,E))); if(steps.length>=18) break; }
+  return {G,N,steps,qs,best:qs.indexOf(Math.max(...qs)),P:layout(N,G.E,2,400,.3)}; })();
+ANIM.gn=(C,cap)=>{
+  const {G,N,steps,qs,best,P}=GNDATA, STEP=700;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const T=t%((steps.length+4)*STEP), k=Math.min(steps.length-1,Math.floor(T/STEP)), st=steps[k], f=(T%STEP)/STEP;
+    const wide=w>=520, NR=wide?[0,20,w*.62,h-20]:[0,20,w,h*.64-20], QR=wide?[w*.66,40,w*.31,h-80]:[34,h*.66+4,w-50,h*.34-28], p=inBox(P,NR,20,1.5);
+    const mx=Math.max(...Object.values(st.eb)), lab=compLabels(N,st.E);
+    st.E.forEach(([a,b])=>{ const v=st.eb[ekey(a,b)]/mx, isCut=ekey(a,b)===ekey(...st.cut); seg(ctx,p[a],p[b],isCut?COL.red:v>.5?COL.amber:COL.cyan,1+v*4,isCut?1-f*.8:.35+.5*v); });
+    p.forEach(([x,y],i)=>dot(ctx,x,y,5.5,PAL[lab[i]%PAL.length],6));
+    const X=i=>QR[0]+QR[2]*i/(qs.length-1), Y=v=>QR[1]+QR[3]*(1-Math.max(0,v)/.7);
+    seg(ctx,[QR[0],QR[1]+QR[3]],[QR[0]+QR[2],QR[1]+QR[3]],COL.ink2,1); seg(ctx,[QR[0],QR[1]],[QR[0],QR[1]+QR[3]],COL.ink2,1);
+    ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.beginPath(); qs.slice(0,k+1).forEach((q,i)=>{ i?ctx.lineTo(X(i),Y(q)):ctx.moveTo(X(i),Y(q)); }); ctx.stroke(); ctx.restore();
+    if(k>=best){ dot(ctx,X(best),Y(qs[best]),4.5,COL.amber,10); label(ctx,'max Q',X(best),Y(qs[best])-12,COL.amber,10); }
+    label(ctx,'Q',QR[0]-10,QR[1]+4,COL.green,11); label(ctx,'links removed',QR[0]+QR[2]-30,QR[1]+QR[3]+10,COL.ink2,10);
+    cap.innerHTML=`<span style="color:var(--amber)">thick</span> = high edge betweenness · removing <span style="color:var(--red)">the top link</span> · step ${k+1}`;
+  };
+};
+// --- Louvain local moving, then aggregation into meta-nodes
+ANIM.louvain=(C,cap)=>{
+  const G=sbm([7,7,7,7],.55,.04,21), N=G.N, P=layout(N,G.E,4,400,.3), LM=localMoving(N,G.E,12,5), moves=LM.moves, STEP=Math.max(90,4500/moves.length);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const T=t%(moves.length*STEP+7000), k=Math.min(moves.length,Math.floor(T/STEP)), lab=d3range(N); moves.slice(0,k).forEach(([i,c])=>lab[i]=c);
+    const ids=[...new Set(lab)], cmap={}; ids.forEach((c,j)=>cmap[c]=j); const p=inBox(P,[0,20,w,h-20],22,1.6), q=modularity(N,G.E,lab);
+    const agg=k>=moves.length && T>moves.length*STEP+2500, am=agg?ease(clamp((T-moves.length*STEP-2500)/1200,0,1)):0;
+    const cen={}; ids.forEach(c=>{ const m=d3range(N).filter(i=>lab[i]===c); cen[c]=[m.reduce((a,i)=>a+p[i][0],0)/m.length, m.reduce((a,i)=>a+p[i][1],0)/m.length, m.length]; });
+    if(am<1){ G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],lab[a]===lab[b]?PAL[cmap[lab[a]]%PAL.length]:COL.ink2,1.2,(lab[a]===lab[b]?.6:.3)*(1-am)));
+      p.forEach(([x,y],i)=>{ const c=cen[lab[i]]; dot(ctx,lerp(x,c[0],am),lerp(y,c[1],am),5.5,PAL[cmap[lab[i]]%PAL.length],6,1-am*.6); }); }
+    if(am>0){ const W={}; G.E.forEach(([a,b])=>{ if(lab[a]!==lab[b]){ const kk=ekey(lab[a],lab[b]); W[kk]=(W[kk]||0)+1; } });
+      for(const kk in W){ const [a,b]=kk.split('-').map(Number); seg(ctx,cen[a],cen[b],COL.ink2,1+W[kk]*1.5,am*.8); }
+      ids.forEach(c=>dot(ctx,cen[c][0],cen[c][1],(6+Math.sqrt(cen[c][2])*5)*am,PAL[cmap[c]%PAL.length],14,am)); }
+    cap.innerHTML = am>0 ? `aggregation: each community becomes a <b>meta-node</b>, then repeat · Q = ${q.toFixed(2)}` : `local moves: ${k} of ${moves.length} · ${ids.length} communities · Q = ${q.toFixed(2)}`;
+  };
+};
+// --- stochastic block model being generated
+ANIM.form=(C,cap)=>{
+  const sizes=[8,8,8], R=rng(31), grp=[]; sizes.forEach((sz,g)=>{ for(let i=0;i<sz;i++) grp.push(g); }); const N=grp.length;
+  const pairs=[]; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++){ const inside=grp[a]===grp[b]; pairs.push([a,b,R()<(inside?.5:.04),inside]); }
+  const ord=d3range(pairs.length).sort(()=>R()-.5), E=pairs.filter(x=>x[2]).map(x=>[x[0],x[1]]);
+  const S0=d3range(N).map(()=>[R(),R()]), P1=tame(layout(N,E,7,400,.3)), SPEED=70, T1=pairs.length/SPEED;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const T=(t%((T1+8)*1000))/1000, k=Math.min(pairs.length,Math.floor(T*SPEED)), m=T<T1+.6?0:T<T1+2.8?ease((T-T1-.6)/2.2):T<T1+6.5?1:1-ease((T-T1-6.5)/1.5);
+    const a=inBox(S0,[0,22,w,h-22],22,1.8), b=inBox(P1,[0,22,w,h-22],22,1.6), p=a.map((q,i)=>[lerp(q[0],b[i][0],m),lerp(q[1],b[i][1],m)]);
+    for(let q=0;q<k;q++){ const [x,y,on,inside]=pairs[ord[q]]; if(on) seg(ctx,p[x],p[y],inside?PAL[grp[x]]:COL.ink2,1.3,inside?.6:.8); }
+    if(k<pairs.length){ const [x,y,on]=pairs[ord[k]]; seg(ctx,p[x],p[y],on?COL.green:COL.mag,2,.9,on?null:[3,3]); }
+    p.forEach(([x,y],i)=>dot(ctx,x,y,5.5,PAL[grp[i]],8));
+    cap.innerHTML = k<pairs.length ? `every pair: p<sub>in</sub> = 0.5 if same colour, p<sub>out</sub> = 0.04 otherwise · <span style="color:var(--green)">link</span> / <span style="color:var(--mag)">no link</span>`
+      : m<.5 ? 'all links drawn… where are the groups?' : 'rearranged: the colours are communities';
+  };
+};
+// --- strong ties inside, a weak tie between, news crossing the bridge
+ANIM.weak=(C,cap)=>{
+  const A=[0,1,2,3,4,5], B=[6,7,8,9,10,11], E=[]; [A,B].forEach(g=>{ for(let i=0;i<g.length;i++) for(let j=i+1;j<g.length;j++) if((i+j)%4!==3) E.push([g[i],g[j]]); }); E.push([5,6]);
+  const N=12, adj=adjOf(N,E), P=[[.05,.3],[.12,.05],[.3,.0],[.1,.65],[.28,.75],[.4,.38],[.6,.38],[.72,.75],[.9,.65],[.7,0],[.88,.05],[.95,.3]];
+  const bridge=ekey(5,6), inner=ekey(0,1), oB=overlap(adj,5,6), oI=overlap(adj,0,1);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,30,w,h-40],26,1.8);
+    E.forEach(([a,b])=>{ const k=ekey(a,b), br=k===bridge; seg(ctx,p[a],p[b],br?COL.amber:COL.cyan,br?1.2:3.2,br?1:.55,br?[5,4]:null); });
+    const s=(t%7000)/1000, wave=s/.5, dA=bfs(adj,0).d;
+    p.forEach(([x,y],i)=>{ const on=wave>=dA[i]; dot(ctx,x,y,8,on?COL.green:COL.dim,on?12:4); });
+    const mB=[(p[5][0]+p[6][0])/2,(p[5][1]+p[6][1])/2], mI=[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2];
+    label(ctx,`weak tie · O = ${oB.toFixed(2)}`,mB[0],mB[1]-16,COL.amber,12); label(ctx,`strong · O = ${oI.toFixed(2)}`,mI[0]+6,mI[1]-14,COL.cyan,11,'left');
+    cap.innerHTML='news spreads inside a group through strong ties, but reaches the other group only through the <span style="color:var(--amber)">weak tie</span>';
+  };
+};
+
+/* =====================================================================
+   CHALLENGE CONTENT
+   ===================================================================== */
+(()=>{ // score the split
+  const G=sbm([6,6],.7,.08,9), N=G.N, P=bestLayout(N,G.E,8), good=G.grp.slice(), bad=d3range(N).map(i=>i%2);
+  const qG=modularity(N,G.E,good), qB=modularity(N,G.E,bad);
+  const two=(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); [[bad,'A',qB],[good,'B',qG]].forEach(([l,nm,q],k)=>{ const R_=[w/2*k,18,w/2,h-18], p=inBox(P,R_,16,1.4);
+      G.E.forEach(([a,b])=>seg(ctx,p[a],p[b],l[a]===l[b]?PAL[l[a]]:COL.ink2,1.2,.55)); p.forEach(([x,y],i)=>dot(ctx,x,y,5,PAL[l[i]],6)); label(ctx,nm+(done?` · Q = ${q.toFixed(2)}`:''),R_[0]+R_[2]/2,10,COL.ink2,12,'center','Orbitron'); }); };
+  const weakPic=(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h);
+    const P2=[[.2,.25],[.35,.05],[.5,.3],[.3,.55],[.48,.75],[.8,.2],[.92,.55],[.78,.8],[.62,.55]], E2=[[0,1],[1,2],[0,2],[0,3],[3,2],[2,4],[3,4],[4,8],[4,7],[2,8],[5,6],[6,7],[5,8],[7,8],[6,8]], p=inBox(P2,[0,0,w,h],24,1.5), inside=[0,1,2,3,4];
+    E2.forEach(([a,b])=>{ const cross=inside.includes(a)!==inside.includes(b); seg(ctx,p[a],p[b],cross?COL.amber:COL.cyan,cross?2.5:1.6,.8); });
+    p.forEach(([x,y],i)=>{ dot(ctx,x,y,i===4?11:8,inside.includes(i)?COL.cyan:COL.violet,8); }); ring(ctx,p[4][0],p[4][1],16,COL.mag,2);
+    label(ctx,'2 links inside · 3 outside',p[4][0],p[4][1]+28,COL.mag,12); };
+  SC('q').items=[
+    {q:'Two ways to split the same network. Which partition has the higher <b>modularity</b>?', canvas:two, h:'min(28vh,230px)', o:['A','B'], a:1, why:'B puts the densely linked nodes together: many more links inside than a random network would give.'},
+    {icon:'⚪', sys:'ONE BIG GROUP', q:'You put every node in a single community. The modularity is…', o:['Q = 0','Q = 1','Q = −1'], a:0, why:'all links are inside, but that is exactly what a random network would give too.'},
+    {q:'The <span style="color:var(--cyan)">blue</span> group has many more links inside than outside, but the circled node has 2 links inside and 3 outside. The blue community is…', canvas:weakPic, h:'min(28vh,230px)', o:['strong','weak'], a:1, why:'in a strong community every single node has more links inside than outside.'},
+  ];
+})();
+(()=>{ // algorithms
+  const E=[[0,1],[0,2],[1,2],[1,3],[2,3],[3,4],[4,5],[4,6],[5,6],[5,7],[6,7]], N=8, P=[[0,.5],[.2,.1],[.2,.9],[.4,.5],[.6,.5],[.8,.1],[.8,.9],[1,.5]], lab={[ekey(0,1)]:'1',[ekey(3,4)]:'2',[ekey(5,6)]:'3'};
+  const pic=(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,0,w,h],26,2.2);
+    E.forEach(([a,b])=>{ const k=ekey(a,b), L=lab[k]; seg(ctx,p[a],p[b],done&&L==='2'?COL.red:L?COL.amber:COL.cyan,L?3:1.6,.85); if(L){ const m=[(p[a][0]+p[b][0])/2,(p[a][1]+p[b][1])/2]; nodeL(ctx,m[0],m[1],10,COL.bg,''); label(ctx,L,m[0],m[1]+1,COL.amber,13,'center','Orbitron'); } });
+    p.forEach(([x,y])=>dot(ctx,x,y,7,COL.cyan,8)); };
+  SC('alg').items=[
+    {q:'Which numbered link does <b>Girvan–Newman</b> remove first?', canvas:pic, h:'min(24vh,200px)', o:['1','2','3'], a:1, why:'every shortest path between the left and the right group crosses link 2: highest edge betweenness.'},
+    {icon:'🧩', sys:'LOUVAIN', q:'How does the Louvain algorithm start?', o:['Every node in its own community','All nodes in one community','With a random partition'], a:0, why:'then nodes move to the neighbouring community that increases Q most.'},
+    {icon:'🎲', sys:'LIMITS', q:'A purely random network with no real groups is fed to a community detection algorithm. Its modularity…', o:['is always exactly 0','can still be fairly high: a high Q alone does not prove real communities'], a:1, why:'random fluctuations create apparent groups. compare with null models and with other algorithms.'},
+  ];
+})();
+(()=>{ // weak or strong
+  const pic=(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h);
+    const P=[[.3,.5],[.7,.5],[.5,.1],[.5,.9],[.05,.2],[.95,.8]], E=[[0,1],[0,2],[1,2],[0,3],[1,3],[0,4],[1,5]], p=inBox(P,[0,0,w,h],26,1.8);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],a===0&&b===1?COL.mag:COL.cyan,a===0&&b===1?3.5:1.6,.85)); p.forEach(([x,y],i)=>nodeL(ctx,x,y,i<2?13:8,i<2?COL.mag:COL.cyan,i===0?'i':i===1?'j':''));
+    if(done){ ring(ctx,p[2][0],p[2][1],13,COL.green,2); ring(ctx,p[3][0],p[3][1],13,COL.green,2); } };
+  SC('ties').items=[
+    {q:'Node <b>i</b> has 4 links, <b>j</b> has 4 links, and they share 2 neighbours. What is the <b>overlap</b> of the link i–j?', canvas:pic, h:'min(26vh,210px)', o:['2/4','2/(3+3−2) = 1/2','2/8'], a:1, why:'O = common / [(k_i−1)+(k_j−1)−common] = 2/(3+3−2) = 1/2.'},
+    {icon:'💼', sys:'GRANOVETTER', q:'Where do people most often hear about a new job?', o:['From close friends','From acquaintances'], a:1, why:'acquaintances bridge to groups with information you do not have.'},
+    {icon:'🔗', sys:'EMBEDDED', q:'Strong ties (many calls, close friends) tend to have…', o:['high overlap: they sit inside dense groups','low overlap: they bridge groups'], a:0, why:'triadic closure makes strong ties redundant.'},
+    {icon:'✂️', sys:'FRAGMENT', q:'To break a social network into pieces with as few removed links as possible, remove first the links with…', o:['the highest overlap','the lowest overlap'], a:1, why:'low-overlap links are the weak ties bridging communities.'},
+  ];
+})();
+
+/* =====================================================================
+   BOSS · THE FACTIONS
+   ===================================================================== */
+const SOC=(()=>{ // dense groups, few links between them: every link between groups is a weak tie (overlap 0). seed chosen offline
+  const G=sbm([12,12,12,12],.5,.015,21), N=G.N, adj=adjOf(N,G.E), best=localMoving(N,G.E,40,3), P=layout(N,G.E,6,500,.35);
+  const ov={}; G.E.forEach(([a,b])=>ov[ekey(a,b)]=overlap(adj,a,b)); const weak=new Set(Object.keys(ov).filter(k=>ov[k]===0));
+  return {...G, adj, best, P, ov, weak}; })();
+BUILD.boss=()=>{
+  const key='boss', N=SOC.N;
+  setNext('DEBRIEF ▸', key in S.xp);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// MISSION</small>THE FACTIONS</div>`; const tag=el('div','timer calm','STEP 1/2'); head.appendChild(tag); stage.appendChild(head);
+  if(key in S.xp) stage.appendChild(el('div','badge',`✓ best: +${S.xp[key]} XP · replay to improve`));
+  const task=el('div','task'); stage.appendChild(task);
+  const brushes=el('div','brushes'); stage.appendChild(brushes);
+  const meter=el('div','qmeter'); meter.innerHTML=`<span style="min-width:0;color:var(--ink2)">Q</span><div class="bar"><i></i><b></b></div><span id="qv">0.00</span>`; stage.appendChild(meter);
+  const pS=el('div','panel'); pS.id='pSoc'; const cS=el('div','cap',''); stage.appendChild(pS);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const bAct=el('button','btn-main','LOCK PARTITION ▸'); bAct.style.cssText='min-height:54px;font-size:15px'; stage.appendChild(bAct);
+  const lab=d3range(N).map(i=>-1-i); // unpainted nodes: each one alone
+  let brush=0, phase=1, p1=0, v=-1, pos=null, done=false, sel=-1, cut=new Set(), flash=null;
+  const MINCUT=SOC.E.filter(([a,b])=>SOC.grp[a]!==SOC.grp[b]).length;
+  // number of big pieces (≥ 6 people) left after the cuts
+  const pieces=()=>{ const rest=SOC.E.filter(([a,b])=>!cut.has(ekey(a,b))), l=compLabels(N,rest), c={}; l.forEach(x=>c[x]=(c[x]||0)+1); return Object.values(c).filter(n=>n>=6).length; };
+  const QMAX=.8, target=Math.max(SOC.best.q, modularity(N,SOC.E,SOC.grp));
+  const q1=()=>{ const q=modularity(N,SOC.E,lab); meter.querySelector('i').style.width=`${clamp(q/QMAX,0,1)*100}%`; meter.querySelector('#qv').textContent=q.toFixed(2); meter.querySelector('b').style.left=`${clamp(target/QMAX,0,1)*100}%`; return q; };
+  const setTask=()=>{ task.innerHTML = phase===1 ? `<b>Step 1 · paint the communities.</b> Pick a colour, tap people to paint them. Push the modularity as high as you can. <span class="tip">The <span style="color:var(--amber)">amber</span> mark on the meter is what our algorithm found.</span>`
+    : `<b>Step 2 · split the network.</b> Cut links until the network falls apart into its groups, with <b>as few cuts as possible</b>. Tap the two ends of a link to cut it. <span class="tip">Hint: groups are held together by <b>weak ties</b>, links whose two ends have no friend in common (low overlap).</span>`; };
+  setTask();
+  ['cyan','amber','violet','green'].forEach((c,k)=>{ const b=el('button',k===0?'on':null,`<i style="background:${PAL[k]}"></i>${k+1}`); b.onclick=()=>{ brush=k; [...brushes.children].forEach((x,j)=>x.classList.toggle('on',j===k)); }; brushes.appendChild(b); });
+  const er=el('button',null,'✕'); er.title='erase'; er.onclick=()=>{ brush=-1; [...brushes.children].forEach((x,j)=>x.classList.toggle('on',j===4)); }; brushes.appendChild(er);
+  const lay=()=>{ const {w,h}=C; if(w&&C.v!==v){ v=C.v; pos=inBox(SOC.P,[0,16,w,h-16],16,1.6); } };
+  const C=canvasIn(pS,(x,y)=>{ lay(); if(!pos||done) return; const b=nearest(pos,x,y,20);
+    if(phase===1){ if(b<0) return; lab[b]=brush<0?-1-b:brush; q1(); return; }
+    if(b<0){ sel=-1; return; } if(sel<0||sel===b){ sel=sel===b?-1:b; return; }
+    const k=ekey(sel,b), a0=sel; sel=-1;
+    if(!(k in SOC.ov)){ info.className='fb no'; info.textContent='> those two are not linked.'; return; }
+    if(cut.has(k)) return;
+    const common=SOC.adj[a0].filter(x=>SOC.adj[b].includes(x)).length; cut.add(k); flash=[a0,b,performance.now()];
+    const big=pieces(); info.className=common?'fb no':'fb ok';
+    info.textContent=`> cut ${cut.size}: ${common} common friend${common===1?'':'s'} (overlap ${SOC.ov[k].toFixed(2)})${common?', a strong tie: probably inside a group':', a weak tie'} · network in ${big} big piece${big===1?'':'s'}`;
+    if(big>=4) finish(); });
+  pS.appendChild(cS);
+  q1();
+  const finish=()=>{ if(done) return; done=true; const split=pieces()>=4, extra=Math.max(0,cut.size-MINCUT), p2=split?Math.max(10,50-4*extra):Math.round(10*pieces()/4), tot=p1+p2, prev=S.xp[key]||0;
+    if(tot>prev||!(key in S.xp)){ S.xp[key]=Math.max(tot,prev); save(); updXP(Math.max(0,tot-prev)); }
+    const weakCut=[...cut].filter(k=>SOC.weak.has(k)).length;
+    tag.textContent='DONE'; bAct.style.display='none';
+    info.className='fb ok'; info.innerHTML=(split?`> split into its 4 groups with ${cut.size} cuts (minimum ${MINCUT}) → <b>+${p2}</b>`:`> not split yet: ${pieces()} big piece${pieces()===1?'':'s'} → <b>+${p2}</b>`)+
+      ` · communities ${p1} + split ${p2} = <b>${tot} XP</b><br>> ${weakCut} of your ${cut.size} cuts were weak ties (overlap 0). the links between groups are exactly the weak ties: that is the strength of weak ties.`;
+    const rb=el('button',null,'↻ RETRY'); rb.style.minHeight='48px'; rb.onclick=()=>go(idx); stage.appendChild(rb); setNext('DEBRIEF ▸',true); };
+  bAct.onclick=()=>{
+    if(phase===1){ const q=q1(); p1=Math.round(50*clamp(q/target,0,1)); phase=2; tag.textContent='STEP 2/2'; brushes.style.display='none'; meter.style.display='none'; bAct.textContent='STOP HERE ▸';
+      info.className=q>=target-.005?'fb ok':'fb info'; info.innerHTML=`> step 1: your Q = ${q.toFixed(2)}, algorithm ${target.toFixed(2)} → <b>+${p1}</b>`; setTask(); return; }
+    finish(); };
+  cur.draw=t=>{ lay(); const {ctx,w,h}=C; if(!w||!pos) return; ctx.clearRect(0,0,w,h);
+    if(phase===1){ SOC.E.forEach(([a,b])=>{ const same=lab[a]>=0&&lab[a]===lab[b]; seg(ctx,pos[a],pos[b],same?PAL[lab[a]]:COL.ink2,1.2,same?.6:.3); });
+      pos.forEach(([x,y],i)=>dot(ctx,x,y,7,lab[i]>=0?PAL[lab[i]]:COL.ink2,lab[i]>=0?8:0,lab[i]>=0?1:.8));
+      cS.textContent=`${lab.filter(l=>l>=0).length}/${N} painted`; return; }
+    const col=i=>done?PAL[SOC.grp[i]]:lab[i]>=0?PAL[lab[i]]:COL.ink2;
+    SOC.E.forEach(([a,b])=>{ const k=ekey(a,b); if(cut.has(k)){ seg(ctx,pos[a],pos[b],COL.red,1.2,.45,[4,4]); return; }
+      const hot=sel>=0&&(a===sel||b===sel); seg(ctx,pos[a],pos[b],hot?COL.mag:COL.ink2,hot?2.2:1.1,hot?.9:.4); });
+    if(flash&&performance.now()-flash[2]<900) seg(ctx,pos[flash[0]],pos[flash[1]],COL.amber,3.5,1);
+    pos.forEach(([x,y],i)=>{ dot(ctx,x,y,7,col(i),6,lab[i]>=0||done?1:.8); if(i===sel){ const g=.5+.5*Math.sin(t/150); ring(ctx,x,y,11+g*2,COL.mag,2.5); } });
+    cS.textContent=`cuts: ${cut.size} · big pieces: ${pieces()} · tap a person to see their links`; };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=130?'PROFILER':x>=90?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a); const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: the network has fallen apart into its groups. the CIRCLE's faction is on its own.`,
+    `VERA: but before going dark they released something: a new NEXUS agent that copies itself from device to device, person to person.`,
+    `VERA: it doesn't need servers anymore. it spreads.`,
+    `> [ LEVEL 6 COMPLETE ]`,
+    `VERA: next time: processes on networks. we need to understand how things spread.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `<b>Communities</b>: dense inside, sparse outside; <b>strong</b> (every node) or <b>weak</b> (the group as a whole).`,
+      `<b>Modularity</b> Q compares internal links with a random network with the same degrees; higher is better, but many partitions are almost as good.`,
+      `<b>Girvan–Newman</b> removes high edge-betweenness links; <b>greedy</b>, <b>Louvain</b> and <b>Leiden</b> optimise modularity.`,
+      `Communities form through <b>homophily</b>: stochastic block model, homophilic attachment, spatial networks, coevolution, affiliations.`,
+      `<b>Weak ties</b> (low overlap) bridge communities and carry new information; removing them fragments a network fastest.`],
+      'level7.html', 'LEVEL 7 · THE OUTBREAK');
+  });
+  // the cells drift apart, then a single copy starts jumping between people
+  const N=SOC.N, P=SOC.P; let t0=null;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; const now=performance.now(); if(t0===null) t0=now; const s=(now-t0)/1000; ctx.clearRect(0,0,w,h);
+    const p0=inBox(P,[w*.15,h*.15,w*.7,h*.7],12,1.6), d=Math.min(1,s/2), cen=[0,1,2,3].map(g=>{ const m=d3range(N).filter(i=>SOC.grp[i]===g); return [m.reduce((a,i)=>a+p0[i][0],0)/m.length, m.reduce((a,i)=>a+p0[i][1],0)/m.length]; });
+    const p=p0.map(([x,y],i)=>{ const c=cen[SOC.grp[i]]; return [x+(c[0]-w/2)*d*.35, y+(c[1]-h/2)*d*.35]; });
+    SOC.E.forEach(([a,b])=>{ const same=SOC.grp[a]===SOC.grp[b]; if(!same&&d>.3) return; seg(ctx,p[a],p[b],PAL[SOC.grp[a]],1,.5); });
+    p.forEach(([x,y],i)=>dot(ctx,x,y,4,PAL[SOC.grp[i]],5));
+    if(s>3){ const k=Math.floor((s-3)*2.5), path=[0]; const adj=SOC.adj; for(let j=0;j<k&&j<30;j++){ const c=path[path.length-1], nb=adj[c]; path.push(nb[(j*5+3)%nb.length]); }
+      for(let j=1;j<path.length;j++) seg(ctx,p[path[j-1]],p[path[j]],COL.mag,2,.8); dot(ctx,p[path[path.length-1]][0],p[path[path.length-1]][1],6,COL.mag,16); }
+  };
+};
+
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pOrg{height:min(52vh,500px);min-height:300px}
+.lens{display:flex;gap:6px;flex-wrap:wrap}
+.lens button{flex:1;min-width:70px;min-height:40px;font-size:11px;padding:4px 6px}
+.lens button.on{border-color:var(--amber);color:var(--amber);background:rgba(255,194,61,.12)}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 5</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l5', label:'LEVEL 5', chapter:'LECTURE 5 · THE CIRCLE'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 5 (Lecture 5 · Measuring Node Centrality): THE CIRCLE
+   ===================================================================== */
+// --- centrality measures (unweighted, undirected unless stated)
+function betweenness(N, adj, rem=new Set()){ const C=Array(N).fill(0);
+  for(let s=0;s<N;s++){ if(rem.has(s)) continue; const St=[], P=Array.from({length:N},()=>[]), sig=Array(N).fill(0), d=Array(N).fill(-1); sig[s]=1; d[s]=0; const Q=[s];
+    while(Q.length){ const v=Q.shift(); St.push(v); for(const w of adj[v]){ if(rem.has(w)) continue; if(d[w]<0){ d[w]=d[v]+1; Q.push(w); } if(d[w]===d[v]+1){ sig[w]+=sig[v]; P[w].push(v); } } }
+    const dl=Array(N).fill(0); while(St.length){ const w=St.pop(); for(const v of P[w]) dl[v]+=sig[v]/sig[w]*(1+dl[w]); if(w!==s) C[w]+=dl[w]; } }
+  return C.map(x=>x/2); }
+function closeness(N, adj, rem=new Set()){ return d3range(N).map(i=>{ if(rem.has(i)) return 0; const d=Array(N).fill(-1); d[i]=0; const Q=[i]; let s=0, r=0;
+  while(Q.length){ const v=Q.shift(); for(const w of adj[v]) if(!rem.has(w)&&d[w]<0){ d[w]=d[v]+1; s+=d[w]; r++; Q.push(w); } } return s?(r/s)*(r/(N-1-rem.size||1)):0; }); }
+function eigenvector(N, adj, rem=new Set(), it=100){ let x=Array(N).fill(1); for(let k=0;k<it;k++){ const y=x.map((v,i)=>rem.has(i)?0:v+adj[i].reduce((a,j)=>a+(rem.has(j)?0:x[j]),0)); const m=Math.max(...y)||1; x=y.map(v=>v/m); } return x; }
+function degreeC(N, adj, rem=new Set()){ return d3range(N).map(i=>rem.has(i)?0:adj[i].filter(j=>!rem.has(j)).length); }
+function pagerank(N, D, beta=.15){ const out=Array.from({length:N},()=>[]); D.forEach(([a,b])=>out[a].push(b)); let p=Array(N).fill(1/N);
+  for(let it=0;it<120;it++){ const q=Array(N).fill(0); let dang=0; for(let i=0;i<N;i++){ if(out[i].length) out[i].forEach(j=>q[j]+=(1-beta)*p[i]/out[i].length); else dang+=p[i]; }
+    for(let i=0;i<N;i++) q[i]+=beta/N+(1-beta)*dang/N; p=q; } return p; }
+const argmax=a=>a.indexOf(Math.max(...a));
+const largest=(N,adj,rem)=>{ const seen=new Uint8Array(N); let b=0; for(let i=0;i<N;i++){ if(seen[i]||rem.has(i)) continue; const c=[i]; seen[i]=1; for(let h=0;h<c.length;h++) for(const u of adj[c[h]]) if(!seen[u]&&!rem.has(u)){ seen[u]=1; c.push(u); } b=Math.max(b,c.length); } return b; };
+// --- covert organisation: cells of 10 (a cell leader + 9 members) joined by brokers
+function cellNet(nc, seed){ const R=rng(seed), E=[], has=new Set(), add=(a,b)=>{ if(a===b||has.has(ekey(a,b))) return; has.add(ekey(a,b)); E.push([a,b]); };
+  for(let c=0;c<nc;c++){ const L=c*10, mem=d3range(9).map(i=>L+1+i);
+    mem.sort(()=>R()-.5).slice(0,7).forEach(m=>add(L,m));
+    for(let i=0;i<9;i++) for(let j=i+1;j<9;j++) if(R()<.22) add(mem[i],mem[j]);
+    mem.forEach(m=>{ if(!E.some(([a,b])=>a===m||b===m)) add(L,m); }); }
+  for(let c=0;c<nc;c++){ const b=nc*10+c, c2=(c+1)%nc, pick=cc=>d3range(9).map(i=>cc*10+1+i).sort(()=>R()-.5).slice(0,2); pick(c).forEach(m=>add(b,m)); pick(c2).forEach(m=>add(b,m)); }
+  return {N:nc*11, E, has, add}; }
+
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> ONE WEEK LATER`,
+    `VERA: NEXUS is quiet. but somebody built it, and somebody hid it for months.`,
+    `VERA: the Helix logs point to a group of people. we call them the CIRCLE.`,
+    `VERA: we have their message traffic: who writes to whom. a network, again.`,
+    `VERA: but in a hidden organisation the person that matters most is rarely the one with the most contacts.`,
+    `VERA: we need better ways to measure importance.`]},
+  {kind:'card', anim:'central', tag:'TRAINING 1', title:'WHO MATTERS?',
+    vera:'same network, four ways of asking who is important.',
+    pts:[`A <b>centrality</b> measures how important a node is from its <b>position</b> in the network, not just from how many links it has.`,
+         `Importance can mean different things: having many contacts, having <b>important</b> contacts, sitting <b>between</b> groups, being <b>close</b> to everyone.`,
+         `Two families: <b>degree-based</b> centralities (degree, eigenvector, PageRank) and <b>path-based</b> ones (betweenness, closeness). They often agree, but not always.`]},
+  {kind:'card', anim:'eig', tag:'TRAINING 2', title:'IMPORTANT FRIENDS',
+    vera:'one contact with a boss can be worth more than ten with nobodies.',
+    pts:[`<b>Eigenvector centrality</b>: a node is important if its neighbours are important. x<sub>i</sub> is proportional to the sum of the x<sub>j</sub> of its neighbours.`,
+         `In matrix form λx = A·x: x is the leading <b>eigenvector</b> of the adjacency matrix.`,
+         `It can be computed by repetition: start with everyone equal, give each node the sum of its neighbours' scores, rescale, and repeat until nothing changes.`]},
+  {kind:'card', anim:'pr', tag:'TRAINING 3', title:'THE RANDOM COURIER',
+    vera:'the CIRCLE passes orders and reports along chains of people. imagine a courier who just keeps forwarding.',
+    pts:[`<b>PageRank</b> treats an incoming link as a <b>vote</b>. Votes from important nodes weigh more, and a node with many out-links splits its vote among them.`,
+         `P(i) = (1−β) Σ<sub>j→i</sub> P(j)/k<sub>j</sub><sup>out</sup> + β/N. Solved by repetition, like eigenvector centrality.`,
+         `Equivalently: a <b>random walker</b> follows out-links at random; P(i) is the fraction of time it spends at node i.`,
+         `<b>Dead ends</b> (no out-links) and <b>traps</b> would capture the walker forever: so with probability <b>β ≈ 0.15</b> it <b>teleports</b> to a random node. Teleporting only into a chosen group gives a ranking <b>specific to that group</b>.`]},
+  {kind:'steps', key:'rank', nm:'Challenge · Follow the courier', tag:'CHALLENGE 1', title:'FOLLOW THE COURIER', items:[] /* filled below */},
+  {kind:'card', anim:'betw', tag:'TRAINING 4', title:'THE BROKER',
+    vera:'watch where the messages between the two groups have to pass.',
+    pts:[`<b>Betweenness centrality</b>: how many shortest paths between other nodes pass through a node.`,
+         `Compute all shortest paths, count how many go through each node, normalise by the number of pairs.`,
+         `Nodes with high betweenness are <b>brokers</b> or <b>bridges</b>: they control the flow between groups, even with few links. Removing them breaks the network apart.`]},
+  {kind:'card', anim:'close', tag:'TRAINING 5', title:'CLOSE TO EVERYONE',
+    vera:'whoever needs to reach everybody fast sits here.',
+    pts:[`<b>Closeness centrality</b>: the inverse of the average distance from a node to all the others, C<sub>i</sub> = (N−1) / Σ<sub>j</sub> d(i,j).`,
+         `High closeness means reaching everybody in few steps: ideal to <b>spread</b> information or orders quickly.`]},
+  {kind:'steps', key:'pick', nm:'Challenge · Four kinds of important', tag:'CHALLENGE 2', title:'FOUR KINDS OF IMPORTANT', unit:'TASK', items:[] /* filled below */},
+  {kind:'card', anim:'covert', tag:'TRAINING 6', title:'HOW HIDDEN GROUPS WORK',
+    vera:'the CIRCLE did not organise like a company. it organised to stay invisible.',
+    pts:[`Covert organisations trade <b>efficiency for secrecy</b>: members keep very <b>few contacts</b>, often in small cells. One member caught exposes little.`,
+         `The price is slow communication over long paths. To coordinate, they hold occasional <b>meetings</b> that add temporary <b>shortcuts</b>, and expose who connects the cells.`,
+         `The formal <b>leader</b> is not always the key node. <b>Brokers</b> with high betweenness, often ordinary members, hold the structure together.`,
+         `The data are always <b>incomplete</b>, and the network <b>adapts</b> after every intervention.`]},
+  {kind:'card', anim:'target', tag:'TRAINING 7', title:'TAKING IT APART',
+    vera:'if we want the CIRCLE to fall into pieces, who do we cut off first?',
+    pts:[`Instead of random interventions, <b>rank members by centrality</b> and act on the top ones first.`,
+         `To fragment a network made of groups, <b>betweenness</b> is usually the most efficient: it finds the bridges between cells, which degree misses.`,
+         `<b>Recompute</b> the centralities after every removal: the network has changed, and the organisation reorganises.`]},
+  {kind:'steps', key:'cov', nm:'Challenge · Think like them', tag:'CHALLENGE 3', title:'THINK LIKE THEM', items:[
+    {icon:'🕶️', sys:'SECRECY', q:'Why do covert organisations keep so few contacts per member?', o:['So that one member caught exposes only a small part of the network','To communicate faster','Because they are a random network'], a:0, why:'sparse cells limit the damage of a single exposure, at the price of slow communication.'},
+    {icon:'✂️', sys:'FRAGMENTATION', q:'To split an organisation of cells into isolated pieces with as few removals as possible, target members with the highest…', o:['degree','betweenness','closeness'], a:1, why:'betweenness finds the bridges between cells.'},
+    {icon:'🔁', sys:'ADAPTATION', q:'After cutting off one member, what should you do before the next move?', o:['Keep using the initial ranking','Recompute the centralities on the new network'], a:1, why:'the paths have changed, and the organisation may create new links.'},
+    {icon:'👑', sys:'LEADERS', q:'Why is the formal leader not always the best member to remove?', o:['Leaders never have many links','Ordinary members acting as brokers can hold the structure together more than the leader'], a:1, why:'social position (betweenness) can matter more than rank.'}]},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> 22:00 · OPERATION CIRCLE`,
+    `VERA: this is the CIRCLE: 45 people and the contacts between them.`,
+    `VERA: step 1: reports flow up their chain of command. find the mastermind, the one all the important reports end up with.`,
+    `VERA: step 2: we can cut off the communications of only 4 people before the others go dark. split the CIRCLE into isolated pieces.`,
+    `VERA: you can look at the network through any centrality you like. choose wisely: they will react.`]},
+  {kind:'boss', nm:'Mission · Operation Circle'},
+  {kind:'end', nm:'Debrief'},
+];
+const SC=k=>SCENES.find(s=>s.key===k);
+
+/* =====================================================================
+   CONCEPT ANIMATIONS
+   ===================================================================== */
+const LENS=[['DEGREE',degreeC,COL.cyan],['BETWEENNESS',betweenness,COL.amber],['CLOSENESS',closeness,COL.green],['EIGENVECTOR',eigenvector,COL.violet]];
+const norm=a=>{ const m=Math.max(...a)||1; return a.map(v=>v/m); };
+// --- one network, four centralities
+ANIM.central=(C,cap)=>{
+  const E=[[0,1],[0,2],[0,3],[0,4],[1,2],[3,4],[0,5],[5,6],[6,7],[7,8],[7,9],[7,10],[8,9],[9,10],[8,10],[10,11],[6,12],[12,13],[12,14],[13,14]], n=15, adj=adjOf(n,E), P=bestLayout(n,E,10);
+  const V=LENS.map(([nm,f,col])=>({nm,col,v:norm(f(n,adj))}));
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const k=Math.floor(t/3200)%4, L=V[k], p=inBox(P,[0,20,w,h-20],26,1.6), top=argmax(L.v);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1.4,.45));
+    p.forEach(([x,y],i)=>dot(ctx,x,y,3+L.v[i]*12,L.col,i===top?18:6,.35+.65*L.v[i]));
+    const g=.5+.5*Math.sin(t/200); ring(ctx,p[top][0],p[top][1],3+12+5+g*3,COL.mag,2);
+    cap.innerHTML=`<span style="color:${L.col}">${L.nm}</span> · node size = centrality · <span style="color:var(--mag)">top node</span>`;
+  };
+};
+// --- eigenvector centrality by repetition
+ANIM.eig=(C,cap)=>{
+  const G=commNet([7,7],4,1), n=G.n, E=G.edges, adj=adjOf(n,E), P=bestLayout(n,E,6);
+  const steps=[Array(n).fill(1)]; for(let k=0;k<8;k++){ const x=steps[k], y=x.map((v,i)=>v+adj[i].reduce((a,j)=>a+x[j],0)), m=Math.max(...y); steps.push(y.map(v=>v/m)); }
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const T=t%14000, k=Math.min(8,Math.floor(T/1300)), f=clamp((T%1300)/500,0,1), x=steps[k].map((v,i)=>k?lerp(steps[k-1][i],v,ease(f)):v), p=inBox(P,[0,20,w,h-20],26,1.6);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1.4,.5));
+    if(k&&f<1) E.forEach(([a,b])=>{ const q=ease(f); dot(ctx,lerp(p[a][0],p[b][0],q),lerp(p[a][1],p[b][1],q),2,COL.violet,6,.8); dot(ctx,lerp(p[b][0],p[a][0],q),lerp(p[b][1],p[a][1],q),2,COL.violet,6,.8); });
+    p.forEach(([px,py],i)=>{ dot(ctx,px,py,3+x[i]*12,COL.violet,8,.4+.6*x[i]); });
+    cap.innerHTML = k===0 ? 'start: everyone equal' : `step ${k}: each node gets the sum of its neighbours' scores${k>=6?' · converged':''}`;
+  };
+};
+// --- PageRank as a random courier
+const PRG=(()=>{ // a small directed chain of reports, with a dead end (Z)
+  const L=['A','B','C','D','E','F','G','H','Z'], D=[[0,1],[1,2],[2,0],[3,2],[4,2],[5,4],[6,4],[7,6],[2,8],[4,7],[1,3],[6,5]];
+  return {L, D, n:L.length, P:layout(L.length,D,5,400,.4), pr:pagerank(L.length,D)}; })();
+ANIM.pr=(C,cap)=>{
+  const {L,D,n,P,pr}=PRG, out=d3range(n).map(i=>D.filter(e=>e[0]===i).map(e=>e[1])), R=rng(5);
+  let pos=0, prev=0, tp=false, last=0, visits=Array(n).fill(0), steps=0, loop=-1;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const L0=Math.floor(t/26000); if(L0!==loop){ loop=L0; visits=Array(n).fill(0); steps=0; pos=0; prev=0; last=t; }
+    const STEP=steps<12?520:140; if(t-last>STEP){ last=t; prev=pos; tp=false; if(!out[pos].length||R()<.15){ pos=Math.floor(R()*n); tp=true; } else pos=out[pos][Math.floor(R()*out[pos].length)]; visits[pos]++; steps++; }
+    const wide=w>=520, NR=wide?[0,20,w*.58,h-20]:[0,20,w,h*.6-20], BR=wide?[w*.6,30,w*.38,h-60]:[14,h*.62,w-28,h*.38-26], p=inBox(P,NR,26,1.5);
+    D.forEach(([a,b])=>arrow(ctx,p[a],p[b],COL.cyan,1.6,.6,13));
+    const f=clamp((t-last)/STEP*1.6,0,1); if(tp) seg(ctx,p[prev],p[pos],COL.mag,1.5,.6*(1-f),[4,5]);
+    p.forEach(([x,y],i)=>nodeL(ctx,x,y,12,i===8?COL.ink2:COL.cyan,L[i]));
+    const cx=tp?p[pos][0]:lerp(p[prev][0],p[pos][0],f), cy=tp?p[pos][1]:lerp(p[prev][1],p[pos][1],f); dot(ctx,cx,cy,6,COL.amber,18);
+    const tot=Math.max(1,steps), bw=BR[2]/n, mx=Math.max(...pr)*1.25;
+    for(let i=0;i<n;i++){ const v=visits[i]/tot, bh=(BR[3]-20)*Math.min(1,v/mx), x=BR[0]+i*bw; ctx.save(); ctx.fillStyle=COL.amber; ctx.globalAlpha=.8; ctx.fillRect(x+2,BR[1]+BR[3]-16-bh,bw-4,bh); ctx.restore();
+      const py=BR[1]+BR[3]-16-(BR[3]-20)*pr[i]/mx; seg(ctx,[x+1,py],[x+bw-1,py],COL.mag,2); label(ctx,L[i],x+bw/2,BR[1]+BR[3]-6,COL.ink2,11); }
+    cap.innerHTML=`<span style="color:var(--amber)">● courier</span> · ${steps} steps · bars: time spent at each node · <span style="color:var(--mag)">—</span> PageRank${tp?' · <span style="color:var(--mag)">teleport!</span>':''}`;
+  };
+};
+// --- betweenness: shortest paths between two groups all cross the broker
+ANIM.betw=(C,cap)=>{
+  const A=[[0,1],[0,2],[1,2],[1,3],[2,3],[0,3],[3,4]], B=[[6,7],[6,8],[7,8],[7,9],[8,9],[6,9],[9,10]], E=[...A,...B,[4,5],[5,6]], n=11, adj=adjOf(n,E), P=[[.05,.3],[.15,.05],[.18,.6],[.3,.3],[.4,.55],[.5,.5],[.62,.45],[.82,.1],[.75,.75],[.92,.4],[.98,.85]];
+  const bt=norm(betweenness(n,adj)), dg=degreeC(n,adj), R=rng(3); let parts=[], last=0;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,22,w,h-22],26,1.8);
+    if(t-last>260){ last=t; const a=Math.floor(R()*4), b=6+Math.floor(R()*5), pth=pathTo(bfs(adj,a).par,b); parts.push({pth,t0:t}); }
+    parts=parts.filter(q=>t-q.t0<q.pth.length*260);
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1.5,.5));
+    parts.forEach(q=>{ const s=(t-q.t0)/260, i=Math.min(q.pth.length-2,Math.floor(s)), f=s-i; const A_=p[q.pth[i]], B_=p[q.pth[i+1]]; dot(ctx,lerp(A_[0],B_[0],f),lerp(A_[1],B_[1],f),2.8,COL.amber,10); });
+    p.forEach(([x,y],i)=>{ dot(ctx,x,y,5+bt[i]*12,i===5?COL.amber:COL.cyan,i===5?20:6); label(ctx,`k=${dg[i]}`,x,y+(5+bt[i]*12)+11,COL.ink2,10); });
+    cap.innerHTML='messages between the two groups: every one crosses the <span style="color:var(--amber)">broker</span> (2 links, top betweenness)';
+  };
+};
+// --- closeness: BFS wave from a central vs a peripheral node
+ANIM.close=(C,cap)=>{
+  const G=commNet([8,8,7],9,3), n=G.n, E=G.edges, adj=adjOf(n,E), P=bestLayout(n,E,8), cl=closeness(n,adj);
+  const best=argmax(cl), worst=cl.indexOf(Math.min(...cl)), D=[bfs(adj,best).d,bfs(adj,worst).d], avg=D.map(d=>d.reduce((a,b)=>a+b,0)/(n-1));
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,22,w,h-22],26,1.6);
+    const k=Math.floor(t/6000)%2, s=(t%6000)/1000, wave=s/.6, d=D[k], src=k?worst:best;
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1.3,.5));
+    p.forEach(([x,y],i)=>{ const on=wave>=d[i]; nodeL(ctx,x,y,i===src?12:9,i===src?COL.mag:on?COL.green:COL.dim,on?String(d[i]):''); });
+    cap.innerHTML=`from the ${k?'<span style="color:var(--mag)">least</span>':'<span style="color:var(--mag)">most</span>'} central node: average distance ${avg[k].toFixed(1)} · closeness ${(1/avg[k]).toFixed(2)}`;
+  };
+};
+// --- covert cells: few contacts, long paths; a meeting adds shortcuts
+ANIM.covert=(C,cap)=>{
+  const E=[], n=24; for(let c=0;c<4;c++){ const b=c*6; for(let i=1;i<6;i++) E.push([b+i-1,b+i]); if(c) E.push([b-1,b]); } E.push([2,9]);
+  const MEET=[[0,12],[5,18],[8,20]], adj0=adjOf(n,E), adj1=adjOf(n,[...E,...MEET]), P=layout(n,E,4,400,.3);
+  const avgD=adj=>{ let s=0,c=0; for(let a=0;a<n;a++){ const d=bfs(adj,a).d; for(let b=a+1;b<n;b++){ s+=d[b]; c++; } } return s/c; }, L0=avgD(adj0), L1=avgD(adj1);
+  const rho=E.length/(n*(n-1)/2);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,22,w,h-22],22,1.6), s=(t%12000)/1000, m=s>6;
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.6,.6));
+    if(m){ const k=clamp((s-6)/1,0,1); MEET.forEach(([a,b])=>seg(ctx,p[a],[lerp(p[a][0],p[b][0],k),lerp(p[a][1],p[b][1],k)],COL.mag,2.5,.95,[6,4])); }
+    const ex=new Set(m?MEET.flat():[]); p.forEach(([x,y],i)=>dot(ctx,x,y,ex.has(i)?8:5.5,ex.has(i)?COL.mag:COL.cyan,ex.has(i)?14:6));
+    cap.innerHTML = m ? `<span style="color:var(--mag)">a meeting</span>: shortcuts, average distance ${L1.toFixed(1)}, but the participants are exposed` : `few contacts (density ${rho.toFixed(2)}): safe, but average distance ${L0.toFixed(1)}`;
+  };
+};
+// --- removal strategies on a network of cells
+ANIM.target=(C,cap)=>{
+  const G=cellNet(3,11), N=G.N, E=G.E, adj=adjOf(N,E), P=layout(N,E,3,400,.3);
+  const run=f=>{ const rem=new Set(), o=[], s=[largest(N,adj,rem)]; for(let k=0;k<6;k++){ const v=f(rem); rem.add(v); o.push(v); s.push(largest(N,adj,rem)); } return {o,s}; };
+  const top=vals=>(rem)=>{ const v=vals(rem); let b=-1,bv=-1; v.forEach((x,i)=>{ if(!rem.has(i)&&x>bv){ bv=x; b=i; } }); return b; };
+  const RB=run(top(rem=>betweenness(N,adj,rem))), RD=run(top(rem=>degreeC(N,adj,rem))), RR=rng(2), rnd=d3range(N).sort(()=>RR()-.5), RN=run(rem=>rnd.find(i=>!rem.has(i)));
+  const S=[[RD,COL.cyan,'degree'],[RB,COL.amber,'betweenness'],[RN,COL.dim,'random']];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const ph=Math.floor(t/7000)%2, cur_=ph?RB:RD, k=Math.min(6,Math.floor((t%7000)/900)), gone=new Set(cur_.o.slice(0,k));
+    const wide=w>=520, NR=wide?[0,24,w*.6,h-24]:[0,24,w,h*.6-24], CR=wide?[w*.64,40,w*.33,h-80]:[40,h*.62+6,w-60,h*.38-32], p=inBox(P,NR,16,1.6);
+    const Ek=E.filter(([a,b])=>!gone.has(a)&&!gone.has(b)); Ek.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1.2,.55));
+    p.forEach(([x,y],i)=>dot(ctx,x,y,gone.has(i)?6:4,gone.has(i)?COL.red:i>=30?COL.amber:COL.cyan,gone.has(i)?12:4));
+    const X=i=>CR[0]+CR[2]*i/6, Y=v=>CR[1]+CR[3]*(1-v/N);
+    seg(ctx,[X(0),Y(0)],[X(6),Y(0)],COL.ink2,1); seg(ctx,[X(0),Y(0)],[X(0),Y(N)],COL.ink2,1);
+    S.forEach(([r,col,nm],j)=>{ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.beginPath(); r.s.forEach((v,i)=>{ i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v)); }); ctx.stroke(); ctx.restore(); label(ctx,nm,X(6),Y(N)+8+j*13,col,10,'right'); });
+    label(ctx,'removed',X(6)-14,Y(0)+11,COL.ink2,10); label(ctx,'largest',X(0)+2,Y(N)-8,COL.ink2,10,'left');
+    dot(ctx,X(k),Y(cur_.s[k]),4,COL.mag,10);
+    cap.innerHTML=`removing by <span style="color:${ph?'var(--amber)':'var(--cyan)'}">${ph?'betweenness':'degree'}</span>, recomputed after each removal · largest piece ${cur_.s[k]} of ${N}`;
+  };
+};
+
+/* =====================================================================
+   CHALLENGE CONTENT
+   ===================================================================== */
+(()=>{ // follow the courier: PageRank and eigenvector questions
+  // leaves feed A (3 incoming links); everybody feeds H, and H passes everything to B (1 incoming link)
+  const L=['A','B','H','·','·','·','·','·','·','·'], D=[[3,0],[4,0],[5,0],[6,2],[7,2],[8,2],[9,2],[0,2],[2,1]], n=10, pr=pagerank(n,D), P=[[.15,.55],[.92,.55],[.6,.55],[0,.15],[0,.55],[0,.95],[.45,0],[.75,0],[.45,1.1],[.75,1.1]];
+  const ans=pr[1]>pr[0]?1:0;
+  const pic=(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const p=inBox(P,[0,0,w,h],22,1.6);
+    D.forEach(([a,b])=>arrow(ctx,p[a],p[b],COL.cyan,1.8,.75,14)); p.forEach(([x,y],i)=>{ const r=done?8+40*pr[i]:i<3?13:8; nodeL(ctx,x,y,r,i<3?COL.amber:COL.ink2,i<3?L[i]:''); if(done&&i<3) label(ctx,pr[i].toFixed(2),x,y+r+10,COL.ink,11); }); };
+  SC('rank').items=[
+    {q:'<b>A</b> receives 3 reports, <b>B</b> only 1. Who has the higher <b>PageRank</b>?', canvas:pic, h:'min(30vh,250px)', o:['A','B','The same'], a:ans, why:'B\'s only report comes from H, who collects reports from almost everyone. A\'s come from people nobody reports to.'},
+    {icon:'🤝', sys:'EIGENVECTOR', q:'X and Y both have 3 contacts. X\'s contacts are well connected people; Y\'s contacts know nobody else. Whose eigenvector centrality is higher?', o:['X','Y','The same: equal degree'], a:0, why:'eigenvector centrality rewards important neighbours, not just many.'},
+    {icon:'🚧', sys:'DEAD END', q:'Z receives orders but never forwards anything. Without teleportation, the random courier would…', o:['get stuck at Z forever','skip Z','go back where it came from'], a:0, why:'that is why PageRank adds teleportation.'},
+    {icon:'✨', sys:'TELEPORT', q:'β = 0.15 means that at every step the courier…', o:['with probability 15% jumps to a random node instead of following a link','ignores 15% of the nodes','follows the 15% most important links'], a:0, why:'random jumps keep the walk from being trapped.'},
+    {icon:'🎯', sys:'FOCUS', q:'You want to rank members by their importance <b>for the NEXUS project</b>. Where should the courier teleport?', o:['Only to members who worked on NEXUS','To any member','Only to the top-ranked member'], a:0, why:'teleporting into a chosen group biases the ranking towards it, like a topic-specific PageRank.'},
+  ];
+})();
+(()=>{ // four kinds of important: tap the top node for each centrality
+  const E=[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[1,2],[3,4],[5,6],[6,7],[7,8],[8,9],[9,10],[9,11],[9,12],[10,11],[11,12],[10,12],[12,13]], n=14, adj=adjOf(n,E), P=bestLayout(n,E,12);
+  const vals={DEGREE:degreeC(n,adj), BETWEENNESS:betweenness(n,adj), CLOSENESS:closeness(n,adj)};
+  const mk=(nm,txt,why)=>{ const v=vals[nm], mx=Math.max(...v), ok=d3range(n).filter(i=>Math.abs(v[i]-mx)<1e-9);
+    return {q:txt, h:'min(32vh,260px)',
+      canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); st.p=inBox(P,[0,0,w,h],22,1.7); const nv=norm(v);
+        E.forEach(([a,b])=>seg(ctx,st.p[a],st.p[b],COL.cyan,1.6,.6));
+        st.p.forEach(([x,y],i)=>{ const r=done?5+nv[i]*10:9; dot(ctx,x,y,r,done&&ok.includes(i)?COL.green:st.bad===i?COL.red:COL.cyan,done&&ok.includes(i)?16:6); }); },
+      tap:(x,y,st)=>{ const b=nearest(st.p||[],x,y,26); if(b<0) return null; if(ok.includes(b)) return {ok:true}; st.bad=b; return {no:'not this one. look again.'}; },
+      why}; };
+  SC('pick').items=[
+    mk('DEGREE','Tap the member with the highest <b>degree</b>.','the most contacts: the hub of the left group.'),
+    mk('BETWEENNESS','Tap the member with the highest <b>betweenness</b>.','every message between the two groups passes through the chain in the middle.'),
+    mk('CLOSENESS','Tap the member with the highest <b>closeness</b>.','from the middle of the chain everybody is a few steps away.'),
+  ];
+})();
+
+/* =====================================================================
+   BOSS · OPERATION CIRCLE
+   ===================================================================== */
+const ORG=(()=>{ // 4 cells (leaders 0,10,20,30) + brokers 40–43 + mastermind 44 (seed chosen offline)
+  const G=cellNet(4,3); G.add(44,40); G.add(44,42);
+  const D=[]; for(let c=0;c<4;c++) for(let i=1;i<10;i++) D.push([c*10+i,c*10]);
+  D.push([0,40],[10,40],[20,42],[30,42],[40,44],[42,44],[41,10],[43,30]);
+  const N=45, MEET=[[0,25],[13,36]], pr=pagerank(N,D);
+  const names=(()=>{ const R=rng(55); return d3range(N).map(()=>String.fromCharCode(65+Math.floor(R()*26))+'-'+String(Math.floor(R()*90)+10)); })();
+  return {N, E:G.E, D, MEET, pr, boss:argmax(pr), names, P:layout(N,G.E,7,500,.3)};
+})();
+BUILD.boss=()=>{
+  const key='boss', N=ORG.N;
+  setNext('DEBRIEF ▸', key in S.xp);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// MISSION</small>OPERATION CIRCLE</div>`; const tag=el('div','timer calm','STEP 1/2'); head.appendChild(tag); stage.appendChild(head);
+  if(key in S.xp) stage.appendChild(el('div','badge',`✓ best: +${S.xp[key]} XP · replay to improve`));
+  const task=el('div','task'); stage.appendChild(task);
+  const lens=el('div','lens'); lens.style.display='none'; stage.appendChild(lens);
+  const pO=el('div','panel'); pO.id='pOrg'; const cO=el('div','cap',''); stage.appendChild(pO);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const bAct=el('button','btn-main',''); bAct.style.cssText='min-height:54px;font-size:15px;display:none'; stage.appendChild(bAct);
+  let phase=1, tries=0, p1=0, bad=-1, sel=-1, E=ORG.E.slice(), cut=[], met=false, lensK=-1, vals=null, v=-1, pos=null, flash=0, done=false;
+  const adjNow=()=>adjOf(N,E), rem=()=>new Set(cut);
+  const recompute=()=>{ vals = lensK<0 ? null : norm(LENS[lensK][1](N,adjNow(),rem())); };
+  const setTask=()=>{ task.innerHTML = phase===1
+    ? `<b>Step 1 · the mastermind.</b> Arrows are reports, from members to whoever they answer to. Tap the person who ends up with the most <b>important</b> reports. <span class="tip">Think like the random courier, not like a vote count.</span>`
+    : `<b>Step 2 · cut off 4 people.</b> Tap a member, then CUT OFF. Goal: make the <b>largest connected piece</b> as small as possible. <span class="tip">Pick a centrality lens to size the nodes. The CIRCLE will react.</span>`; };
+  setTask();
+  LENS.forEach(([nm],k)=>{ const b=el('button',null,nm); b.onclick=()=>{ lensK=lensK===k?-1:k; [...lens.children].forEach((c,j)=>c.classList.toggle('on',j===lensK)); recompute(); }; lens.appendChild(b); });
+  const lay=()=>{ const {w,h}=C; if(w&&C.v!==v){ v=C.v; pos=inBox(ORG.P,[0,18,w,h-18],18,1.6); } };
+  const C=canvasIn(pO,(x,y)=>{ lay(); if(!pos||done) return; const b=nearest(pos,x,y,22); if(b<0) return;
+    if(phase===1){ tries++; if(b===ORG.boss){ p1=tries===1?30:tries===2?15:5; info.className='fb ok'; info.innerHTML=`> ${ORG.names[b]}: only 2 reports, but from the two people every cell reports to. highest PageRank. <b>+${p1}</b>`; bAct.textContent='STEP 2 ▸'; bAct.style.display=''; phase=1.5; }
+      else { bad=b; const nin=ORG.D.filter(e=>e[1]===b).length; info.className='fb no'; info.textContent=`> ${ORG.names[b]} receives ${nin} report${nin===1?'':'s'}, but ${nin>3?'from people nobody reports to':'not the important ones'}. ${tries>=3?'':'try again.'}`;
+        if(tries>=3){ p1=0; info.textContent+=` the mastermind is highlighted.`; bAct.textContent='STEP 2 ▸'; bAct.style.display=''; phase=1.5; } } }
+    else if(phase===2){ if(cut.includes(b)) return; sel=sel===b?-1:b; bAct.textContent=sel<0?'':`CUT OFF ${ORG.names[sel]} ▸`; bAct.style.display=sel<0?'none':''; } });
+  pO.appendChild(cO);
+  const finish=()=>{ done=true; const adj=adjNow(), big=largest(N,adj,rem()), sc=Math.round(100*(1-big/N)), tot=p1+sc;
+    // what the textbook strategies would have done with the same 4 cuts and the same reaction
+    const sim=f=>{ let e=ORG.E.slice(); const r=new Set(); for(let k=0;k<4;k++){ if(k===2) e=e.concat(ORG.MEET); const a=adjOf(N,e), x=f(a,r); let b=-1,bv=-1; x.forEach((q,i)=>{ if(!r.has(i)&&q>bv){bv=q;b=i;} }); r.add(b); } return Math.round(100*(1-largest(N,adjOf(N,e),r)/N)); };
+    const sB=sim((a,r)=>betweenness(N,a,r)), sD=sim((a,r)=>degreeC(N,a,r));
+    const prev=S.xp[key]||0; if(tot>prev||!(key in S.xp)){ S.xp[key]=Math.max(tot,prev); save(); updXP(Math.max(0,tot-prev)); }
+    tag.textContent='DONE'; lens.style.display='none'; bAct.style.display='none';
+    info.className='fb ok'; info.innerHTML=`> largest piece left: ${big} of ${N} → <b>${sc}%</b> of the CIRCLE cut apart · mastermind ${p1} = <b>${tot} XP</b>${tot>prev&&prev?' (new best)':''}<br>> same 4 cuts, same reaction · betweenness recomputed each time: ${sB}% · highest degree: ${sD}%`;
+    const rb=el('button',null,'↻ RETRY'); rb.style.minHeight='48px'; rb.onclick=()=>go(idx); stage.appendChild(rb);
+    setNext('DEBRIEF ▸',true); };
+  bAct.onclick=()=>{
+    if(phase===1.5){ phase=2; tag.textContent='STEP 2/2'; lens.style.display=''; bAct.style.display='none'; info.className='fb info'; info.textContent='> cuts left: 4'; setTask(); return; }
+    if(phase===2&&sel>=0){ cut.push(sel); sel=-1; bAct.style.display='none'; flash=performance.now();
+      if(cut.length===2&&!met){ met=true; E=E.concat(ORG.MEET); info.className='fb no'; info.innerHTML=`> the CIRCLE reacts: an emergency <span style="color:var(--mag)">meeting</span> creates ${ORG.MEET.length} new links. cuts left: 2`; }
+      else { info.className='fb info'; info.textContent=`> ${ORG.names[cut[cut.length-1]]} cut off · largest piece ${largest(N,adjNow(),rem())} of ${N} · cuts left: ${4-cut.length}`; }
+      recompute(); if(cut.length===4) finish(); } };
+  cur.draw=t=>{ lay(); const {ctx,w,h}=C; if(!w||!pos) return; ctx.clearRect(0,0,w,h); const R_=rem();
+    if(phase<2){ ORG.E.forEach(([a,b])=>seg(ctx,pos[a],pos[b],COL.ink2,1,.25)); ORG.D.forEach(([a,b])=>arrow(ctx,pos[a],pos[b],COL.cyan,1.3,.7,7));
+      const show=phase===1.5, pr=norm(ORG.pr);
+      pos.forEach(([x,y],i)=>{ const r=show?3+pr[i]*12:5.5; dot(ctx,x,y,r,show&&i===ORG.boss?COL.mag:i===bad?COL.red:COL.cyan,show&&i===ORG.boss?18:5); });
+      if(show){ label(ctx,`MASTERMIND ${ORG.names[ORG.boss]}`,pos[ORG.boss][0],pos[ORG.boss][1]-22,COL.mag,12); }
+      cO.textContent = show ? 'node size = PageRank of the report network' : 'REPORTS · who answers to whom'; return; }
+    const cc=comps(N,E.filter(([a,b])=>!R_.has(a)&&!R_.has(b))); let bl=-1,bs=0; { const sz={}; for(let i=0;i<N;i++) if(!R_.has(i)){ sz[cc.lab[i]]=(sz[cc.lab[i]]||0)+1; if(sz[cc.lab[i]]>bs){ bs=sz[cc.lab[i]]; bl=cc.lab[i]; } } }
+    E.forEach(([a,b],j)=>{ if(R_.has(a)||R_.has(b)) return; const m=j>=ORG.E.length; seg(ctx,pos[a],pos[b],m?COL.mag:cc.lab[a]===bl?COL.cyan:COL.dim,m?2.5:1.2,m?.95:.6,m?[6,4]:null); });
+    const col=lensK<0?COL.cyan:LENS[lensK][2];
+    pos.forEach(([x,y],i)=>{ if(R_.has(i)){ dot(ctx,x,y,6,COL.red,12); label(ctx,'✕',x,y+1,COL.bg,9,'center','Poppins'); return; }
+      const r=vals?3+vals[i]*12:5.5, big=cc.lab[i]===bl; dot(ctx,x,y,r,big?col:COL.dim,big?6:0,big?1:.7);
+      if(i===sel){ const g=.5+.5*Math.sin(t/150); ring(ctx,x,y,r+5+g*2,COL.mag,2.5); label(ctx,ORG.names[i],x,y-r-14,COL.mag,12); } });
+    if(vals){ const top=d3range(N).filter(i=>!R_.has(i)).sort((a,b)=>vals[b]-vals[a]).slice(0,3); top.forEach((i,k)=>label(ctx,`#${k+1}`,pos[i][0]+12,pos[i][1]-10,col,11)); }
+    cO.innerHTML=`${lensK<0?'no lens':'lens: '+LENS[lensK][0].toLowerCase()} · largest piece ${bs}/${N}`;
+  };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=130?'SPYMASTER':x>=90?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a); const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: the CIRCLE is in pieces. its cells can't talk to each other anymore.`,
+    `VERA: and in the mastermind's files we found what NEXUS was really built for.`,
+    `VERA: a map of the whole Helix social network, thousands of people. somewhere in there, groups loyal to the CIRCLE are hiding.`,
+    `> [ LEVEL 5 COMPLETE ]`,
+    `VERA: next time: communities. we need to find the groups nobody declared.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `A <b>centrality</b> measures importance from position: <b>degree-based</b> (degree, eigenvector, PageRank) or <b>path-based</b> (betweenness, closeness).`,
+      `<b>Eigenvector centrality</b>: important if your neighbours are important (λx = Ax).`,
+      `<b>PageRank</b>: incoming links as weighted votes, or the time a <b>random walker</b> spends on a node; <b>teleportation</b> (β ≈ 0.15) avoids dead ends and traps.`,
+      `<b>Betweenness</b>: share of shortest paths through a node (brokers, bridges). <b>Closeness</b>: inverse average distance.`,
+      `Covert organisations trade efficiency for secrecy; to <b>fragment</b> them, target high-<b>betweenness</b> brokers and <b>recompute</b> after each step.`],
+      'level6.html', 'LEVEL 6 · THE FACTIONS');
+  });
+  // cells drifting apart
+  const N=ORG.N, P=ORG.P; let t0=null;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; const now=performance.now(); if(t0===null) t0=now; const s=Math.min(1,(now-t0)/2500); ctx.clearRect(0,0,w,h);
+    const p0=inBox(P,[w*.1,h*.12,w*.8,h*.76],16,1.6), cx=w/2, cy=h/2, cell=i=>i<40?Math.floor(i/10):-1;
+    const p=p0.map(([x,y],i)=>{ const c=cell(i); if(c<0) return [x,y]; const ang=Math.PI/4+c*Math.PI/2; return [x+Math.cos(ang)*s*w*.06, y+Math.sin(ang)*s*h*.08]; });
+    ORG.E.forEach(([a,b])=>{ const same=cell(a)>=0&&cell(a)===cell(b); if(!same&&s>.3) return; seg(ctx,p[a],p[b],COL.cyan,1.2,.55); });
+    p.forEach(([x,y],i)=>dot(ctx,x,y,cell(i)<0?6:4,cell(i)<0?COL.red:[COL.cyan,COL.violet,COL.green,COL.amber][cell(i)],6,cell(i)<0?1-s*.5:1));
+  };
+};
+
+start();
+</script>
+</body>
+</html>

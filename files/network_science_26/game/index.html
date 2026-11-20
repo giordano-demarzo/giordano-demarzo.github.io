@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · Campaign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+body{overflow-y:auto}
+.wrap{max-width:560px;width:100%;margin:0 auto;padding:36px 16px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}
+.logo{font-size:clamp(48px,14vw,84px);text-align:center}
+.subt{text-align:center}
+.lvl{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(13,20,32,.85);text-decoration:none;color:var(--ink)}
+.lvl.open{border-color:rgba(56,225,255,.55);box-shadow:0 0 0 1px rgba(56,225,255,.12) inset}
+.lvl.locked{opacity:.45}
+.num{font-family:Orbitron,sans-serif;font-weight:800;font-size:26px;color:var(--cyan);width:34px;text-align:center}
+.lvl .t{flex:1;min-width:0}
+.lvl .t b{display:block;font-family:Orbitron,sans-serif;font-size:15px;letter-spacing:.05em}
+.lvl .t small{display:block;font-size:13px;color:var(--ink2);line-height:1.4;margin-top:2px}
+.st{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--ink2);text-align:right;white-space:nowrap}
+.st.done{color:var(--green)}
+.tot{text-align:center;font-family:Orbitron,sans-serif;color:var(--amber);font-size:15px;letter-spacing:.05em;min-height:1.2em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="chap" style="text-align:center">NETWORK SCIENCE OF SOCIO-ECONOMIC SYSTEMS</div>
+  <h1 class="logo">NEXUS</h1>
+  <div class="subt">// a network science campaign</div>
+  <div class="tot" id="tot"></div>
+  <div id="list" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+<script>
+const LV=[
+  {n:1, href:'level1.html', key:'nexus-l1', name:'PROLOGUE', sub:'Lecture 1 · what is a network'},
+  {n:2, href:'level2.html', key:'nexus-l2', name:'THE MAP', sub:'Lecture 2 · network theory basics'},
+  {n:3, href:'level3.html', key:'nexus-l3', name:'THE SWARM', sub:'Lecture 3 · random networks and small worlds'},
+  {n:4, href:'level4.html', key:'nexus-l4', name:'THE HUBS', sub:'Lecture 4 · scale-free networks · boss: SHUTDOWN'},
+  {n:5, href:'level5.html', key:'nexus-l5', name:'THE CIRCLE', sub:'Lecture 5 · centrality measures'},
+  {n:6, href:'level6.html', key:'nexus-l6', name:'THE FACTIONS', sub:'Lecture 6 · communities'},
+  {n:7, href:'level7.html', key:'nexus-l7', name:'THE OUTBREAK', sub:'Lecture 7 · spreading processes'},
+];
+const get=k=>{ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+let tot=0; const list=document.getElementById('list');
+for(const l of LV){
+  const s=l.key?get(l.key):null, xp=s?Object.values(s.xp||{}).reduce((a,b)=>a+b,0):0; tot+=xp;
+  const a=document.createElement(l.href?'a':'div'); a.className='lvl '+(l.href?'open':'locked'); if(l.href) a.href=l.href;
+  const st = !l.href ? '🔒' : l.ext ? 'play ▸' : s&&s.done ? `✓ ${xp} XP` : s&&s.max ? `${xp} XP · in progress` : 'start ▸';
+  a.innerHTML=`<div class="num">${l.n}</div><div class="t"><b>${l.name}</b><small>${l.sub}</small></div><div class="st ${s&&s.done?'done':''}">${st}</div>`;
+  list.appendChild(a);
+}
+if(tot) document.getElementById('tot').textContent=`CAMPAIGN · ${tot} XP`;
+</script>
+</body>
+</html>

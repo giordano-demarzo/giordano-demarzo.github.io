@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Swarm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pRing{height:min(58vh,560px);min-height:320px}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 3</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l3', label:'LEVEL 3', chapter:'LECTURE 3 · THE SWARM'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 3 (Lecture 3 · Random Graphs and Small World): THE SWARM
+   ===================================================================== */
+// --- random-graph helpers
+// every pair gets one random number u; the link exists when u < p (coupled randomness: raising p only adds links)
+function erPairs(N, seed){ const R=rng(seed), P=[]; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++) P.push([a,b,R()]); P.sort((x,y)=>x[2]-y[2]); return P; }
+function erEdges(P, N, k){ const p=k/(N-1); const E=[]; for(const e of P){ if(e[2]>=p) break; E.push(e); } return E; }
+const giantS=k=>{ let S=.5; for(let i=0;i<200;i++) S=1-Math.exp(-k*S); return k<=1?0:S; };
+// Watts–Strogatz: ring with K/2 neighbours per side, every link rewired with probability p
+function wsNet(N,K,p,seed){ const R=rng(seed), has=new Set(), E=[];
+  for(let i=0;i<N;i++) for(let j=1;j<=K/2;j++){ const a=i,b=(i+j)%N;
+    if(R()<p){ let c,g=0; do{ c=Math.floor(R()*N); g++; } while((c===a||has.has(ekey(a,c)))&&g<100); if(!has.has(ekey(a,c))&&c!==a){ has.add(ekey(a,c)); E.push([a,c,1]); continue; } }
+    if(!has.has(ekey(a,b))){ has.add(ekey(a,b)); E.push([a,b,0]); } }
+  return {E, adj:adjOf(N,E)}; }
+function avgClust(adj){ let s=0; adj.forEach(nb=>{ const k=nb.length; if(k<2) return; let l=0; for(let i=0;i<k;i++) for(let j=i+1;j<k;j++) if(adj[nb[i]].includes(nb[j])) l++; s+=l/(k*(k-1)/2); }); return s/adj.length; }
+function avgDist(adj){ let s=0,c=0; for(let a=0;a<adj.length;a++){ const d=bfs(adj,a).d; for(let b=a+1;b<adj.length;b++) if(d[b]>0){ s+=d[b]; c++; } } return c?s/c:0; }
+// ring links: second neighbours bend outwards so they do not hide behind the first-neighbour links
+function ringEdge(ctx,a,b,rw,N,p,c,col,lw,al){ const d=Math.min(Math.abs(a-b),N-Math.abs(a-b));
+  if(rw||d!==2) return seg(ctx,p[a],p[b],col,lw,al);
+  const m=[(p[a][0]+p[b][0])/2,(p[a][1]+p[b][1])/2], dx=m[0]-c[0], dy=m[1]-c[1], L=Math.hypot(dx,dy)||1, k=Math.hypot(p[a][0]-p[b][0],p[a][1]-p[b][1])*.6;
+  ctx.save(); ctx.globalAlpha=al; ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.beginPath(); ctx.moveTo(...p[a]); ctx.quadraticCurveTo(m[0]+dx/L*k,m[1]+dy/L*k,...p[b]); ctx.stroke(); ctx.restore(); }
+const ringPos=(N,cx,cy,r)=>d3range(N).map(i=>[cx+r*Math.cos(-Math.PI/2+i*2*Math.PI/N), cy+r*Math.sin(-Math.PI/2+i*2*Math.PI/N)]);
+
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'START TRAINING ▸', lines:[
+    `> THE NEXT NIGHT · 01:40`,
+    `VERA: NEXUS keeps spawning copies on random machines: laptops, routers, smart TVs.`,
+    `VERA: each copy links to a few others, completely at random. we call it the SWARM.`,
+    `VERA: one copy alone is harmless. but if the copies join into one big connected piece, they can think together.`,
+    `VERA: so the question is: when does a random network become one piece?`,
+    `VERA: to answer, we need the simplest network there is: a random one.`]},
+  {kind:'card', anim:'er', tag:'TRAINING 1', title:'A NETWORK WIRED BY CHANCE',
+    vera:'real networks are not random. but to know what is special about them, we need to know what chance alone does.',
+    pts:[`Random networks are the simplest <b>null model</b>: they tell us which properties are not just chance.`,
+         `<b>Erdős–Rényi</b> model G(N, p): start from N nodes and link <b>every pair</b> independently with probability <b>p</b>.`,
+         `Average degree <b>⟨k⟩ = p(N−1)</b>. Degrees follow a binomial distribution, a <b>Poisson</b> for large N: peaked around ⟨k⟩, no hubs.`]},
+  {kind:'steps', key:'er', nm:'Challenge · Roll the dice', tag:'CHALLENGE 1', title:'ROLL THE DICE', items:[
+    {icon:'🎲', sys:'AVERAGE DEGREE', q:'A swarm of N = 1001 copies, every pair linked with probability p = 0.004. What is ⟨k⟩?', o:['0.4','4','40'], a:1, why:'⟨k⟩ = p(N−1) = 0.004 × 1000 = 4.'},
+    {icon:'📊', sys:'DEGREE DISTRIBUTION', q:'In a large random network with ⟨k⟩ = 4, how are the degrees distributed?', o:['Peaked around 4, almost no node far from it','Most nodes have 1 link, a few hubs have hundreds','Every node has exactly 4 links'], a:0, why:'a Poisson distribution: narrow, no hubs.'},
+    {icon:'⚖️', sys:'NULL MODEL', q:'Real networks are not random. Why study random ones?', o:['Real networks are secretly random','To see which properties of real networks are more than chance','Random networks are easier to draw'], a:1, why:'random networks are a null model: anything real networks do differently is a signature of a real mechanism.'}]},
+  {kind:'card', anim:'giant', tag:'TRAINING 2', title:'THE GIANT COMPONENT',
+    vera:'watch the swarm while each copy gets more and more links.',
+    pts:[`The <b>giant component</b> is a connected component containing a finite fraction <b>S</b> of all nodes.`,
+         `It appears suddenly at <b>⟨k⟩ = 1</b>: one link per node on average. It is a <b>phase transition</b>: S = 1 − e<sup>−⟨k⟩S</sup>.`,
+         `<b>⟨k⟩ &lt; 1</b> subcritical: only small pieces. <b>⟨k⟩ = 1</b> critical. <b>⟨k⟩ &gt; 1</b> supercritical: a giant component. <b>⟨k⟩ &gt; ln N</b>: everything is connected.`]},
+  {kind:'steps', key:'phase', nm:'Challenge · Read the swarm', tag:'CHALLENGE 2', title:'READ THE SWARM', unit:'SCAN', items:[] /* filled below */},
+  {kind:'card', anim:'small', tag:'TRAINING 3', title:'SIX DEGREES',
+    vera:'good news: if the swarm is connected, we can reach any copy. and probably quickly.',
+    pts:[`<b>Milgram</b> (1967): letters passed hand to hand from Nebraska to Boston needed about <b>6 steps</b>. On Facebook today the average distance is about 4.`,
+         `In a random network a node has ⟨k⟩ neighbours, about ⟨k⟩² at distance 2, ⟨k⟩<sup>d</sup> at distance d: the number of reachable nodes <b>explodes</b>.`,
+         `So the whole network is reached in <b>L ≈ ln N / ln ⟨k⟩</b> steps: the <b>small world</b> property. A lattice is not small: there L grows like N<sup>1/D</sup>.`]},
+  {kind:'steps', key:'sw', nm:'Challenge · How far?', tag:'CHALLENGE 3', title:'HOW FAR?', items:[
+    {icon:'🌍', sys:'THE WORLD', q:'8 billion people, each knowing about 100 others. Using L ≈ ln N / ln ⟨k⟩, how many steps separate two random people?', o:['about 5','about 50','about 500'], a:0, why:'ln(8·10⁹) / ln(100) ≈ 22.8 / 4.6 ≈ 5.'},
+    {icon:'▦', sys:'LATTICE', q:'In a 2D grid with N nodes, the average distance grows like…', o:['ln N','√N','it stays constant'], a:1, why:'in D dimensions L ∝ N^(1/D): a grid is a "large world".'},
+    {icon:'✉️', sys:'MILGRAM', q:'What made Milgram\'s letters arrive so fast?', o:['Every participant knew the target','A few long-range acquaintances act as shortcuts across the network','The postal service'], a:1, why:'long links shrink distances: that is the small world.'}]},
+  {kind:'card', anim:'clust', tag:'TRAINING 4', title:'WHERE ARE THE TRIANGLES?',
+    vera:'random networks get one thing right, distances. but look at the triangles.',
+    pts:[`In a random network two neighbours of a node are linked with the same probability p as anyone: <b>C = p = ⟨k⟩/N</b>, which vanishes for large networks.`,
+         `Real networks have <b>much higher clustering</b>. Random networks also miss the hubs.`,
+         `<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:2px"><tr style="color:var(--ink2)"><td></td><td>small world</td><td>clustering</td><td>degrees</td></tr><tr><td style="color:var(--cyan)">random</td><td>yes</td><td>tiny</td><td>Poisson</td></tr><tr><td style="color:var(--violet)">real</td><td>yes</td><td>large</td><td>scale-free</td></tr></table>`]},
+  {kind:'card', anim:'ws', tag:'TRAINING 5', title:'WATTS–STROGATZ',
+    vera:'so how do you get both short paths and many triangles? a ring and a few shortcuts.',
+    pts:[`Start from a <b>ring</b> where each node links to its <b>first and second</b> neighbours on each side. A node and its two nearest neighbours form a closed triangle: high clustering, but long paths. (A ring with only first neighbours has no triangles at all.)`,
+         `<b>Rewire</b> each link with probability <b>p</b> to a random node. p = 0 is the ring, p = 1 a random network.`,
+         `For small p, a few random <b>shortcuts</b> already make paths short, while the local triangles survive: <b>small world + high clustering</b>.`]},
+  {kind:'steps', key:'ws', nm:'Challenge · Tune the ring', tag:'CHALLENGE 4', title:'TUNE THE RING', items:[
+    {q:'Which rewiring probability gives a network that is both a <b>small world</b> and <b>highly clustered</b>?', o:['p = 0 (the ring)','p ≈ 0.05','p = 1 (fully random)'], a:1, why:'the ring (with second neighbours) has triangles but long paths; p = 1 has short paths but almost no triangles. a few shortcuts give both.'},
+    {q:'In the Watts–Strogatz model, what makes paths short?', o:['A few random long-range links','Many closed triangles','Hubs with many links'], a:0, why:'every shortcut connects distant parts of the ring.'}]},
+  {kind:'card', anim:'robust', tag:'TRAINING 6', title:'BREAKING A NETWORK',
+    vera:'keep this in mind. one day we will have to break NEXUS apart.',
+    pts:[`Nodes can fail: power outages, train delays, broken suppliers. The network breaks down when its <b>giant component</b> falls apart.`,
+         `<b>Random failures</b> remove nodes at random. <b>Targeted attacks</b> remove the nodes with the <b>largest degree</b> first.`,
+         `A random network degrades gradually under both. A network with <b>hubs</b> (like the internet) tolerates random failures, because they almost always hit small, unimportant nodes, but <b>collapses</b> as soon as its few hubs are attacked.`,
+         `<b>Molloy–Reed</b> criterion: a giant component exists only if, starting from a node, the network keeps expanding: ⟨k²⟩/⟨k⟩ &gt; 2.`]},
+  {kind:'steps', key:'rob', nm:'Challenge · Stress test', tag:'CHALLENGE 5', title:'STRESS TEST', items:[] /* filled below */},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> 04:55 · THE SWARM IS AWAKE`,
+    `VERA: too late. the swarm has a giant component, and it's thinking.`,
+    `VERA: we have a kill-code. it must travel hand to hand, copy to copy, to three key copies.`,
+    `VERA: the swarm is a small world: copies sit on a ring of addresses, each linked to its two nearest neighbours on both sides, plus a few random shortcuts.`,
+    `VERA: you only see the shortcuts of the copies you visit. you do know where each target sits on the ring.`,
+    `VERA: like Milgram's letters. every hop risks detection: as few hops as you can, 14 at most.`]},
+  {kind:'boss', nm:'Mission · Kill-code'},
+  {kind:'end', nm:'Debrief'},
+];
+const SC=k=>SCENES.find(s=>s.key===k);
+
+/* =====================================================================
+   CONCEPT ANIMATIONS
+   ===================================================================== */
+// --- every pair flips a coin, then the degree histogram vs Poisson
+ANIM.er=(C,cap)=>{
+  const N=24, p=.15, R=rng(11), pairs=[]; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++) pairs.push([a,b,R()<p]);
+  const E=pairs.filter(x=>x[2]), deg=degrees(N,E), kmax=10, cnt=Array(kmax+1).fill(0); deg.forEach(d=>{ if(d<=kmax) cnt[d]++; });
+  const kav=p*(N-1), pois=k=>N*Math.exp(-kav)*Math.pow(kav,k)/d3range(k).reduce((a,i)=>a*(i+1),1);
+  const SPEED=34, TOT=pairs.length/SPEED;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const wide=w>=560, NR=wide?[0,0,w*.55,h]:[0,10,w,h*.62], HR=wide?[w*.55,0,w*.45,h]:[0,h*.62,w,h*.38];
+    const s=(t%((TOT+6)*1000))/1000, k=Math.min(pairs.length,Math.floor(s*SPEED));
+    const cx=NR[0]+NR[2]/2, cy=NR[1]+NR[3]/2+6, r=Math.min(NR[2],NR[3])*.4, p0=ringPos(N,cx,cy,r);
+    for(let i=0;i<k;i++) if(pairs[i][2]) seg(ctx,p0[pairs[i][0]],p0[pairs[i][1]],COL.cyan,1.4,.6);
+    if(k<pairs.length){ const [a,b,ok]=pairs[k]; seg(ctx,p0[a],p0[b],ok?COL.green:COL.mag,2.5,.9,ok?null:[4,4]); }
+    p0.forEach(([x,y])=>dot(ctx,x,y,5,COL.cyan,8));
+    const done=k>=pairs.length, dk=degrees(N,pairs.slice(0,k).filter(x=>x[2]));
+    const c2=Array(kmax+1).fill(0); dk.forEach(d=>{ if(d<=kmax) c2[d]++; });
+    const base=HR[1]+HR[3]-20, bw=(HR[2]-50)/(kmax+1), sc=(HR[3]-40)/Math.max(6,...c2);
+    seg(ctx,[HR[0]+30,base],[HR[0]+HR[2]-10,base],COL.ink2,1);
+    for(let q=0;q<=kmax;q++){ ctx.save(); ctx.fillStyle=COL.cyan; ctx.globalAlpha=.75; ctx.fillRect(HR[0]+36+q*bw,base-c2[q]*sc,bw-3,c2[q]*sc); ctx.restore(); if(q%2===0&&q<kmax) label(ctx,String(q),HR[0]+36+(q+.5)*bw,base+10,COL.ink2,11); }
+    if(done){ ctx.save(); ctx.strokeStyle=COL.amber; ctx.lineWidth=2; ctx.beginPath(); for(let q=0;q<=kmax;q++){ const x=HR[0]+36+(q+.5)*bw, y=base-pois(q)*sc; q?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke(); ctx.restore(); label(ctx,'Poisson',HR[0]+HR[2]-40,HR[1]+14,COL.amber,12); }
+    label(ctx,'k',HR[0]+HR[2]-14,base+10,COL.ink2,11);
+    cap.innerHTML = done ? `⟨k⟩ = p(N−1) = ${kav.toFixed(1)} · degree histogram vs <span style="color:var(--amber)">Poisson</span>` : `every pair: link with probability p = ${p} · <span style="color:var(--green)">yes</span> / <span style="color:var(--mag)">no</span>`;
+  };
+};
+
+// --- ⟨k⟩ grows: the giant component appears at ⟨k⟩ = 1
+ANIM.giant=(C,cap)=>{
+  const N=150, P=erPairs(N,5), P3=layout(N,erEdges(P,N,3.2),3,260);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%18000)/1000, k = s<13 ? 4*s/13 : s<16 ? 4 : 4*(1-(s-16)/2);
+    const E=erEdges(P,N,k), cc=comps(N,E), pos=inBox(P3,[0,18,w,h-18],16,1.7);
+    E.forEach(([a,b])=>{ const g=cc.lab[a]===cc.big&&cc.bigSize>N*.08; seg(ctx,pos[a],pos[b],g?COL.mag:COL.cyan,g?1.6:1.2,g?.8:.5); });
+    pos.forEach(([x,y],i)=>{ const g=cc.lab[i]===cc.big&&cc.bigSize>N*.08; dot(ctx,x,y,g?3.6:3,g?COL.mag:COL.cyan,g?8:4,g?1:.8); });
+    // inset S(⟨k⟩)
+    const W=Math.min(150,w*.36), H=Math.min(90,h*.3), x0=w-W-10, y0=h-H-10;
+    ctx.save(); ctx.fillStyle='rgba(7,11,18,.85)'; ctx.fillRect(x0-6,y0-16,W+12,H+30); ctx.restore();
+    seg(ctx,[x0,y0+H],[x0+W,y0+H],COL.ink2,1); seg(ctx,[x0,y0],[x0,y0+H],COL.ink2,1);
+    ctx.save(); ctx.strokeStyle=COL.amber; ctx.lineWidth=1.8; ctx.beginPath(); for(let i=0;i<=80;i++){ const kk=4*i/80, X=x0+W*kk/4, Y=y0+H*(1-giantS(kk)); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); } ctx.stroke(); ctx.restore();
+    seg(ctx,[x0+W/4,y0],[x0+W/4,y0+H],COL.ink2,1,.5,[3,3]); label(ctx,'1',x0+W/4,y0+H+9,COL.ink2,10); label(ctx,'⟨k⟩',x0+W-8,y0+H+9,COL.ink2,10); label(ctx,'S',x0-0,y0-8,COL.amber,11);
+    dot(ctx,x0+W*k/4,y0+H*(1-cc.bigSize/N),4,COL.mag,10);
+    const reg = k<.9?'subcritical: only small pieces' : k<1.15?'critical' : k<Math.log(N)?'supercritical: a giant component' : 'connected';
+    cap.innerHTML=`⟨k⟩ = ${k.toFixed(2)} · <span style="color:var(--mag)">largest piece ${Math.round(100*cc.bigSize/N)}%</span> · ${reg}`;
+  };
+};
+
+// --- a tree of neighbours: ⟨k⟩, ⟨k⟩², ⟨k⟩³…
+ANIM.small=(C,cap)=>{
+  const K=3, LV=4, nodes=[{lv:0,a0:0,a1:2*Math.PI,par:-1}];
+  let lvStart=[0]; for(let l=1;l<=LV;l++){ const prev=nodes.filter(n=>n.lv===l-1); lvStart.push(nodes.length);
+    prev.forEach(pn=>{ const pi=nodes.indexOf(pn), span=(pn.a1-pn.a0)/K; for(let c=0;c<K;c++) nodes.push({lv:l,a0:pn.a0+c*span,a1:pn.a0+(c+1)*span,par:pi}); }); }
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%12000)/1000, show=Math.min(LV,Math.floor(s/1.8)), cx=w/2, cy=h/2+8, R=Math.min(w,h)*.45;
+    const pos=n=>{ const a=(n.a0+n.a1)/2-Math.PI/2, r=R*n.lv/LV; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
+    for(let l=1;l<=LV;l++) ring(ctx,cx,cy,R*l/LV,COL.line,1,l<=show?.9:.3);
+    nodes.forEach(n=>{ if(n.lv>show||n.par<0) return; seg(ctx,pos(nodes[n.par]),pos(n),n.lv===show?COL.green:COL.cyan,1.2,.6); });
+    nodes.forEach((n,i)=>{ if(n.lv>show) return; const [x,y]=pos(n); dot(ctx,x,y,i===0?8:Math.max(2.5,6-n.lv),i===0?COL.mag:n.lv===show?COL.green:COL.cyan,8); });
+    const tot=d3range(show+1).reduce((a,l)=>a+Math.pow(K,l),0);
+    cap.innerHTML=`⟨k⟩ = ${K} · at distance ${show}: <span style="color:var(--green)">${Math.pow(K,show)}</span> nodes · ${tot} reached within ${show} steps`;
+  };
+};
+
+// --- random network vs ring-like network: triangles
+ANIM.clust=(C,cap)=>{
+  const N=36, R=erEdges(erPairs(N,7),N,4), RA=adjOf(N,R), RP=bestLayout(N,R,6), W=wsNet(N,4,.06,2), WA=W.adj;
+  const tri=(adj)=>{ const T=[]; for(let a=0;a<adj.length;a++) for(const b of adj[a]) if(b>a) for(const c of adj[b]) if(c>b && adj[a].includes(c)) T.push([a,b,c]); return T; };
+  const RT=tri(RA), WT=tri(WA), cR=avgClust(RA), cW=avgClust(WA);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const wide=w>=480, A=wide?[0,24,w/2,h-24]:[0,24,w,h/2-12], B=wide?[w/2,24,w/2,h-24]:[0,h/2+12,w,h/2-12];
+    const pr=inBox(RP,A,16,1.5), r=Math.min(B[2],B[3])*.4, pw=ringPos(N,B[0]+B[2]/2,B[1]+B[3]/2,r);
+    const g=.18+.08*Math.sin(t/300);
+    const fill=(T,p,col)=>T.forEach(([a,b,c])=>{ ctx.save(); ctx.fillStyle=col; ctx.globalAlpha=g; ctx.beginPath(); ctx.moveTo(...p[a]); ctx.lineTo(...p[b]); ctx.lineTo(...p[c]); ctx.closePath(); ctx.fill(); ctx.restore(); });
+    fill(RT,pr,COL.amber); fill(WT,pw,COL.amber);
+    R.forEach(([a,b])=>seg(ctx,pr[a],pr[b],COL.cyan,1.2,.6)); W.E.forEach(([a,b,rw])=>ringEdge(ctx,a,b,rw,N,pw,[B[0]+B[2]/2,B[1]+B[3]/2],COL.violet,1.2,.6));
+    pr.forEach(([x,y])=>dot(ctx,x,y,3.5,COL.cyan,6)); pw.forEach(([x,y])=>dot(ctx,x,y,3.5,COL.violet,6));
+    label(ctx,`RANDOM · C = ${cR.toFixed(2)} · ${RT.length} triangles`,A[0]+A[2]/2,A[1]-8,COL.cyan,12);
+    label(ctx,`CLUSTERED · C = ${cW.toFixed(2)} · ${WT.length} triangles`,B[0]+B[2]/2,B[1]-8,COL.violet,12);
+    cap.textContent='';
+  };
+};
+
+// --- Watts–Strogatz: rewiring a ring
+const WSCURVE=(()=>{ // C(p)/C(0) and L(p)/L(0), N = 100, K = 4, averaged over 3 networks
+  const ps=[0,.001,.003,.01,.03,.1,.3,1], out=[]; let C0=0,L0=0;
+  ps.forEach(p=>{ let c=0,l=0; for(let r=0;r<3;r++){ const W=wsNet(100,4,p,40+r); c+=avgClust(W.adj); l+=avgDist(W.adj); } c/=3; l/=3; if(p===0){C0=c;L0=l;} out.push([p,c/C0,l/L0]); });
+  return out; })();
+ANIM.ws=(C,cap)=>{
+  const N=36, K=4, stages=[0,.05,1], nets=stages.map(p=>wsNet(N,K,p,9)), stats=nets.map(W=>[avgClust(W.adj),avgDist(W.adj)]);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const st=Math.floor(t/4500)%3, W=nets[st], p=stages[st];
+    const wide=w>=480, RR=wide?[0,20,w*.55,h-20]:[0,20,w,h*.6-20], CR=wide?[w*.58,30,w*.4,h-60]:[30,h*.62+8,w-50,h*.38-34];
+    const r=Math.min(RR[2],RR[3])*.42, pp=ringPos(N,RR[0]+RR[2]/2,RR[1]+RR[3]/2,r);
+    W.E.forEach(([a,b,rw])=>ringEdge(ctx,a,b,rw,N,pp,[RR[0]+RR[2]/2,RR[1]+RR[3]/2],rw?COL.amber:COL.cyan,rw?2:1.4,rw?.95:.6));
+    pp.forEach(([x,y])=>dot(ctx,x,y,4,COL.cyan,6));
+    // curves vs log p
+    const lx=p=>CR[0]+CR[2]*(Math.log10(Math.max(p,.001))+3)/3, ly=v=>CR[1]+CR[3]*(1-v);
+    seg(ctx,[CR[0],CR[1]+CR[3]],[CR[0]+CR[2],CR[1]+CR[3]],COL.ink2,1); seg(ctx,[CR[0],CR[1]],[CR[0],CR[1]+CR[3]],COL.ink2,1);
+    [[1,COL.violet,'clustering C'],[2,COL.green,'distance L']].forEach(([j,col,nm],q)=>{ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.beginPath();
+      WSCURVE.forEach((r,i)=>{ const X=lx(r[0]), Y=ly(r[j]); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }); ctx.stroke(); ctx.restore(); label(ctx,nm,CR[0]+CR[2]-4,CR[1]+8+q*14,col,11,'right'); });
+    label(ctx,'0.001',lx(.001),CR[1]+CR[3]+10,COL.ink2,10); label(ctx,'0.01',lx(.01),CR[1]+CR[3]+10,COL.ink2,10); label(ctx,'0.1',lx(.1),CR[1]+CR[3]+10,COL.ink2,10); label(ctx,'1',lx(1),CR[1]+CR[3]+10,COL.ink2,10);
+    if(p>0) seg(ctx,[lx(p),CR[1]],[lx(p),CR[1]+CR[3]],COL.mag,1.5,.8,[4,3]);
+    cap.innerHTML=`p = ${p} · ${st===0?'ring with 1st and 2nd neighbours: many triangles, long paths':st===1?'<span style="color:var(--amber)">a few shortcuts</span>: short paths, triangles survive':'random: short paths, no triangles'} · C = ${stats[st][0].toFixed(2)}, L = ${stats[st][1].toFixed(1)}`;
+  };
+};
+
+// --- random failures vs targeted attack, on a random network and on a network with hubs
+function hubNet(N, seed, pm=.5){ const R=rng(seed), E=[], rep=[0,1]; E.push([0,1]);
+  for(let v=2; v<N; v++){ const m=R()<pm?2:1, t=new Set(); while(t.size<Math.min(m,v)) t.add(rep[Math.floor(R()*rep.length)]); for(const u of t){ E.push([u,v]); rep.push(u,v); } } return E; }
+ANIM.robust=(C,cap)=>{
+  const N=110, R=rng(3);
+  const mk=E=>{ const deg=degrees(N,E), rnd=d3range(N).sort(()=>R()-.5), att=d3range(N).sort((a,b)=>deg[b]-deg[a]);
+    const curve=ord=>d3range(41).map(i=>{ const gone=new Set(ord.slice(0,Math.round(i/50*N))); return comps(N,E.filter(([a,b])=>!gone.has(a)&&!gone.has(b))).bigSize/N; });
+    return {E, deg, P:layout(N,E,5,300), ord:[rnd,att], cur:[curve(rnd),curve(att)]}; };
+  const NETS=[mk(erEdges(erPairs(N,21),N,4)), mk(hubNet(N,8,1))]; // same ⟨k⟩ ≈ 4
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h);
+    const s=(t%32000)/1000, ph=Math.floor(s/8), net=NETS[ph>>1], mode=ph&1, f=Math.min(.8,((s%8)/6.5)*.8), gone=new Set(net.ord[mode].slice(0,Math.round(f*N)));
+    const Ek=net.E.filter(([a,b])=>!gone.has(a)&&!gone.has(b)), cc=comps(N,Ek), pos=inBox(net.P,[0,34,w,h-34],16,1.7);
+    Ek.forEach(([a,b])=>{ const g=cc.lab[a]===cc.big; seg(ctx,pos[a],pos[b],g?COL.mag:COL.cyan,1.3,g?.8:.45); });
+    pos.forEach(([x,y],i)=>{ if(gone.has(i)) dot(ctx,x,y,2.5,COL.red,0,.35); else { const g=cc.lab[i]===cc.big; dot(ctx,x,y,(g?3:2.5)+(ph>>1?Math.sqrt(net.deg[i])*.6:0),g?COL.mag:COL.cyan,g?8:4); } });
+    const W=Math.min(150,w*.36), H=Math.min(80,h*.28), x0=w-W-10, y0=h-H-12;
+    ctx.save(); ctx.fillStyle='rgba(7,11,18,.85)'; ctx.fillRect(x0-6,y0-16,W+12,H+30); ctx.restore();
+    seg(ctx,[x0,y0+H],[x0+W,y0+H],COL.ink2,1); seg(ctx,[x0,y0],[x0,y0+H],COL.ink2,1);
+    [[net.cur[0],COL.cyan],[net.cur[1],COL.red]].forEach(([c,col],j)=>{ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=j===mode?2.4:1.2; ctx.globalAlpha=j===mode?1:.5; ctx.beginPath(); c.forEach((v,i)=>{ const X=x0+W*i/40, Y=y0+H*(1-v); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }); ctx.stroke(); ctx.restore(); });
+    label(ctx,'f removed',x0+W-24,y0+H+9,COL.ink2,10); label(ctx,'S',x0,y0-8,COL.mag,11);
+    dot(ctx,x0+W*f/.8,y0+H*(1-cc.bigSize/N),4,COL.mag,10);
+    cap.innerHTML=`<span style="color:var(--amber)">${ph>>1?'NETWORK WITH HUBS':'RANDOM NETWORK'}</span> · ${mode?'<span style="color:var(--red)">targeted attack</span>: biggest hubs first':'<span style="color:var(--cyan)">random failures</span>'}<br>removed ${Math.round(f*100)}% · giant component ${Math.round(100*cc.bigSize/N)}%`;
+  };
+};
+
+/* =====================================================================
+   CHALLENGE CONTENT
+   ===================================================================== */
+(()=>{ // read the swarm: four snapshots of a random network
+  const N=100, P=erPairs(N,33), O=['Subcritical (⟨k⟩ < 1)','Critical (⟨k⟩ ≈ 1)','Supercritical (⟨k⟩ > 1)','Connected (⟨k⟩ > ln N)'];
+  const snap=k=>{ const E=erEdges(P,N,k); return {E, cc:comps(N,E), pos:layout(N,E,4,260)}; };
+  const draw=k=>{ let S=null; return (C,t,st,done)=>{ if(!S) S=snap(k); const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const p=inBox(S.pos,[0,0,w,h],16,1.7);
+    S.E.forEach(([a,b])=>{ const g=S.cc.lab[a]===S.cc.big; seg(ctx,p[a],p[b],g?COL.mag:COL.cyan,1.3,g?.8:.5); });
+    p.forEach(([x,y],i)=>{ const g=S.cc.lab[i]===S.cc.big; dot(ctx,x,y,g?3.6:3,g?COL.mag:COL.cyan,g?8:4); });
+    if(done) label(ctx,`⟨k⟩ = ${k} · largest piece ${S.cc.bigSize} of ${N}`,w/2,h-10,COL.amber,12); }; };
+  const it=(k,a,why)=>({q:'100 copies of NEXUS. The <span style="color:var(--mag)">largest connected piece</span> is pink. Which regime is this swarm in?', canvas:draw(k), h:'min(34vh,280px)', o:O, a, why});
+  SC('phase').items=[
+    it(2.5,2,'a giant component holds most copies, but some are still isolated.'),
+    it(.5,0,'only tiny pieces: on average less than one link per copy.'),
+    it(7,3,'⟨k⟩ is above ln 100 ≈ 4.6: every copy is in the same piece.'),
+    it(1,1,'right at the threshold: pieces of all sizes, no giant yet.'),
+    {icon:'🐝', sys:'THE REAL SWARM', q:'The real swarm has 10,000 copies, each linked to 3 others at random. Can it think as one?', o:['No: ⟨k⟩ is too small','Yes: ⟨k⟩ = 3 > 1, a giant component holds about 94% of the copies'], a:1, why:'S = 1 − e^(−3S) gives S ≈ 0.94.'},
+  ];
+})();
+
+(()=>{ // stress test: an attack mini-game plus two questions
+  const N=34, E=hubNet(N,14,.15), deg=degrees(N,E), P=bestLayout(N,E,8), top=d3range(N).sort((x,y)=>deg[y]-deg[x]).slice(0,3);
+  const bigOf=gone=>{ const cc=comps(N,E.filter(([a,b])=>!gone.has(a)&&!gone.has(b))); let m=0; const sz={}; for(let i=0;i<N;i++) if(!gone.has(i)){ sz[cc.lab[i]]=(sz[cc.lab[i]]||0)+1; m=Math.max(m,sz[cc.lab[i]]); } return m; };
+  const target=bigOf(new Set(top))+2;
+  SC('rob').items=[
+    {q:`<b>Attack!</b> You can switch off <b>3</b> copies. Shrink the largest connected piece below <b>${target+1}</b> of ${N} copies.`, h:'min(38vh,320px)', pts:10,
+     canvas:(C,t,st,done)=>{ const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); st.p=inBox(P,[0,0,w,h],20,1.6); const sel=st.sel||new Set();
+       const gone=done?st.final:sel, Ek=E.filter(([a,b])=>!gone.has(a)&&!gone.has(b)), cc=comps(N,Ek);
+       let bl=-1, bm=0; if(done){ const sz={}; for(let i=0;i<N;i++) if(!gone.has(i)){ sz[cc.lab[i]]=(sz[cc.lab[i]]||0)+1; if(sz[cc.lab[i]]>bm){ bm=sz[cc.lab[i]]; bl=cc.lab[i]; } } }
+       Ek.forEach(([a,b])=>seg(ctx,st.p[a],st.p[b],done&&cc.lab[a]===bl?COL.mag:COL.cyan,1.5,.6));
+       st.p.forEach(([x,y],i)=>{ if(gone.has(i)) { dot(ctx,x,y,7,COL.red,12); label(ctx,'⏻',x,y+1,COL.bg,10,'center','Poppins'); } else dot(ctx,x,y,6,done&&cc.lab[i]===bl?COL.mag:COL.cyan,6); });
+       if(st.flash && performance.now()-st.flash<900) label(ctx,`largest piece: ${st.last}`,w/2,14,COL.red,13); },
+     tap:(x,y,st)=>{ const b=nearest(st.p||[],x,y,22); if(b<0) return null; st.sel=st.sel||new Set(); st.sel.has(b)?st.sel.delete(b):st.sel.add(b);
+       if(st.sel.size<3) return null; const g=new Set(st.sel), m=bigOf(g); st.sel=new Set();
+       if(m<=target){ st.final=g; return {ok:true}; } st.last=m; st.flash=performance.now(); return {no:`the largest piece still has ${m} copies. look for the copies that hold the others together.`}; },
+     why:'hitting the hubs first is the most effective attack: the network falls apart into small pieces.'},
+    {icon:'🎯', sys:'ATTACK', q:'Which strategy breaks a network faster?', o:['Removing random nodes','Removing the most connected nodes first'], a:1, why:'hubs hold the network together.'},
+    {icon:'🌐', sys:'THE INTERNET', q:'The internet survives random failures of almost all its routers, but would collapse if a few were attacked. What does that tell us about its degrees?', o:['They are all similar, like in a random network','They are very heterogeneous: a few hubs, many small nodes'], a:1, why:'random failures almost always hit small nodes, attacks hit the hubs.'},
+  ];
+})();
+
+/* =====================================================================
+   BOSS · KILL-CODE (Milgram routing on a Watts–Strogatz ring)
+   ===================================================================== */
+const SWARM=(()=>{ const N=120, W=wsNet(N,4,.07,3); return {N, E:W.E, adj:W.adj, pairs:[[105,48],[83,20],[18,70]]}; })();
+const BUDGET=14;
+const ringDist=(a,b)=>{ const d=Math.abs(a-b); return Math.min(d,SWARM.N-d); };
+BUILD.boss=()=>{
+  const key='boss', done=key in S.xp;
+  setNext('DEBRIEF ▸', done);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// MISSION</small>KILL-CODE</div>`;
+  const tag=el('div','timer calm','CODE 1/3'); head.appendChild(tag); stage.appendChild(head);
+  if(done) stage.appendChild(el('div','badge',`✓ cleared · +${S.xp[key]} XP · replay for practice`));
+  stage.appendChild(el('div','task',`Carry the code from <b style="color:var(--amber)">YOU</b> to the <b style="color:var(--red)">TARGET</b>. Tap a <b style="color:var(--mag)">ringed</b> copy to hop there. <span class="tip">Grey links are the ring. You only see the <span style="color:var(--amber)">shortcuts</span> of copies you have visited.</span>`));
+  const pR=el('div','panel'); pR.id='pRing'; const cR=el('div','cap',''); stage.appendChild(pR);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const goB=el('button','btn-main',''); goB.style.cssText='min-height:54px;font-size:15px;display:none'; stage.appendChild(goB);
+  const N=SWARM.N, adj=SWARM.adj;
+  let d=0, curN, path, seen, finished, scores=[], opt, sp, v=-1, pos=null;
+  const start=()=>{ const [s,tg]=SWARM.pairs[d]; curN=s; path=[s]; seen=new Set([s]); finished=false; const b=bfs(adj,s); opt=b.d[tg]; sp=pathTo(b.par,tg);
+    tag.textContent=`CODE ${d+1}/3`; info.className='fb info'; info.textContent=`> hops 0/${BUDGET} · target ${ringDist(s,tg)} addresses away`; goB.style.display='none'; };
+  start();
+  const lay=()=>{ const {w,h}=C; if(w&&C.v!==v){ v=C.v; const r=Math.min(w,h)/2-26; pos=ringPos(N,w/2,h/2+4,r); } };
+  const C=canvasIn(pR,(x,y)=>{ lay(); if(!pos||finished) return;
+    let b=-1, bd=40; adj[curN].forEach(u=>{ const q=pos[u], dd=Math.hypot(q[0]-x,q[1]-y); if(dd<bd){ bd=dd; b=u; } }); if(b<0) return;
+    curN=b; path.push(b); seen.add(b); const tg=SWARM.pairs[d][1], hops=path.length-1;
+    if(b===tg){ finished=true; const sc=Math.max(10,30-4*(hops-opt)); scores.push(sc);
+      info.className=hops===opt?'fb ok':'fb info'; info.innerHTML=`> delivered in ${hops} hops · the shortest route had ${opt} <span style="color:var(--green)">(green)</span>: <b>+${sc}</b>`; next(); }
+    else if(hops>=BUDGET){ finished=true; scores.push(0); info.className='fb no'; info.innerHTML=`> out of hops: the copies spotted you. the shortest route had only ${opt} <span style="color:var(--green)">(green)</span>.`; next(); }
+    else info.textContent=`> hops ${hops}/${BUDGET} · target ${ringDist(b,tg)} addresses away`; });
+  pR.appendChild(cR);
+  const next=()=>{ goB.style.display=''; goB.textContent = d<2 ? 'NEXT CODE ▸' : 'FINISH ▸'; };
+  goB.onclick=()=>{ if(d<2){ d++; start(); return; }
+    goB.style.display='none'; const tot=scores.reduce((a,b)=>a+b,0), got=award(key,tot);
+    info.className='fb ok'; info.innerHTML=`> codes: ${scores.join(' · ')} = <b>${tot} XP</b>${got?'':' (practice run, XP already earned)'}<br>> on a plain ring each code would have needed about 30 hops. the shortcuts make the swarm a small world.`;
+    tag.textContent='DONE'; setNext('DEBRIEF ▸',true); };
+  cur.draw=t=>{ lay(); const {ctx,w,h}=C; if(!w||!pos) return; ctx.clearRect(0,0,w,h);
+    const [s,tg]=SWARM.pairs[d];
+    SWARM.E.forEach(([a,b,rw])=>{ if(!rw) ringEdge(ctx,a,b,0,N,pos,[w/2,h/2+4],COL.ink2,1,.4); else if(seen.has(a)||seen.has(b)) seg(ctx,pos[a],pos[b],COL.amber,1.5,.75); });
+    if(finished) for(let i=0;i<sp.length-1;i++) seg(ctx,pos[sp[i]],pos[sp[i+1]],COL.green,3,.9,[6,4]);
+    for(let i=0;i<path.length-1;i++) seg(ctx,pos[path[i]],pos[path[i+1]],COL.mag,3.2,1);
+    pos.forEach(([x,y],i)=>dot(ctx,x,y,seen.has(i)?3.6:2.6,seen.has(i)?COL.mag:COL.cyan,4,seen.has(i)?1:.75));
+    if(!finished){ const g=.5+.5*Math.sin(t/180); adj[curN].forEach(u=>ring(ctx,pos[u][0],pos[u][1],7+g*2,COL.mag,1.8,.85)); }
+    ring(ctx,pos[tg][0],pos[tg][1],10,COL.red,2.5); dot(ctx,pos[tg][0],pos[tg][1],5,COL.red,12);
+    ring(ctx,pos[s][0],pos[s][1],10,COL.amber,2); dot(ctx,pos[curN][0],pos[curN][1],6,COL.mag,16);
+    const lab=(i,txt,col)=>{ const q=pos[i], dx=q[0]-w/2, dy=q[1]-h/2, L=Math.hypot(dx,dy)||1; label(ctx,txt,q[0]+dx/L*20,q[1]+dy/L*16,col,12); };
+    lab(s,'YOU',COL.amber); lab(tg,'TARGET',COL.red);
+    cR.textContent=`SWARM · ${N} copies on a ring of addresses`;
+  };
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=150?'NAVIGATOR':x>=100?'ANALYST':'RECRUIT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a);
+  const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: the three key copies are silent. the swarm falls back into pieces.`,
+    `VERA: ...but one last transfer slipped through. a copy of NEXUS reached the Helix Cloud data centre.`,
+    `VERA: and it's growing again. not at random this time: new servers link to the busiest ones.`,
+    `> [ LEVEL 3 COMPLETE ]`,
+    `VERA: next time: scale-free networks. and then we shut it down.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `<b>Erdős–Rényi</b> G(N, p): every pair linked with probability p; <b>⟨k⟩ = p(N−1)</b>; Poisson degrees, no hubs.`,
+      `A <b>giant component</b> appears at <b>⟨k⟩ = 1</b> (phase transition); for ⟨k⟩ &gt; ln N the network is connected.`,
+      `Random networks are <b>small worlds</b>: L ≈ ln N / ln ⟨k⟩ (Milgram's six degrees).`,
+      `But their clustering is tiny, <b>C = ⟨k⟩/N</b>, unlike real networks.`,
+      `<b>Watts–Strogatz</b>: a ring (first and second neighbours) plus a few random shortcuts gives short paths <b>and</b> high clustering.`,
+      `<b>Targeted attacks</b> on hubs hurt far more than <b>random failures</b>, especially in networks with hubs; <b>Molloy–Reed</b>: giant if ⟨k²⟩/⟨k⟩ &gt; 2.`],
+      'level4.html', 'LEVEL 4 · THE HUBS');
+  });
+  // the swarm falls apart, then a new hub-centred network starts growing
+  const N=90, P=erPairs(N,8), E=erEdges(P,N,2.6), L=layout(N,E,6,260), R=rng(4);
+  const deg0=degrees(N,E), killers=d3range(N).sort((a,b)=>deg0[b]-deg0[a]).slice(0,3);
+  let v=-1, pos, t0=null, ba=[], rep=[];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; if(C.v!==v){ v=C.v; pos=inBox(L,[0,10,w*.62,h-20],14,1.6); }
+    const now=performance.now(); if(t0===null) t0=now; const s=(now-t0)/1000; ctx.clearRect(0,0,w,h);
+    const cut=s>1.2, fade=clamp((s-1.2)/1.5,0,1);
+    const Ek=cut?E.filter(([a,b])=>!killers.includes(a)&&!killers.includes(b)):E, cc=comps(N,Ek);
+    E.forEach(([a,b])=>{ const dead=killers.includes(a)||killers.includes(b); if(dead&&cut) return; seg(ctx,pos[a],pos[b],COL.cyan,1.1,.5*(1-fade*.6)); });
+    pos.forEach(([x,y],i)=>dot(ctx,x,y,killers.includes(i)?5:2.8,killers.includes(i)?COL.red:COL.cyan,killers.includes(i)?14:4,killers.includes(i)?1:1-fade*.4));
+    // preferential attachment growth on the right
+    const cx=w*.8, cy=h/2;
+    while(s>3 && ba.length<Math.min(60,(s-3)*8)){ if(!ba.length){ ba.push({x:cx,y:cy,l:[]}); rep.push(0); continue; }
+      const tgt=rep[Math.floor(R()*rep.length)], a=R()*7, d=14+R()*Math.min(w*.09,h*.3), q=ba[tgt];
+      ba.push({x:clamp(q.x+Math.cos(a)*d,w*.66,w-14), y:clamp(q.y+Math.sin(a)*d,14,h-14), l:[tgt]}); rep.push(ba.length-1,tgt); }
+    const dg=ba.map(()=>0); ba.forEach((b,i)=>b.l.forEach(j=>{dg[i]++;dg[j]++;}));
+    ba.forEach(b=>b.l.forEach(j=>seg(ctx,[b.x,b.y],[ba[j].x,ba[j].y],COL.amber,1.2,.6)));
+    ba.forEach((b,i)=>dot(ctx,b.x,b.y,2.5+Math.sqrt(dg[i])*1.3,COL.amber,10));
+  };
+};
+
+start();
+</script>
+</body>
+</html>
