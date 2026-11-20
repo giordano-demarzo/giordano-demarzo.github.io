@@ -82,13 +82,13 @@ const SCENES=[
   {kind:'card', anim:'comm', tag:'TRAINING 1', title:'COMMUNITIES',
     vera:'same people, same links. just look at them the right way.',
     pts:[`A <b>community</b> is a group of nodes densely linked to each other and sparsely linked to the rest. They come from <b>clustering</b> and <b>homophily</b>: friend circles, research groups, modules in cells.`,
-         `<b>Strong</b> community: every node has more links inside than outside. <b>Weak</b> community: only the group as a whole has more links inside than outside.`,
+         `<b>Strong</b> community: every node has more links inside than outside. <b>Weak</b> community: only the group as a whole does. $$\\begin{array}{ll}\\text{strong:} & k_i^{\\text{in}}>k_i^{\\text{out}}\\ \\text{ for every } i\\in c\\\\ \\text{weak:} & \\sum_{i\\in c}k_i^{\\text{in}}>\\sum_{i\\in c}k_i^{\\text{out}}\\end{array}$$`,
          `<b>Community detection</b> splits a network into communities automatically, from its structure alone. It is hard: communities overlap, boundaries are fuzzy, networks are huge. Unlike clustering, there is no distance between points, only links.`]},
   {kind:'card', anim:'mod', tag:'TRAINING 2', title:'MODULARITY',
     vera:'a network can be cut in a million ways. we need a score.',
-    pts:[`<b>Modularity</b> Q compares the links inside the communities with those expected in a <b>random network</b> with the same degrees.`,
-         `Q = Σ<sub>c</sub> [ L<sub>c</sub>/E − (K<sub>c</sub>/2E)² ], with L<sub>c</sub> the links inside community c and K<sub>c</sub> the total degree of its nodes.`,
-         `<b>Q &lt; 0</b>: badly grouped. <b>Q = 0</b>: everything in one community. <b>Q &gt; 0</b>: some structure. The <b>maximum</b> of Q marks the best partition.`]},
+    pts:[`<b>Modularity</b> $Q$ compares the links inside the communities with those expected in a <b>random network</b> with the same degrees.`,
+         `For each community: the fraction of links inside it, minus the fraction expected at random: $$Q=\\sum_{c}\\left[\\frac{L_c}{E}-\\left(\\frac{K_c}{2E}\\right)^{2}\\right]$$<span class="where">$L_c$: links inside community $c$; $K_c$: total degree of its nodes; $E$: links in the network.</span>`,
+         `$Q<0$: badly grouped. $Q=0$: everything in one community. $Q>0$: some structure. The <b>maximum</b> of $Q$ marks the best partition.`]},
   {kind:'steps', key:'q', nm:'Challenge · Score the split', tag:'CHALLENGE 1', title:'SCORE THE SPLIT', items:[] /* filled below */},
   {kind:'card', anim:'gn', tag:'TRAINING 3', title:'GIRVAN–NEWMAN',
     vera:'the links between groups carry all the traffic. cut those first.',
@@ -97,20 +97,20 @@ const SCENES=[
          `The sequence of splits forms a <b>dendrogram</b>; cut it where the <b>modularity</b> is highest.`]},
   {kind:'card', anim:'louvain', tag:'TRAINING 4', title:'GREEDY AND LOUVAIN',
     vera:'or the other way around: start from tiny groups and grow them.',
-    pts:[`<b>Greedy modularity</b>: start with every node alone, keep merging the pair of communities that increases Q the most, stop when Q stops growing.`,
-         `<b>Louvain</b>: move single nodes to the neighbouring community that increases Q most, then <b>aggregate</b> each community into a meta-node and repeat. <b>Leiden</b> adds a refinement step that keeps communities well connected.`,
-         `Limits: many different partitions have almost the same Q, and even <b>random</b> networks can reach high Q. Different algorithms can disagree, especially on <b>bridge</b> nodes: test more than one. Community sizes are often <b>fat-tailed</b>.`]},
+    pts:[`<b>Greedy modularity</b>: start with every node alone, keep merging the pair of communities that increases $Q$ the most, stop when $Q$ stops growing.`,
+         `<b>Louvain</b>: move single nodes to the neighbouring community that increases $Q$ most, then <b>aggregate</b> each community into a meta-node and repeat. <b>Leiden</b> adds a refinement step that keeps communities well connected.`,
+         `Limits: many different partitions have almost the same $Q$, and even <b>random</b> networks can reach high $Q$. Different algorithms can disagree, especially on <b>bridge</b> nodes: test more than one. Community sizes are often <b>fat-tailed</b>.`]},
   {kind:'steps', key:'alg', nm:'Challenge · Algorithms', tag:'CHALLENGE 2', title:'ALGORITHMS', items:[] /* filled below */},
   {kind:'card', anim:'form', tag:'TRAINING 5', title:'WHY GROUPS FORM',
     vera:'the CIRCLE did not need a secret handshake. similar people just stick together.',
-    pts:[`<b>Stochastic block model</b>: assign nodes to groups, then link them at random, with a high probability <b>p<sub>in</sub></b> inside groups and a low <b>p<sub>out</sub></b> between them.`,
+    pts:[`<b>Stochastic block model</b>: assign nodes to groups, then link them at random, with a high probability inside groups and a low one between them: $p_{\\text{in}}\\gg p_{\\text{out}}$.`,
          `<b>Homophily + popularity</b>: new nodes link to nodes that are popular <b>and</b> similar to them. The result is scale-free with communities. In <b>spatial networks</b> (airports, roads, power grids) closeness in space plays the role of similarity.`,
          `<b>Coevolution</b>: similarity creates links, and links make people more similar over time. Shared <b>affiliations</b> (workplace, school, hobbies) also create groups: a bipartite network and its projection.`]},
   {kind:'card', anim:'weak', tag:'TRAINING 6', title:'THE STRENGTH OF WEAK TIES',
     vera:'how does news leave a closed group? not through best friends.',
     pts:[`<b>Granovetter</b>: people find jobs mostly through <b>acquaintances</b>, not close friends. Close friends know the same things you know.`,
          `<b>Strong ties</b> sit inside dense groups (triadic closure): they are <b>embedded</b> and redundant. <b>Weak ties</b> are the <b>bridges</b> between groups and bring new information.`,
-         `<b>Edge overlap</b> O<sub>ij</sub> = common neighbours of i and j / [(k<sub>i</sub>−1) + (k<sub>j</sub>−1) − common]. In real phone networks, stronger ties have higher overlap, and removing the <b>low-overlap</b> links first breaks the network fastest.`]},
+         `<b>Edge overlap</b>: the fraction of the neighbours of $i$ and $j$ that they share: $$O_{ij}=\\frac{n_{ij}}{(k_i-1)+(k_j-1)-n_{ij}}$$<span class="where">$n_{ij}$: common neighbours of $i$ and $j$.</span> In real phone networks, stronger ties have higher overlap, and removing the <b>low-overlap</b> links first breaks the network fastest.`]},
   {kind:'steps', key:'ties', nm:'Challenge · Weak or strong', tag:'CHALLENGE 3', title:'WEAK OR STRONG', items:[] /* filled below */},
   {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
     `> 23:30 · HELIX SOCIAL NETWORK`,
@@ -234,7 +234,7 @@ ANIM.weak=(C,cap)=>{
     label(ctx,'2 links inside · 3 outside',p[4][0],p[4][1]+28,COL.mag,12); };
   SC('q').items=[
     {q:'Two ways to split the same network. Which partition has the higher <b>modularity</b>?', canvas:two, h:'min(28vh,230px)', o:['A','B'], a:1, why:'B puts the densely linked nodes together: many more links inside than a random network would give.'},
-    {icon:'⚪', sys:'ONE BIG GROUP', q:'You put every node in a single community. The modularity is…', o:['Q = 0','Q = 1','Q = −1'], a:0, why:'all links are inside, but that is exactly what a random network would give too.'},
+    {icon:'⚪', sys:'ONE BIG GROUP', q:'You put every node in a single community. The modularity is…', o:['$Q=0$','$Q=1$','$Q=-1$'], a:0, why:'all links are inside, but that is exactly what a random network would give too.'},
     {q:'The <span style="color:var(--cyan)">blue</span> group has many more links inside than outside, but the circled node has 2 links inside and 3 outside. The blue community is…', canvas:weakPic, h:'min(28vh,230px)', o:['strong','weak'], a:1, why:'in a strong community every single node has more links inside than outside.'},
   ];
 })();
@@ -255,7 +255,7 @@ ANIM.weak=(C,cap)=>{
     E.forEach(([a,b])=>seg(ctx,p[a],p[b],a===0&&b===1?COL.mag:COL.cyan,a===0&&b===1?3.5:1.6,.85)); p.forEach(([x,y],i)=>nodeL(ctx,x,y,i<2?13:8,i<2?COL.mag:COL.cyan,i===0?'i':i===1?'j':''));
     if(done){ ring(ctx,p[2][0],p[2][1],13,COL.green,2); ring(ctx,p[3][0],p[3][1],13,COL.green,2); } };
   SC('ties').items=[
-    {q:'Node <b>i</b> has 4 links, <b>j</b> has 4 links, and they share 2 neighbours. What is the <b>overlap</b> of the link i–j?', canvas:pic, h:'min(26vh,210px)', o:['2/4','2/(3+3−2) = 1/2','2/8'], a:1, why:'O = common / [(k_i−1)+(k_j−1)−common] = 2/(3+3−2) = 1/2.'},
+    {q:'Node <b>i</b> has 4 links, <b>j</b> has 4 links, and they share 2 neighbours. What is the <b>overlap</b> of the link i–j?', canvas:pic, h:'min(26vh,210px)', o:['$2/4$','$2/(3+3-2)=1/2$','$2/8$'], a:1, why:'$O_{ij}=\\frac{n_{ij}}{(k_i-1)+(k_j-1)-n_{ij}}=\\frac{2}{3+3-2}=\\frac{1}{2}$.'},
     {icon:'💼', sys:'GRANOVETTER', q:'Where do people most often hear about a new job?', o:['From close friends','From acquaintances'], a:1, why:'acquaintances bridge to groups with information you do not have.'},
     {icon:'🔗', sys:'EMBEDDED', q:'Strong ties (many calls, close friends) tend to have…', o:['high overlap: they sit inside dense groups','low overlap: they bridge groups'], a:0, why:'triadic closure makes strong ties redundant.'},
     {icon:'✂️', sys:'FRAGMENT', q:'To break a social network into pieces with as few removed links as possible, remove first the links with…', o:['the highest overlap','the lowest overlap'], a:1, why:'low-overlap links are the weak ties bridging communities.'},
@@ -343,7 +343,7 @@ BUILD.end=()=>{
     `VERA: next time: processes on networks. we need to understand how things spread.`], ()=>{
     endSummary(rest, xp, rankOf(xp), [
       `<b>Communities</b>: dense inside, sparse outside; <b>strong</b> (every node) or <b>weak</b> (the group as a whole).`,
-      `<b>Modularity</b> Q compares internal links with a random network with the same degrees; higher is better, but many partitions are almost as good.`,
+      `<b>Modularity</b> $Q$ compares internal links with a random network with the same degrees; higher is better, but many partitions are almost as good.`,
       `<b>Girvan–Newman</b> removes high edge-betweenness links; <b>greedy</b>, <b>Louvain</b> and <b>Leiden</b> optimise modularity.`,
       `Communities form through <b>homophily</b>: stochastic block model, homophilic attachment, spatial networks, coevolution, affiliations.`,
       `<b>Weak ties</b> (low overlap) bridge communities and carry new information; removing them fragments a network fastest.`],

@@ -6,6 +6,29 @@ let S = store.get() || {xp:{}, at:0, best:0};
 const save = ()=>store.set(S);
 const totalXP = ()=>Object.values(S.xp).reduce((a,b)=>a+b,0);
 
+/* ---------------- math typesetting (KaTeX, loaded on demand) ----------------
+   In any text: $...$ inline, $$...$$ as a centred display formula.
+   Inside JS strings every backslash must be doubled: '$\\frac{a}{b}$'.            */
+const TEX={ready:false, opts:{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false, strict:false}};
+(function(){ const V='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/';
+  const l=document.createElement('link'); l.rel='stylesheet'; l.href=V+'katex.min.css'; document.head.appendChild(l);
+  const a=document.createElement('script'); a.src=V+'katex.min.js'; a.onload=()=>{ const b=document.createElement('script'); b.src=V+'contrib/auto-render.min.js';
+    b.onload=()=>{ TEX.ready=true; tex(document.body); }; document.head.appendChild(b); }; document.head.appendChild(a); })();
+function tex(node){ if(TEX.ready && node) try{ renderMathInElement(node, TEX.opts); }catch(e){} }
+
+/* ---------------- debug mode: a code on every page, for page-by-page notes ----------------
+   ?debug=1 turns it on (remembered), ?debug=0 turns it off. Code = L<level>-<scene>[-Q<item>]. */
+const DBG=(()=>{ const q=new URLSearchParams(location.search);
+  try{ if(q.get('debug')==='1') localStorage.setItem('nexus-debug','1'); if(q.get('debug')==='0') localStorage.removeItem('nexus-debug'); return localStorage.getItem('nexus-debug')==='1'; }
+  catch(e){ return q.get('debug')==='1'; } })();
+let dbgEl=null;
+function dbg(extra){ if(!DBG) return;
+  if(!dbgEl){ dbgEl=el('div','dbg'); document.body.appendChild(dbgEl);
+    dbgEl.onclick=()=>{ try{ navigator.clipboard.writeText(dbgEl.dataset.code); }catch(e){} dbgEl.classList.add('copied'); setTimeout(()=>dbgEl.classList.remove('copied'),800); }; }
+  const n=(LEVEL.key.match(/\d+/)||['0'])[0], sc=SCENES[idx];
+  const code=`L${n}-${String(idx).padStart(2,'0')}${extra?'-'+extra:''}`;
+  dbgEl.dataset.code=code; dbgEl.innerHTML=`<b>${code}</b> ${sc.kind}${sc.key?':'+sc.key:sc.anim?':'+sc.anim:''}`; }
+
 /* ---------------- utilities ---------------- */
 function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 const ease = t => t<0?0:t>1?1:t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
@@ -160,8 +183,9 @@ function go(i){
   for(let k=1;k<SCENES.length;k++){ const s=el('i'); if(k<idx) s.className='done'; if(k===idx) s.className='cur';
     if(k<=S.max && k!==idx){ s.classList.add('go'); s.title=sceneName(k); s.onclick=()=>go(k); } prog.appendChild(s); }
   document.getElementById('bMenu').style.visibility = S.max>1 ? 'visible' : 'hidden';
-  updXP();
+  updXP(); dbg();
   BUILD[sc.kind](sc);
+  tex(stage);
 }
 function sceneName(k){ const sc=SCENES[k]; return sc.nm || (sc.title ? sc.title.charAt(0)+sc.title.slice(1).toLowerCase() : ''); }
 function jumpList(box){ box.innerHTML='';
@@ -260,7 +284,7 @@ function endSummary(box, xp, rank, learned, nextHref, nextLabel){
     <div class="card fade"><h3>WHAT YOU LEARNED</h3><ul class="pts">${learned.map(l=>'<li>'+l+'</li>').join('')}</ul></div>
     <div class="card fade"><h3>REVISIT ANY PAGE</h3><div class="jl" id="eJl"></div></div>
     <div class="btnrow fade"><button id="eRe">↻ TITLE SCREEN</button>${nextHref?`<button class="btn-main" id="eNx">${nextLabel} ▸</button>`:`<button class="btn-main" disabled>${nextLabel}</button>`}</div>`;
-  jumpList(document.getElementById('eJl'));
+  jumpList(document.getElementById('eJl')); tex(box);
   document.getElementById('eRe').onclick=()=>go(0);
   if(nextHref) document.getElementById('eNx').onclick=()=>{ location.href=nextHref; };
 }
@@ -283,14 +307,14 @@ BUILD.steps=sc=>{
   const wrap=el('div'); stage.appendChild(wrap);
   let i=0;
   const show=()=>{
-    const it=sc.items[i]; wrap.innerHTML=''; cur.draw=null;
+    const it=sc.items[i]; wrap.innerHTML=''; cur.draw=null; dbg('Q'+(i+1));
     const c=el('div','qcard fade');
     c.innerHTML = it.icon ? `<div class="qtop"><div class="qicon">${it.icon}</div><div><div class="qn">${sc.unit||'QUESTION'} ${i+1} / ${n}</div><div class="qsys">${it.sys||''}</div></div></div>`
                           : `<div class="qn">${sc.unit||'QUESTION'} ${i+1} / ${n}</div>`;
     c.appendChild(el('div','qtext',it.q));
     let first=true, answered=false; const st={}; const fb=el('div','fb');
     const right=()=>{ if(answered) return; answered=true; const pts=first?(it.pts||5):2, got=award(key+i,pts);
-      fb.className='fb ok'; fb.innerHTML=`> right${it.why?': '+it.why:'.'} ${got?'<b>+'+pts+' XP</b>':''}`;
+      fb.className='fb ok'; fb.innerHTML=`> right${it.why?': '+it.why:'.'} ${got?'<b>+'+pts+' XP</b>':''}`; tex(fb);
       const last=i===n-1, nb=el('button','btn-main', last?'ALL DONE ✓':'NEXT ▸'); nb.style.minHeight='48px';
       if(!last) nb.onclick=()=>{ i++; show(); stage.scrollTop=0; }; else { nb.disabled=true; setNext('NEXT ▸',true); }
       c.appendChild(nb); };
@@ -300,6 +324,6 @@ BUILD.steps=sc=>{
       cur.draw=t=>{ if(C.w) it.canvas(C,t,st,answered); }; }
     if(it.o){ const opts=el('div','opts'); it.o.forEach((o,k)=>{ const b=el('button',null,o); b.onclick=()=>{ if(answered) return;
         if(k===it.a){ b.className='ok'; right(); } else { b.className='no'; b.disabled=true; wrong(it.no&&it.no[k]); } }; opts.appendChild(b); }); c.appendChild(opts); }
-    c.appendChild(fb); wrap.appendChild(c); };
+    c.appendChild(fb); wrap.appendChild(c); tex(c); };
   show();
 };

@@ -125,3 +125,14 @@ body.notop .top, body.nonav .nav{display:none}
 .fade{animation:fadein .6s ease both}
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (min-width:700px){ .h{font-size:26px} .pts li{font-size:16px} .term{font-size:19px} }
+
+/* math */
+.katex{font-size:1.08em;color:var(--ink)}
+.katex-display{margin:8px 0 4px;padding:8px 10px;border-radius:10px;background:rgba(56,225,255,.06);border:1px solid rgba(56,225,255,.18);overflow-x:auto;overflow-y:hidden}
+.katex-display>.katex{font-size:1.2em}
+.opts .katex,.fb .katex{color:inherit}
+.where{display:block;font-size:13px;color:var(--ink2);margin-top:2px}
+/* debug badge */
+.dbg{position:fixed;left:6px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:9999;font-family:'Share Tech Mono',monospace;font-size:12px;color:#fff;background:rgba(255,61,129,.88);border-radius:8px;padding:3px 8px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.dbg b{font-size:14px;letter-spacing:.04em}
+.dbg.copied{background:var(--green);color:#000}

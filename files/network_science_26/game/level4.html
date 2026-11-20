@@ -83,10 +83,10 @@ const SCENES=[
     vera:'two cities. one built by the bell curve, one by the power law.',
     pts:[`In the <b>Gaussian world</b> (heights, weights, speeds) values cluster around the average. No surprises: a small sample tells you everything.`,
          `In the <b>Paretian world</b> (wealth, financial crises, wars, disasters) <b>extreme events</b> dominate, and the next sample can be bigger than everything seen so far.`,
-         `A <b>power law</b> P(k) = c·k<sup>−γ</sup> decays much more slowly than a Gaussian. For <b>γ &lt; 3</b> the variance diverges; for γ &lt; 2 even the mean does.`]},
+         `A <b>power law</b> decays much more slowly than a Gaussian: $$P(k)=c\\,k^{-\\gamma}$$ For $\\gamma<3$ the variance diverges; for $\\gamma<2$ even the mean does.`]},
   {kind:'card', anim:'loglog', tag:'TRAINING 2', title:'SPOTTING A POWER LAW',
     vera:'how do you recognise one in the data? change the axes.',
-    pts:[`On a <b>log-log</b> plot a power law is a <b>straight line</b> with slope <b>−γ</b>.`,
+    pts:[`Take the logarithm: a power law becomes a <b>straight line</b> with slope $-\\gamma$ on a <b>log-log</b> plot. $$\\log P(k)=-\\gamma\\log k+\\log c$$`,
          `With bins of equal width the tail is just noise: most bins are empty or hold a single event.`,
          `<b>Logarithmic binning</b>: each bin is a fixed factor wider than the previous one, and its height is divided by its width.`,
          `Power laws are <b>scale-free</b>: multiply all sizes by a constant and the shape does not change. There is no typical size.`]},
@@ -94,29 +94,29 @@ const SCENES=[
   {kind:'card', anim:'sfnet', tag:'TRAINING 3', title:'SCALE-FREE NETWORKS',
     vera:'now put that power law in the degrees.',
     pts:[`A <b>scale-free network</b> has a power-law degree distribution: many nodes with few links and a few <b>hubs</b> with an enormous number of them. Examples: the WWW, the internet, air transport.`,
-         `Hubs grow fast with the size: k<sub>max</sub> ∝ N<sup>1/(γ−1)</sup>, against ~ln N in a random network.`,
-         `Three regimes: <b>γ &lt; 2</b> anomalous (no large networks), <b>2 &lt; γ &lt; 3</b> scale-free and <b>ultra-small world</b>, <b>γ &gt; 3</b> similar to a random network.`,
+         `Hubs grow fast with the size of the network: $$k_{\\max}\\sim N^{1/(\\gamma-1)}$$ against only $k_{\\max}\\sim\\ln N$ in a random network.`,
+         `Three regimes, with different average distances: $$\\begin{array}{ll}\\gamma<2 & \\text{anomalous: no large networks}\\\\ 2<\\gamma<3 & L\\sim\\ln\\ln N\\ \\text{(ultra-small world)}\\\\ \\gamma>3 & L\\sim\\ln N\\ \\text{(like a random network)}\\end{array}$$`,
          `Truly scale-free networks are rarer than once claimed, but real degree distributions are almost always <b>much wider</b> than in random networks.`]},
   {kind:'steps', key:'sf', nm:'Challenge · Find the hubs', tag:'CHALLENGE 2', title:'FIND THE HUBS', items:[] /* filled below */},
   {kind:'card', anim:'ba', tag:'TRAINING 4', title:'BARABÁSI–ALBERT',
     vera:'this is exactly how NEXUS is growing.',
-    pts:[`<b>Growth</b>: at every step a new node arrives and links to <b>m</b> existing nodes.`,
-         `<b>Preferential attachment</b>: it links to node i with probability <b>π<sub>i</sub> = k<sub>i</sub> / Σ<sub>j</sub>k<sub>j</sub></b>, proportional to its degree.`,
-         `<b>Rich get richer</b>: old nodes have had more time to collect links, and links attract more links. The result is a scale-free network with <b>γ = 3</b>, whatever m.`]},
+    pts:[`<b>Growth</b>: at every step a new node arrives and links to $m$ existing nodes.`,
+         `<b>Preferential attachment</b>: it links to node $i$ with a probability proportional to its degree: $$\\Pi_i=\\frac{k_i}{\\sum_j k_j}$$`,
+         `<b>Rich get richer</b>: old nodes have had more time to collect links, and links attract more links. The result is a scale-free network with $P(k)\\sim k^{-3}$, so $\\gamma=3$ whatever $m$.`]},
   {kind:'card', anim:'ingr', tag:'TRAINING 5', title:'WHAT DO YOU REALLY NEED?',
     vera:'take one ingredient away and see what happens.',
     pts:[`<b>Without preferential attachment</b> (new nodes link at random) the degrees are exponential: no hubs.`,
          `<b>Without growth</b> the distribution never settles into a power law. Both ingredients are needed.`,
-         `<b>Non-linear</b> attachment π ∝ k<sup>α</sup>: sublinear (α &lt; 1) is almost random, superlinear (α &gt; 1) gives a <b>hub-and-spoke</b> network.`]},
+         `<b>Non-linear</b> attachment, $\\Pi_i\\propto k_i^{\\alpha}$: sublinear ($\\alpha<1$) is almost random, superlinear ($\\alpha>1$) gives a <b>hub-and-spoke</b> network.`]},
   {kind:'steps', key:'ba', nm:'Challenge · Grow it', tag:'CHALLENGE 3', title:'GROW IT', items:[] /* filled below */},
   {kind:'card', anim:'sfrob', tag:'TRAINING 6', title:'STRONG AND FRAGILE',
     vera:'hubs are NEXUS\'s strength. they are also its weakness.',
     pts:[`<b>Random failures</b> almost always hit small nodes: scale-free networks are extremely tolerant to them. The advantage grows with the size of the network (in the small one below, failures hurt both networks about equally).`,
-         `Molloy–Reed gives the critical fraction <b>f<sub>c</sub> = 1 − 1/(⟨k²⟩/⟨k⟩ − 1)</b>. For γ &lt; 3, ⟨k²⟩ diverges and f<sub>c</sub> → 1: you would have to remove almost every node.`,
+         `Molloy–Reed gives the fraction of randomly removed nodes that breaks the giant component: $$f_c=1-\\frac{1}{\\dfrac{\\langle k^2\\rangle}{\\langle k\\rangle}-1}$$ For $\\gamma<3$, $\\langle k^2\\rangle$ diverges and $f_c\\to 1$: you would have to remove almost every node.`,
          `<b>Targeted attacks</b> on the hubs are the opposite story: removing a small fraction of hubs breaks the network apart.`]},
   {kind:'steps', key:'sfr', nm:'Challenge · Strength and weakness', tag:'CHALLENGE 4', title:'STRENGTH AND WEAKNESS', items:[
-    {icon:'🛡️', sys:'ROBUSTNESS', q:'Compared with a random network, a scale-free network (γ &lt; 3) is…', o:['more robust to failures and to attacks','more robust to random failures, more fragile to attacks','more fragile to both'], a:1, why:'failures hit small nodes, attacks hit the hubs that hold everything together.'},
-    {icon:'∞', sys:'MOLLOY–REED', q:'f<sub>c</sub> = 1 − 1/(⟨k²⟩/⟨k⟩ − 1). For γ &lt; 3, ⟨k²⟩ diverges in a very large network. Then f<sub>c</sub> →', o:['0','1/2','1'], a:2, why:'you would need to remove practically all nodes at random to destroy the giant component.'}]},
+    {icon:'🛡️', sys:'ROBUSTNESS', q:'Compared with a random network, a scale-free network ($\\gamma<3$) is…', o:['more robust to failures and to attacks','more robust to random failures, more fragile to attacks','more fragile to both'], a:1, why:'failures hit small nodes, attacks hit the hubs that hold everything together.'},
+    {icon:'∞', sys:'MOLLOY–REED', q:'$$f_c=1-\\frac{1}{\\langle k^2\\rangle/\\langle k\\rangle-1}$$ For $\\gamma<3$, $\\langle k^2\\rangle$ diverges in a very large network. Then $f_c\\to$', o:['0','1/2','1'], a:2, why:'you would need to remove practically all nodes at random to destroy the giant component.'}]},
   {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
     `> 03:00 · HELIX CLOUD`,
     `VERA: NEXUS now runs on 200 servers, wired by preferential attachment.`,
@@ -260,8 +260,8 @@ ANIM.sfrob=(C,cap)=>{
   SC('pl').items=[
     {icon:'🏙️', sys:'TWO WORLDS', q:'Which of these quantities lives in the <b>Paretian</b> world?', o:['Heights of students','Wealth of people','Body temperature'], a:1, why:'a few people own a huge share: extreme events dominate.'},
     {q:'Three distributions on <b>log-log</b> axes. Which one is a power law?', canvas:curvesFig, h:'min(28vh,220px)', o:['A','B','C'], a:1, why:'a power law is a straight line on log-log axes. A is an exponential, C a bell curve.'},
-    {q:'On a log-log plot, P(k) ∝ k<sup>−2.5</sup> is a straight line with slope…', o:['−2.5','+2.5','−1/2.5'], a:0, why:'log P = −γ log k + const.'},
-    {q:'A power law has <b>γ = 2.5</b>. Which statement is true?', o:['Mean and variance are both finite','The mean is finite, the variance diverges','Both diverge'], a:1, why:'the variance diverges for γ < 3, the mean only for γ < 2.'},
+    {q:'On a log-log plot, $P(k)\\propto k^{-2.5}$ is a straight line with slope…', o:['$-2.5$','$+2.5$','$-1/2.5$'], a:0, why:'$\\log P=-\\gamma\\log k+\\text{const}$.'},
+    {q:'A power law has $\\gamma=2.5$. Which statement is true?', o:['Mean and variance are both finite','The mean is finite, the variance diverges','Both diverge'], a:1, why:'the variance diverges for $\\gamma<3$, the mean only for $\\gamma<2$.'},
   ];
 })();
 (()=>{ // find the hubs
@@ -272,8 +272,8 @@ ANIM.sfrob=(C,cap)=>{
       label(ctx,nm+(done?` · max ${Math.max(...d)} links`:''),Rb[0]+Rb[2]/2,10,COL.ink2,12,'center','Orbitron'); }); };
   SC('sf').items=[
     {q:'Same number of nodes and links. Which network is <b>scale-free</b>?', canvas:two, h:'min(30vh,240px)', o:['A','B'], a:1, why:'B has a few hubs and many nodes with one or two links; A is random.'},
-    {icon:'🌐', sys:'ULTRA-SMALL', q:'The internet has γ ≈ 2.5. Its distances are…', o:['even shorter than in a random network (ultra-small world)','the same as in a random network','long, like in a lattice'], a:0, why:'for 2 < γ < 3 hubs act as shortcuts: ultra-small world.'},
-    {icon:'📈', sys:'BIGGEST HUB', q:'Two networks with a million nodes and ⟨k⟩ = 10: one random, one scale-free. Where is the biggest hub much bigger?', o:['In the random network','In the scale-free network'], a:1, why:'k_max grows like N^(1/(γ−1)) instead of ln N.'},
+    {icon:'🌐', sys:'ULTRA-SMALL', q:'The internet has $\\gamma\\approx 2.5$. Its distances are…', o:['even shorter than in a random network (ultra-small world)','the same as in a random network','long, like in a lattice'], a:0, why:'for $2<\\gamma<3$ hubs act as shortcuts: $L\\sim\\ln\\ln N$, an ultra-small world.'},
+    {icon:'📈', sys:'BIGGEST HUB', q:'Two networks with a million nodes and $\\langle k\\rangle=10$: one random, one scale-free. Where is the biggest hub much bigger?', o:['In the random network','In the scale-free network'], a:1, why:'$k_{\\max}$ grows like $N^{1/(\\gamma-1)}$ instead of $\\ln N$.'},
     {icon:'🔬', sys:'UBIQUITY', q:'Are all real networks truly scale-free?', o:['Yes, it is a universal law','No: only some are, but most have degree distributions much wider than random networks'], a:1, why:'Broido & Clauset (2019): strict scale-freeness is rare, heavy tails are common.'},
   ];
 })();
@@ -284,10 +284,10 @@ ANIM.sfrob=(C,cap)=>{
     p.forEach(([x,y],i)=>{ nodeL(ctx,x,y,14,COL.cyan,L[i]); label(ctx,`k=${i?1:2}`,x,y+26,COL.ink2,12); });
     const g=.5+.5*Math.sin(t/200); dot(ctx,nw[0],nw[1],11+g*2,COL.mag,14); label(ctx,'new node',nw[0],nw[1]-24,COL.mag,12); };
   SC('ba').items=[
-    {q:'A new node arrives and makes one link with <b>preferential attachment</b>. What is the probability that it links to <b>A</b>?', canvas:pic, h:'min(26vh,210px)', o:['1/3','1/2','2/3'], a:1, why:'π_A = k_A / Σk = 2 / (2+1+1) = 1/2.'},
+    {q:'A new node arrives and makes one link with <b>preferential attachment</b>. What is the probability that it links to <b>A</b>?', canvas:pic, h:'min(26vh,210px)', o:['1/3','1/2','2/3'], a:1, why:'$\\Pi_A=\\frac{k_A}{\\sum_j k_j}=\\frac{2}{2+1+1}=\\frac{1}{2}$.'},
     {icon:'👑', sys:'RICH GET RICHER', q:'In the Barabási–Albert model, which nodes end up as the biggest hubs?', o:['The oldest','The newest','Random ones'], a:0, why:'they had more time to collect links, and links attract links.'},
     {icon:'🎲', sys:'NO PREFERENCE', q:'Nodes keep arriving, but they link to existing nodes chosen <b>at random</b>. The degrees are…', o:['still a power law','exponential: no hubs'], a:1, why:'growth alone is not enough: you also need preferential attachment.'},
-    {icon:'🕸️', sys:'SUPERLINEAR', q:'With superlinear attachment, π ∝ k², you get…', o:['a random network','a hub-and-spoke network: one node grabs almost every link','exactly the BA model'], a:1, why:'the biggest node wins more and more: winner takes all.'},
+    {icon:'🕸️', sys:'SUPERLINEAR', q:'With superlinear attachment, $\\Pi\\propto k^2$, you get…', o:['a random network','a hub-and-spoke network: one node grabs almost every link','exactly the BA model'], a:1, why:'the biggest node wins more and more: winner takes all.'},
   ];
 })();
 
@@ -436,12 +436,12 @@ BUILD.end=()=>{
     `> [ LEVEL 4 COMPLETE ]`,
     `VERA: next time: centrality.`], ()=>{
     endSummary(rest, xp, rankOf(xp), [
-      `<b>Power laws</b> P(k) ∝ k<sup>−γ</sup>: extreme events, no typical scale; variance diverges for γ &lt; 3.`,
-      `Spot them on <b>log-log</b> plots (straight line, slope −γ) with <b>logarithmic binning</b>.`,
-      `<b>Scale-free networks</b> have power-law degrees and <b>hubs</b>; for 2 &lt; γ &lt; 3 they are <b>ultra-small worlds</b>.`,
-      `<b>Barabási–Albert</b>: growth + linear preferential attachment → γ = 3, rich get richer.`,
+      `<b>Power laws</b> $P(k)\\propto k^{-\\gamma}$: extreme events, no typical scale; variance diverges for $\\gamma<3$.`,
+      `Spot them on <b>log-log</b> plots (straight line, slope $-\\gamma$) with <b>logarithmic binning</b>.`,
+      `<b>Scale-free networks</b> have power-law degrees and <b>hubs</b>; for $2<\\gamma<3$ they are <b>ultra-small worlds</b>.`,
+      `<b>Barabási–Albert</b>: growth + linear preferential attachment $\\to\\gamma=3$, rich get richer.`,
       `Both growth and linear preferential attachment are needed; superlinear attachment gives a hub-and-spoke network.`,
-      `Scale-free networks are <b>robust to failures</b> (f<sub>c</sub> → 1) but <b>fragile to attacks</b> on hubs.`],
+      `Scale-free networks are <b>robust to failures</b> ($f_c\\to 1$) but <b>fragile to attacks</b> on hubs.`],
       'level5.html', 'LEVEL 5 · THE CIRCLE');
   });
   // a scale-free network losing its hubs one by one

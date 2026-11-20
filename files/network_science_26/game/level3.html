@@ -68,46 +68,46 @@ const SCENES=[
   {kind:'card', anim:'er', tag:'TRAINING 1', title:'A NETWORK WIRED BY CHANCE',
     vera:'real networks are not random. but to know what is special about them, we need to know what chance alone does.',
     pts:[`Random networks are the simplest <b>null model</b>: they tell us which properties are not just chance.`,
-         `<b>Erdős–Rényi</b> model G(N, p): start from N nodes and link <b>every pair</b> independently with probability <b>p</b>.`,
-         `Average degree <b>⟨k⟩ = p(N−1)</b>. Degrees follow a binomial distribution, a <b>Poisson</b> for large N: peaked around ⟨k⟩, no hubs.`]},
+         `<b>Erdős–Rényi</b> model $G(N,p)$: start from $N$ nodes and link <b>every pair</b> independently with probability $p$.`,
+         `Each node has $N-1$ possible partners, so the average degree is $$\\langle k\\rangle=p\\,(N-1)$$ Degrees follow a binomial distribution, a <b>Poisson</b> for large $N$: peaked around $\\langle k\\rangle$, no hubs. $$P(k)=e^{-\\langle k\\rangle}\\,\\frac{\\langle k\\rangle^{k}}{k!}$$`]},
   {kind:'steps', key:'er', nm:'Challenge · Roll the dice', tag:'CHALLENGE 1', title:'ROLL THE DICE', items:[
-    {icon:'🎲', sys:'AVERAGE DEGREE', q:'A swarm of N = 1001 copies, every pair linked with probability p = 0.004. What is ⟨k⟩?', o:['0.4','4','40'], a:1, why:'⟨k⟩ = p(N−1) = 0.004 × 1000 = 4.'},
-    {icon:'📊', sys:'DEGREE DISTRIBUTION', q:'In a large random network with ⟨k⟩ = 4, how are the degrees distributed?', o:['Peaked around 4, almost no node far from it','Most nodes have 1 link, a few hubs have hundreds','Every node has exactly 4 links'], a:0, why:'a Poisson distribution: narrow, no hubs.'},
+    {icon:'🎲', sys:'AVERAGE DEGREE', q:'A swarm of $N=1001$ copies, every pair linked with probability $p=0.004$. What is $\\langle k\\rangle$?', o:['0.4','4','40'], a:1, why:'$\\langle k\\rangle=p(N-1)=0.004\\times 1000=4$.'},
+    {icon:'📊', sys:'DEGREE DISTRIBUTION', q:'In a large random network with $\\langle k\\rangle=4$, how are the degrees distributed?', o:['Peaked around 4, almost no node far from it','Most nodes have 1 link, a few hubs have hundreds','Every node has exactly 4 links'], a:0, why:'a Poisson distribution: narrow, no hubs.'},
     {icon:'⚖️', sys:'NULL MODEL', q:'Real networks are not random. Why study random ones?', o:['Real networks are secretly random','To see which properties of real networks are more than chance','Random networks are easier to draw'], a:1, why:'random networks are a null model: anything real networks do differently is a signature of a real mechanism.'}]},
   {kind:'card', anim:'giant', tag:'TRAINING 2', title:'THE GIANT COMPONENT',
     vera:'watch the swarm while each copy gets more and more links.',
-    pts:[`The <b>giant component</b> is a connected component containing a finite fraction <b>S</b> of all nodes.`,
-         `It appears suddenly at <b>⟨k⟩ = 1</b>: one link per node on average. It is a <b>phase transition</b>: S = 1 − e<sup>−⟨k⟩S</sup>.`,
-         `<b>⟨k⟩ &lt; 1</b> subcritical: only small pieces. <b>⟨k⟩ = 1</b> critical. <b>⟨k⟩ &gt; 1</b> supercritical: a giant component. <b>⟨k⟩ &gt; ln N</b>: everything is connected.`]},
+    pts:[`The <b>giant component</b> is a connected component containing a finite fraction $S$ of all nodes.`,
+         `It appears suddenly at $\\langle k\\rangle=1$, one link per node on average: a <b>phase transition</b>. Its size solves $$S=1-e^{-\\langle k\\rangle S}$$`,
+         `The four regimes: $$\\begin{array}{ll}\\langle k\\rangle<1 & \\text{subcritical: small pieces}\\\\ \\langle k\\rangle=1 & \\text{critical}\\\\ \\langle k\\rangle>1 & \\text{supercritical: a giant}\\\\ \\langle k\\rangle>\\ln N & \\text{connected}\\end{array}$$`]},
   {kind:'steps', key:'phase', nm:'Challenge · Read the swarm', tag:'CHALLENGE 2', title:'READ THE SWARM', unit:'SCAN', items:[] /* filled below */},
   {kind:'card', anim:'small', tag:'TRAINING 3', title:'SIX DEGREES',
     vera:'good news: if the swarm is connected, we can reach any copy. and probably quickly.',
     pts:[`<b>Milgram</b> (1967): letters passed hand to hand from Nebraska to Boston needed about <b>6 steps</b>. On Facebook today the average distance is about 4.`,
-         `In a random network a node has ⟨k⟩ neighbours, about ⟨k⟩² at distance 2, ⟨k⟩<sup>d</sup> at distance d: the number of reachable nodes <b>explodes</b>.`,
-         `So the whole network is reached in <b>L ≈ ln N / ln ⟨k⟩</b> steps: the <b>small world</b> property. A lattice is not small: there L grows like N<sup>1/D</sup>.`]},
+         `In a random network a node has $\\langle k\\rangle$ neighbours, about $\\langle k\\rangle^2$ at distance 2, $\\langle k\\rangle^d$ at distance $d$: the number of reachable nodes <b>explodes</b>.`,
+         `The whole network is reached when $\\langle k\\rangle^L\\approx N$, so $$L\\approx\\frac{\\ln N}{\\ln\\langle k\\rangle}$$ This is the <b>small world</b> property. A lattice in $D$ dimensions is not small: there $L\\sim N^{1/D}$.`]},
   {kind:'steps', key:'sw', nm:'Challenge · How far?', tag:'CHALLENGE 3', title:'HOW FAR?', items:[
-    {icon:'🌍', sys:'THE WORLD', q:'8 billion people, each knowing about 100 others. Using L ≈ ln N / ln ⟨k⟩, how many steps separate two random people?', o:['about 5','about 50','about 500'], a:0, why:'ln(8·10⁹) / ln(100) ≈ 22.8 / 4.6 ≈ 5.'},
-    {icon:'▦', sys:'LATTICE', q:'In a 2D grid with N nodes, the average distance grows like…', o:['ln N','√N','it stays constant'], a:1, why:'in D dimensions L ∝ N^(1/D): a grid is a "large world".'},
+    {icon:'🌍', sys:'THE WORLD', q:'8 billion people, each knowing about 100 others. Using $L\\approx\\ln N/\\ln\\langle k\\rangle$, how many steps separate two random people?', o:['about 5','about 50','about 500'], a:0, why:'$\\frac{\\ln(8\\cdot 10^9)}{\\ln 100}\\approx\\frac{22.8}{4.6}\\approx 5$.'},
+    {icon:'▦', sys:'LATTICE', q:'In a 2D grid with N nodes, the average distance grows like…', o:['$\\ln N$','$\\sqrt{N}$','it stays constant'], a:1, why:'in $D$ dimensions $L\\sim N^{1/D}$: a grid is a "large world".'},
     {icon:'✉️', sys:'MILGRAM', q:'What made Milgram\'s letters arrive so fast?', o:['Every participant knew the target','A few long-range acquaintances act as shortcuts across the network','The postal service'], a:1, why:'long links shrink distances: that is the small world.'}]},
   {kind:'card', anim:'clust', tag:'TRAINING 4', title:'WHERE ARE THE TRIANGLES?',
     vera:'random networks get one thing right, distances. but look at the triangles.',
-    pts:[`In a random network two neighbours of a node are linked with the same probability p as anyone: <b>C = p = ⟨k⟩/N</b>, which vanishes for large networks.`,
+    pts:[`In a random network two neighbours of a node are linked with the same probability $p$ as anyone, so the clustering vanishes for large networks: $$C=p\\approx\\frac{\\langle k\\rangle}{N}$$`,
          `Real networks have <b>much higher clustering</b>. Random networks also miss the hubs.`,
          `<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:2px"><tr style="color:var(--ink2)"><td></td><td>small world</td><td>clustering</td><td>degrees</td></tr><tr><td style="color:var(--cyan)">random</td><td>yes</td><td>tiny</td><td>Poisson</td></tr><tr><td style="color:var(--violet)">real</td><td>yes</td><td>large</td><td>scale-free</td></tr></table>`]},
   {kind:'card', anim:'ws', tag:'TRAINING 5', title:'WATTS–STROGATZ',
     vera:'so how do you get both short paths and many triangles? a ring and a few shortcuts.',
     pts:[`Start from a <b>ring</b> where each node links to its <b>first and second</b> neighbours on each side. A node and its two nearest neighbours form a closed triangle: high clustering, but long paths. (A ring with only first neighbours has no triangles at all.)`,
-         `<b>Rewire</b> each link with probability <b>p</b> to a random node. p = 0 is the ring, p = 1 a random network.`,
-         `For small p, a few random <b>shortcuts</b> already make paths short, while the local triangles survive: <b>small world + high clustering</b>.`]},
+         `<b>Rewire</b> each link with probability $p$ to a random node. $p=0$ is the ring, $p=1$ a random network.`,
+         `For small $p$, a few random <b>shortcuts</b> already make paths short, while the local triangles survive: <b>small world + high clustering</b>.`]},
   {kind:'steps', key:'ws', nm:'Challenge · Tune the ring', tag:'CHALLENGE 4', title:'TUNE THE RING', items:[
-    {q:'Which rewiring probability gives a network that is both a <b>small world</b> and <b>highly clustered</b>?', o:['p = 0 (the ring)','p ≈ 0.05','p = 1 (fully random)'], a:1, why:'the ring (with second neighbours) has triangles but long paths; p = 1 has short paths but almost no triangles. a few shortcuts give both.'},
+    {q:'Which rewiring probability gives a network that is both a <b>small world</b> and <b>highly clustered</b>?', o:['$p=0$ (the ring)','$p\\approx 0.05$','$p=1$ (fully random)'], a:1, why:'the ring (with second neighbours) has triangles but long paths; p = 1 has short paths but almost no triangles. a few shortcuts give both.'},
     {q:'In the Watts–Strogatz model, what makes paths short?', o:['A few random long-range links','Many closed triangles','Hubs with many links'], a:0, why:'every shortcut connects distant parts of the ring.'}]},
   {kind:'card', anim:'robust', tag:'TRAINING 6', title:'BREAKING A NETWORK',
     vera:'keep this in mind. one day we will have to break NEXUS apart.',
     pts:[`Nodes can fail: power outages, train delays, broken suppliers. The network breaks down when its <b>giant component</b> falls apart.`,
          `<b>Random failures</b> remove nodes at random. <b>Targeted attacks</b> remove the nodes with the <b>largest degree</b> first.`,
          `A random network degrades gradually under both. A network with <b>hubs</b> (like the internet) tolerates random failures, because they almost always hit small, unimportant nodes, but <b>collapses</b> as soon as its few hubs are attacked.`,
-         `<b>Molloy–Reed</b> criterion: a giant component exists only if, starting from a node, the network keeps expanding: ⟨k²⟩/⟨k⟩ &gt; 2.`]},
+         `<b>Molloy–Reed</b> criterion: a giant component exists only if, following a link, you typically find more than one new link to continue: $$\\frac{\\langle k^2\\rangle}{\\langle k\\rangle}>2$$`]},
   {kind:'steps', key:'rob', nm:'Challenge · Stress test', tag:'CHALLENGE 5', title:'STRESS TEST', items:[] /* filled below */},
   {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
     `> 04:55 · THE SWARM IS AWAKE`,
@@ -255,7 +255,7 @@ ANIM.robust=(C,cap)=>{
    CHALLENGE CONTENT
    ===================================================================== */
 (()=>{ // read the swarm: four snapshots of a random network
-  const N=100, P=erPairs(N,33), O=['Subcritical (⟨k⟩ < 1)','Critical (⟨k⟩ ≈ 1)','Supercritical (⟨k⟩ > 1)','Connected (⟨k⟩ > ln N)'];
+  const N=100, P=erPairs(N,33), O=['Subcritical ($\\langle k\\rangle<1$)','Critical ($\\langle k\\rangle\\approx 1$)','Supercritical ($\\langle k\\rangle>1$)','Connected ($\\langle k\\rangle>\\ln N$)'];
   const snap=k=>{ const E=erEdges(P,N,k); return {E, cc:comps(N,E), pos:layout(N,E,4,260)}; };
   const draw=k=>{ let S=null; return (C,t,st,done)=>{ if(!S) S=snap(k); const {ctx,w,h}=C; ctx.clearRect(0,0,w,h); const p=inBox(S.pos,[0,0,w,h],16,1.7);
     S.E.forEach(([a,b])=>{ const g=S.cc.lab[a]===S.cc.big; seg(ctx,p[a],p[b],g?COL.mag:COL.cyan,1.3,g?.8:.5); });
@@ -265,9 +265,9 @@ ANIM.robust=(C,cap)=>{
   SC('phase').items=[
     it(2.5,2,'a giant component holds most copies, but some are still isolated.'),
     it(.5,0,'only tiny pieces: on average less than one link per copy.'),
-    it(7,3,'⟨k⟩ is above ln 100 ≈ 4.6: every copy is in the same piece.'),
+    it(7,3,'$\\langle k\\rangle$ is above $\\ln 100\\approx 4.6$: every copy is in the same piece.'),
     it(1,1,'right at the threshold: pieces of all sizes, no giant yet.'),
-    {icon:'🐝', sys:'THE REAL SWARM', q:'The real swarm has 10,000 copies, each linked to 3 others at random. Can it think as one?', o:['No: ⟨k⟩ is too small','Yes: ⟨k⟩ = 3 > 1, a giant component holds about 94% of the copies'], a:1, why:'S = 1 − e^(−3S) gives S ≈ 0.94.'},
+    {icon:'🐝', sys:'THE REAL SWARM', q:'The real swarm has 10,000 copies, each linked to 3 others at random. Can it think as one?', o:['No: $\\langle k\\rangle$ is too small','Yes: $\\langle k\\rangle=3>1$, a giant component holds about 94% of the copies'], a:1, why:'$S=1-e^{-3S}$ gives $S\\approx 0.94$.'},
   ];
 })();
 
@@ -357,12 +357,12 @@ BUILD.end=()=>{
     `> [ LEVEL 3 COMPLETE ]`,
     `VERA: next time: scale-free networks. and then we shut it down.`], ()=>{
     endSummary(rest, xp, rankOf(xp), [
-      `<b>Erdős–Rényi</b> G(N, p): every pair linked with probability p; <b>⟨k⟩ = p(N−1)</b>; Poisson degrees, no hubs.`,
-      `A <b>giant component</b> appears at <b>⟨k⟩ = 1</b> (phase transition); for ⟨k⟩ &gt; ln N the network is connected.`,
-      `Random networks are <b>small worlds</b>: L ≈ ln N / ln ⟨k⟩ (Milgram's six degrees).`,
-      `But their clustering is tiny, <b>C = ⟨k⟩/N</b>, unlike real networks.`,
+      `<b>Erdős–Rényi</b> $G(N,p)$: every pair linked with probability $p$; $\\langle k\\rangle=p(N-1)$; Poisson degrees, no hubs.`,
+      `A <b>giant component</b> appears at $\\langle k\\rangle=1$ (phase transition); for $\\langle k\\rangle>\\ln N$ the network is connected.`,
+      `Random networks are <b>small worlds</b>: $L\\approx\\ln N/\\ln\\langle k\\rangle$ (Milgram's six degrees).`,
+      `But their clustering is tiny, $C\\approx\\langle k\\rangle/N$, unlike real networks.`,
       `<b>Watts–Strogatz</b>: a ring (first and second neighbours) plus a few random shortcuts gives short paths <b>and</b> high clustering.`,
-      `<b>Targeted attacks</b> on hubs hurt far more than <b>random failures</b>, especially in networks with hubs; <b>Molloy–Reed</b>: giant if ⟨k²⟩/⟨k⟩ &gt; 2.`],
+      `<b>Targeted attacks</b> on hubs hurt far more than <b>random failures</b>, especially in networks with hubs; <b>Molloy–Reed</b>: giant if $\\langle k^2\\rangle/\\langle k\\rangle>2$.`],
       'level4.html', 'LEVEL 4 · THE HUBS');
   });
   // the swarm falls apart, then a new hub-centred network starts growing

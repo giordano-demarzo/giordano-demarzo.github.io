@@ -51,23 +51,23 @@ const SCENES=[
     `VERA: let's start with the alphabet.`]},
   {kind:'card', anim:'repr', tag:'TRAINING 1', title:'THREE WAYS TO WRITE IT',
     vera:'on a hard drive a network is just numbers. here are three ways to write the same one.',
-    pts:[`<b>Adjacency matrix</b> A: an N×N table with A<sub>ij</sub> = 1 if i and j are linked, 0 otherwise (A<sub>ij</sub> = w<sub>ij</sub> if weighted). For an undirected network it is <b>symmetric</b>.`,
+    pts:[`<b>Adjacency matrix</b> $A$: an $N\\times N$ table, <b>symmetric</b> for an undirected network: $$A_{ij}=\\begin{cases}1 & \\text{if } i,j \\text{ are linked}\\\\ 0 & \\text{otherwise}\\end{cases}$$<span class="where">in a weighted network $A_{ij}=w_{ij}$, the weight of the link.</span>`,
          `<b>Adjacency list</b>: every node with the list of its neighbours. <b>Edge list</b>: the list of all linked pairs.`,
-         `A matrix always needs N² cells; lists only store the links that exist. Real networks are sparse, so lists usually win.`]},
+         `A matrix always needs $N^2$ cells; lists only store the links that exist. Real networks are sparse, so lists usually win.`]},
   {kind:'steps', key:'read', nm:'Challenge · Read the tables', tag:'CHALLENGE 1', title:'READ THE TABLES',
     vera:'these tables came straight out of Helix Cloud. show me you can read them.', items:[] /* filled below */},
   {kind:'card', anim:'degree', tag:'TRAINING 2', title:'DEGREE',
     vera:'first measure: how connected is each node?',
-    pts:[`The <b>degree</b> k<sub>i</sub> is the number of links of node i: the sum of row i of the adjacency matrix.`,
+    pts:[`The <b>degree</b> $k_i$ is the number of links of node $i$: the sum of row $i$ of the adjacency matrix. Averaged over the nodes it gives $\\langle k\\rangle$: $$k_i=\\sum_j A_{ij}\\qquad \\langle k\\rangle=\\frac{1}{N}\\sum_i k_i=\\frac{2E}{N}$$`,
          `Directed networks have an <b>in-degree</b> (arrows in) and an <b>out-degree</b> (arrows out). In weighted networks the <b>strength</b> is the sum of the weights.`,
-         `The <b>degree distribution</b> P(k) is the histogram of all degrees: the probability that a random node has k links.`]},
+         `The <b>degree distribution</b> $P(k)$ is the histogram of all degrees: the probability that a random node has k links.`]},
   {kind:'steps', key:'deg', nm:'Challenge · Degree detective', tag:'CHALLENGE 2', title:'DEGREE DETECTIVE',
     vera:'NEXUS keeps statistics about itself. let\'s see if they match.', items:[]},
   {kind:'card', anim:'paths', tag:'TRAINING 3', title:'PATHS AND DISTANCES',
     vera:'to reach the core of NEXUS we have to move along its links. so: how far is far?',
     pts:[`A <b>path</b> is a sequence of links; its <b>length</b> is the number of links.`,
-         `The <b>distance</b> d(i,j) is the length of the <b>shortest path</b> between i and j.`,
-         `The <b>diameter</b> D is the largest distance in the network; the <b>average distance</b> L is the mean over all pairs.`]},
+         `The <b>distance</b> $d_{ij}$ is the length of the <b>shortest path</b> between $i$ and $j$.`,
+         `The <b>diameter</b> $D$ is the largest distance in the network; the <b>average distance</b> $L$ is the mean over all pairs: $$D=\\max_{i,j} d_{ij}\\qquad L=\\frac{2}{N(N-1)}\\sum_{i<j} d_{ij}$$`]},
   {kind:'card', anim:'components', tag:'TRAINING 4', title:'COMPONENTS',
     vera:'not every machine can reach every other one. that matters.',
     pts:[`A <b>connected component</b> is a group of nodes that can all reach each other. Between different components there is no path.`,
@@ -77,13 +77,13 @@ const SCENES=[
   {kind:'card', anim:'tri', tag:'TRAINING 5', title:'FRIENDS OF FRIENDS',
     vera:'NEXUS learned this from social networks: my friends\' friends tend to be my friends.',
     pts:[`Real networks have many <b>closed triangles</b>: if B is linked to A and C, A and C are often linked too.`,
-         `The <b>local clustering</b> of node i is the fraction of pairs of its neighbours that are linked: C<sub>i</sub> = links among neighbours / [k<sub>i</sub>(k<sub>i</sub>−1)/2]. The <b>average clustering</b> averages it over nodes.`,
+         `The <b>local clustering</b> of node $i$ is the fraction of pairs of its neighbours that are linked: $$C_i=\\frac{e_i}{k_i(k_i-1)/2}$$<span class="where">$e_i$ = links among the neighbours of $i$; $k_i(k_i-1)/2$ = possible pairs of neighbours.</span> The <b>average clustering</b> $\\langle C\\rangle$ averages it over nodes.`,
          `<b>Assortativity</b> (or homophily): nodes tend to link to similar nodes, by features like opinions, or by degree.`]},
   {kind:'steps', key:'clu', nm:'Challenge · Count the triangles', tag:'CHALLENGE 4', title:'COUNT THE TRIANGLES',
     vera:'compute the clustering of these servers.', items:[]},
   {kind:'card', anim:'real', tag:'TRAINING 6', title:'WHAT REAL NETWORKS LOOK LIKE',
     vera:'Helix Cloud ticks every box below. so does almost every real network. why? that is the rest of the course.',
-    pts:[`<b>Sparse</b>: only a tiny fraction of the possible links exist (low density ρ).`,
+    pts:[`<b>Sparse</b>: only a tiny fraction of the possible links exist (low <b>density</b>): $$\\rho=\\frac{E}{N(N-1)/2}\\ll 1$$`,
          `<b>Small world</b>: any two nodes are only a few steps apart. <b>High clustering</b>: many triangles.`,
          `<b>Hubs</b>: a few nodes with a huge number of links (scale-free networks). <b>Homophily</b>: similar nodes stick together.`]},
   {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
@@ -282,7 +282,7 @@ ANIM.real=(C,cap)=>{
        drawMatrix(ctx,DM,mx,my,cs,DL,(i,j)=>done&&((i===0&&j===1)||(i===1&&j===0))?COL.amber:null); },
      o:['Undirected','Directed'], a:1, why:'the matrix is not symmetric: A→B is 1 but B→A is 0, so links have a direction.'},
     {icon:'🌐', sys:'THE WEB', q:'Billions of pages, each linking to only a handful of others. How would you store this network?', o:['Adjacency matrix','Adjacency list'], a:1,
-     why:'a matrix would need N² cells, almost all zeros. a list stores only the links that exist: perfect for sparse networks.'},
+     why:'a matrix would need $N^2$ cells, almost all zeros. a list stores only the links that exist: perfect for sparse networks.'},
   ];
 })();
 
@@ -346,8 +346,8 @@ const MEAS=(()=>{
     links.forEach(([a,b])=>seg(ctx,q[a],q[b],COL.amber,3,1));
     q.forEach(([x,y])=>dot(ctx,x,y,10,COL.cyan,10)); nodeL(ctx,cx,cy,14,COL.mag,lab); };
   SC('clu').items=[
-    {q:'What is the local clustering of server <b>X</b>?', canvas:star(4,[[0,1],[2,3]],'X'), h:'min(30vh,240px)', o:['1/3','1/2','2/3','1'], a:0, why:'k = 4, so 4·3/2 = 6 possible pairs of neighbours; 2 are linked: C = 2/6 = 1/3.'},
-    {q:'And the local clustering of server <b>Y</b>?', canvas:star(3,[[0,1],[1,2],[0,2]],'Y'), h:'min(30vh,240px)', o:['0','1/3','1'], a:2, why:'3 possible pairs of neighbours, all 3 linked: C = 1. Y sits inside a fully connected group.'},
+    {q:'What is the local clustering of server <b>X</b>?', canvas:star(4,[[0,1],[2,3]],'X'), h:'min(30vh,240px)', o:['1/3','1/2','2/3','1'], a:0, why:'$k=4$, so $4\\cdot 3/2=6$ possible pairs of neighbours; 2 are linked: $C=\\frac{2}{6}=\\frac{1}{3}$.'},
+    {q:'And the local clustering of server <b>Y</b>?', canvas:star(3,[[0,1],[1,2],[0,2]],'Y'), h:'min(30vh,240px)', o:['0','1/3','1'], a:2, why:'3 possible pairs of neighbours, all 3 linked: $C=1$. Y sits inside a fully connected group.'},
     {icon:'🎲', sys:'COMPARISON', q:'Where do you expect the <b>higher</b> clustering?', o:['A friendship network','A random network with the same N and E'], a:0, why:'friends of friends become friends; in a random network triangles appear only by chance.'},
   ];
 })();
@@ -468,8 +468,8 @@ BUILD.end=()=>{
     `VERA: next time: random networks. we need to know what a network wired by chance looks like.`], ()=>{
     endSummary(rest, xp, rankOf(xp), [
       `A network can be written as an <b>adjacency matrix</b> (symmetric if undirected), an <b>adjacency list</b> or an <b>edge list</b>.`,
-      `The <b>degree</b> k counts the links of a node (<b>in/out-degree</b> if directed, <b>strength</b> if weighted); <b>P(k)</b> is their distribution.`,
-      `<b>Distance</b> = shortest path; <b>diameter</b> = largest distance; <b>average distance</b> L.`,
+      `The <b>degree</b> $k$ counts the links of a node (<b>in/out-degree</b> if directed, <b>strength</b> if weighted); $P(k)$ is their distribution.`,
+      `<b>Distance</b> = shortest path; <b>diameter</b> $D$ = largest distance; <b>average distance</b> $L$.`,
       `<b>Components</b> are groups of mutually reachable nodes: <b>strongly</b> or <b>weakly</b> connected if directed.`,
       `<b>Clustering</b> measures closed triangles around a node; <b>assortativity</b> is the tendency of similar nodes to link.`,
       `Real networks are <b>sparse</b>, <b>small world</b>, <b>clustered</b>, with <b>hubs</b> and <b>homophily</b>.`],
