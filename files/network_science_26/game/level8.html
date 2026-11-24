@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>NEXUS · The Core</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nexus.css">
+<style>
+#pNet{height:min(52vh,500px);min-height:300px}
+#stage>*{flex-shrink:0}
+.det{display:flex;align-items:center;gap:10px}
+.det .lab{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--ink2);white-space:nowrap;min-width:118px}
+.det .bar{flex:1;height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.det .bar i{display:block;height:100%;width:0;background:var(--amber);box-shadow:0 0 8px rgba(255,194,61,.6);transition:width .4s,background .4s}
+.det.hot .bar i{background:var(--red);box-shadow:0 0 8px rgba(255,77,77,.7)}
+.det.hot .lab{color:var(--red)}
+.tbar{height:6px;border-radius:4px;background:var(--line);overflow:hidden}
+.tbar i{display:block;height:100%;width:100%;background:var(--cyan)}
+.tbar.low i{background:var(--red)}
+.qbox{display:flex;flex-direction:column;gap:10px}
+.sumt{width:100%;border-collapse:collapse;font-size:14px}
+.sumt td{padding:5px 4px;border-bottom:1px solid var(--line)}
+.sumt td:last-child{text-align:right;font-family:'Share Tech Mono',monospace;color:var(--amber)}
+</style>
+</head>
+<body class="notop nonav">
+<div class="top">
+  <button class="mbtn" id="bMenu" title="jump to a page" aria-label="jump to a page">☰</button>
+  <div class="lv">LEVEL 8</div>
+  <div class="prog" id="prog"></div>
+  <div class="xp" id="xp">0 XP</div>
+</div>
+<div id="stage"></div>
+<div id="jump"><div class="jbox"><div class="jhead">JUMP TO<button id="bJx" aria-label="close">✕</button></div><div class="jl" id="jl"></div></div></div>
+<div class="nav">
+  <button class="back" id="bBack" aria-label="back">◂</button>
+  <button class="next" id="bNext">CONTINUE ▸</button>
+</div>
+
+<script>const LEVEL={key:'nexus-l8', label:'LEVEL 8', chapter:'FINALE · THE CORE', sub:'// the end of part one'};</script>
+<script src="nexus.js"></script>
+<script>
+/* =====================================================================
+   NEXUS · Level 8 (finale of part one): THE CORE
+   a recap of lectures 1–7 and a long final boss on a single network
+   ===================================================================== */
+const ST={S:0,I:1,R:2,V:3}, SCOL=[COL.cyan,COL.mag,COL.dim,COL.green], GCOL=[COL.cyan,COL.mag,COL.violet,COL.amber,COL.green];
+// --- algorithms from the previous levels
+function h01(a,b,c,s=0){ let h=(a*73856093)^(b*19349663)^(c*83492791)^(s*2654435761); h=Math.imul(h^h>>>16,0x45d9f3b); h=Math.imul(h^h>>>16,0x45d9f3b); h^=h>>>16; return (h>>>0)/4294967296; }
+function sirStep(adj, st, t, beta, mu, s=0){ const inf=[]; st.forEach((x,i)=>{ if(x===ST.I) inf.push(i); }); const nw=[];
+  for(const i of inf) for(const j of adj[i]) if(st[j]===ST.S && h01(i,j,t,s)<beta && !nw.includes(j)) nw.push(j);
+  for(const i of inf) if(h01(i,i,t,s+7)<mu) st[i]=ST.R; nw.forEach(j=>st[j]=ST.I); return st; }
+function spreadSize(adj, seeds, beta, mu, s, off){ const N=adj.length, st=Array(N).fill(ST.S); if(off) off.forEach(i=>st[i]=ST.V); const ever=new Set();
+  seeds.forEach(x=>{ if(st[x]===ST.S){ st[x]=ST.I; ever.add(x); } }); let t=0;
+  while(st.includes(ST.I)&&t<300){ sirStep(adj,st,t,beta,mu,s); st.forEach((x,i)=>{ if(x===ST.I) ever.add(i); }); t++; } return ever.size; }
+function pagerank(N, D, beta=.15){ const out=Array.from({length:N},()=>[]); D.forEach(([a,b])=>out[a].push(b)); let p=Array(N).fill(1/N);
+  for(let it=0;it<120;it++){ const q=Array(N).fill(0); let dang=0; for(let i=0;i<N;i++){ if(out[i].length) out[i].forEach(j=>q[j]+=(1-beta)*p[i]/out[i].length); else dang+=p[i]; }
+    for(let i=0;i<N;i++) q[i]+=beta/N+(1-beta)*dang/N; p=q; } return p; }
+function betweenness(N, adj){ const C=Array(N).fill(0);
+  for(let s=0;s<N;s++){ const St=[], P=Array.from({length:N},()=>[]), sig=Array(N).fill(0), d=Array(N).fill(-1); sig[s]=1; d[s]=0; const Q=[s];
+    while(Q.length){ const v=Q.shift(); St.push(v); for(const w of adj[v]){ if(d[w]<0){ d[w]=d[v]+1; Q.push(w); } if(d[w]===d[v]+1){ sig[w]+=sig[v]; P[w].push(v); } } }
+    const dl=Array(N).fill(0); while(St.length){ const w=St.pop(); for(const v of P[w]) dl[v]+=sig[v]/sig[w]*(1+dl[w]); if(w!==s) C[w]+=dl[w]; } }
+  return C.map(x=>x/2); }
+function closeness(N, adj){ return d3range(N).map(i=>{ const d=bfs(adj,i).d; const s=d.reduce((a,x)=>a+(x>0?x:0),0); return s?(N-1)/s:0; }); }
+function eigenvector(N, adj, it=100){ let x=Array(N).fill(1); for(let k=0;k<it;k++){ const y=x.map((v,i)=>v+adj[i].reduce((a,j)=>a+x[j],0)); const m=Math.max(...y)||1; x=y.map(v=>v/m); } return x; }
+function modularity(N, E, lab){ const m=E.length; if(!m) return 0; const deg=degrees(N,E), L={}, K={};
+  E.forEach(([a,b])=>{ if(lab[a]===lab[b]) L[lab[a]]=(L[lab[a]]||0)+1; }); for(let i=0;i<N;i++) K[lab[i]]=(K[lab[i]]||0)+deg[i];
+  let q=0; for(const c in K) q+=(L[c]||0)/m-Math.pow(K[c]/(2*m),2); return q; }
+const overlap=(adj,i,j)=>{ const ni=new Set(adj[i]), c=adj[j].filter(x=>ni.has(x)).length, den=(adj[i].length-1)+(adj[j].length-1)-c; return den>0?c/den:0; };
+const norm=v=>{ const m=Math.max(...v)||1; return v.map(x=>x/m); };
+
+// --- the Core: preferential attachment inside groups (homophily) + triadic closure: hubs, communities and triangles at once
+function coreNet(G, n, pin, pm, ptri, seed){ const R=rng(seed), grp=[], adj=[], E=[], has=new Set();
+  const add=(a,b)=>{ if(a===b||has.has(ekey(a,b))) return false; has.add(ekey(a,b)); adj[a].push(b); adj[b].push(a); E.push([a,b]); return true; };
+  const node=g=>{ grp.push(g); adj.push([]); return grp.length-1; };
+  for(let g=0;g<G;g++){ const a=node(g), b=node(g), c=node(g); add(a,b); add(b,c); add(a,c); }
+  for(let g=0;g<G;g++) add(3*g, 3*((g+1)%G)+1);
+  const pick=g=>{ let tot=0; const c=[]; for(let i=0;i<grp.length;i++) if(grp[i]===g){ tot+=adj[i].length; c.push(i); } let u=R()*tot; for(const i of c){ u-=adj[i].length; if(u<=0) return i; } return c[c.length-1]; };
+  while(grp.length<G*n){ const g=grp.length%G, v=node(g), m=R()<pm?2:1; let first=-1, made=0, tries=0;
+    while(made<m&&tries<50){ tries++; let t;
+      if(first>=0&&R()<ptri){ const nb=adj[first].filter(x=>x!==v); t=nb[Math.floor(R()*nb.length)]; }
+      else { const og=R()<pin?g:((g+1+Math.floor(R()*(G-1)))%G); t=pick(og); }
+      if(t!=null&&add(v,t)){ made++; if(first<0) first=t; } } }
+  return {N:grp.length, E, adj, grp}; }
+// reports inside the cell: mostly towards the controller (by distance), some the other way, some both ways
+function reportNet(E, Tl, x, seed, pto=.85, prec=.25){ const n=Tl.length, ix=new Map(Tl.map((v,k)=>[v,k])), Ein=E.filter(([a,b])=>ix.has(a)&&ix.has(b)).map(([a,b])=>[ix.get(a),ix.get(b)]);
+  const R=rng(seed), d=bfs(adjOf(n,Ein),ix.get(x)).d, D=[];
+  Ein.forEach(([a,b])=>{ let [u,v]=d[a]>d[b]?[a,b]:d[b]>d[a]?[b,a]:(R()<.5?[a,b]:[b,a]); if(R()>pto) [u,v]=[v,u]; D.push([u,v]); if(R()<prec) D.push([v,u]); });
+  return D.map(([u,v])=>[Tl[u],Tl[v]]); }
+// two contagions racing (the kill-patch = 1, NEXUS = 2), SI-like: a device taken by one cannot be taken by the other
+function race(adj, pS, nS, off, bp, bn, s, rec){ const N=adj.length, st=Array(N).fill(0); off.forEach(i=>st[i]=3); nS.forEach(i=>{ if(!st[i]) st[i]=2; }); pS.forEach(i=>{ if(!st[i]) st[i]=1; }); if(rec) rec.push(st.slice());
+  for(let t=0;t<200;t++){ const claim=new Map(); let any=false;
+    for(let i=0;i<N;i++){ const c=st[i]; if(c!==1&&c!==2) continue; for(const j of adj[i]){ if(st[j]) continue; any=true; if(h01(i,j,t,s+c*11)<(c===1?bp:bn)){ const o=claim.get(j); claim.set(j, o&&o!==c ? (h01(j,j,t,s)<.5?1:2) : c); } } }
+    claim.forEach((c,j)=>st[j]=c); if(rec&&claim.size) rec.push(st.slice()); if(!any) break; }
+  let p=0,x=0; st.forEach(v=>{ if(v===1)p++; else if(v===2)x++; }); return p/(p+x); }
+
+// clean the planted groups: move single devices to the group that raises the modularity most, until nothing moves
+function qRefine(G){ const N=G.N, lab=G.grp.slice(); let q=modularity(N,G.E,lab), moved=true;
+  while(moved){ moved=false; for(let i=0;i<N;i++){ let bl=lab[i], bq=q; const o=lab[i];
+    for(const c of new Set(G.adj[i].map(j=>lab[j]))){ if(c===o) continue; lab[i]=c; const nq=modularity(N,G.E,lab); if(nq>bq+1e-9){ bq=nq; bl=c; } } lab[i]=bl; if(bl!==o){ q=bq; moved=true; } } }
+  return lab; }
+const CORE=(()=>{ const G0=coreNet(5,32,.88,.55,.5,87), G={...G0, grp:qRefine(G0)}, N=G.N, deg=G.adj.map(a=>a.length);
+  const T=new Set(d3range(N).filter(i=>G.grp[i]===2)), X=27, START=35, GATE=7;
+  const D=reportNet(G.E,[...T],X,8), bnd=G.E.filter(([a,b])=>T.has(a)!==T.has(b));
+  let cl=0; for(let i=0;i<N;i++){ const a=G.adj[i]; if(a.length<2) continue; let t=0; for(let x=0;x<a.length;x++) for(let y=x+1;y<a.length;y++) if(G.adj[a[x]].includes(a[y])) t++; cl+=t/(a.length*(a.length-1)/2); }
+  let L=0, c=0; for(let s=0;s<N;s++) bfs(G.adj,s).d.forEach(x=>{ if(x>0){ L+=x; c++; } });
+  const out=d3range(N).filter(i=>!T.has(i)), SLEEP=[0,1,3].map(g=>out.filter(i=>G.grp[i]===g&&deg[i]>=3&&deg[i]<=5)).map((c,k)=>c[Math.floor(h01(k,3,9)*c.length)]);
+  return {...G, deg, T, X, START, GATE, D, bnd, SLEEP, C:cl/N, L:L/c, k:2*G.E.length/N, kmax:Math.max(...deg)}; })();
+let PCORE=null; const corePos=()=>PCORE||(PCORE=tame(layout(CORE.N,CORE.E,5,420,.25),.92,1.1));
+const csize=i=>2+Math.sqrt(CORE.deg[i])*1.25;
+// log-binned degree distribution, for log-log plots
+function logHist(deg){ const N=deg.length, out=[]; for(let lo=1;lo<=64;lo*=2){ const c=deg.filter(k=>k>=lo&&k<2*lo).length; if(c) out.push([Math.sqrt(lo*(2*lo-1)), c/lo/N]); } return out; }
+function drawLogLog(ctx,R,pts,col,lab){ const [x0,y0,W,H]=R, lx=Math.log10, xmn=0, xmx=lx(64), ymn=lx(1e-4), ymx=0;
+  const X=v=>x0+W*(lx(v)-xmn)/(xmx-xmn), Y=v=>y0+H*(1-(lx(v)-ymn)/(ymx-ymn));
+  seg(ctx,[x0,y0+H],[x0+W,y0+H],COL.ink2,1); seg(ctx,[x0,y0],[x0,y0+H],COL.ink2,1);
+  label(ctx,'k (log)',x0+W-24,y0+H+11,COL.ink2,10); label(ctx,'P(k) (log)',x0+30,y0-8,COL.ink2,10);
+  pts.forEach(([k,p],i)=>{ if(i) seg(ctx,[X(pts[i-1][0]),Y(pts[i-1][1])],[X(k),Y(p)],col,1.5,.6); dot(ctx,X(k),Y(p),4,col,8); });
+  if(lab) label(ctx,lab,x0+W/2,y0+H+24,col,11); }
+
+/* =====================================================================
+   SCENES
+   ===================================================================== */
+const SCENES=[
+  {kind:'title'},
+  {kind:'story', nm:'Briefing', next:'OPEN THE DOSSIER ▸', lines:[
+    `> 00:00 · ONE WEEK AFTER THE OUTBREAK`,
+    `VERA: it's been quiet. NEXUS lost its servers, its swarm, its CIRCLE, its agent.`,
+    `VERA: then last night an address lit up inside Helix. then another. then a hundred and sixty.`,
+    `VERA: it's the Core: everything NEXUS saved before we took it apart, hidden in one network.`,
+    `VERA: this is the last mission, agent. before we go in, let's go through the dossier one more time.`]},
+  {kind:'card', anim:'d1', tag:'DOSSIER 1 · LECTURES 1–2', title:'READING A NETWORK',
+    vera:'this is the Core. everything you learned, you will need on this one network.',
+    pts:[`A network $G=(V,E)$: $N$ nodes, $E$ links; directed or not, weighted or not. Written as an <b>adjacency matrix</b>, an adjacency list or an edge list.`,
+         `<b>Degree</b> and its average: $$k_i=\\sum_j A_{ij}\\qquad \\langle k\\rangle=\\frac{2E}{N}$$`,
+         `<b>Distance</b> $d_{ij}$ = shortest path; <b>components</b> = groups of mutually reachable nodes; <b>clustering</b> = closed triangles: $$C_i=\\frac{e_i}{k_i(k_i-1)/2}$$`]},
+  {kind:'card', anim:'d2', tag:'DOSSIER 2 · LECTURE 3', title:'CHANCE AND SMALL WORLDS',
+    vera:'the null model: what would the Core look like if it were wired by chance?',
+    pts:[`<b>Erdős–Rényi</b>: every pair linked with probability $p$, $\\langle k\\rangle=p(N-1)$, Poisson degrees. A <b>giant component</b> appears at $\\langle k\\rangle=1$.`,
+         `<b>Small world</b>: $$L\\approx\\frac{\\ln N}{\\ln\\langle k\\rangle}$$ but random networks have almost no triangles, $C\\approx\\langle k\\rangle/N$. <b>Watts–Strogatz</b>: a clustered ring plus a few shortcuts gets both.`,
+         `<b>Robustness</b>: random failures vs targeted attacks; a giant component exists if $\\langle k^2\\rangle/\\langle k\\rangle>2$ (Molloy–Reed).`]},
+  {kind:'card', anim:'d3', tag:'DOSSIER 3 · LECTURE 4', title:'HUBS',
+    vera:'the Core grew the usual way. the rich got richer.',
+    pts:[`<b>Scale-free</b> networks: a power-law degree distribution, a straight line on log-log axes: $$P(k)\\sim k^{-\\gamma}$$ For $\\gamma<3$ the variance diverges; for $2<\\gamma<3$ the network is an <b>ultra-small world</b>.`,
+         `<b>Barabási–Albert</b>: growth + preferential attachment, $\\Pi_i=k_i/\\sum_j k_j$, gives $\\gamma=3$.`,
+         `Hubs make the network <b>robust to failures</b> ($f_c\\to 1$) but <b>fragile to attacks</b>.`]},
+  {kind:'card', anim:'d4', tag:'DOSSIER 4 · LECTURE 5', title:'WHO MATTERS',
+    vera:'four lenses on the same network. they don\'t always agree.',
+    pts:[`<b>Degree</b>: many contacts. <b>Eigenvector</b>: important contacts, $\\lambda\\mathbf{x}=A\\mathbf{x}$.`,
+         `<b>PageRank</b>: the random courier, with teleportation $\\beta$: $$P_i=(1-\\beta)\\sum_{j\\to i}\\frac{P_j}{k_j^{\\text{out}}}+\\frac{\\beta}{N}$$`,
+         `<b>Betweenness</b>: shortest paths through a node (brokers). <b>Closeness</b>: $C_i=(N-1)/\\sum_j d_{ij}$. To fragment an organisation, target brokers and <b>recompute</b>.`]},
+  {kind:'card', anim:'d5', tag:'DOSSIER 5 · LECTURE 6', title:'GROUPS',
+    vera:'the Core has factions too. one of them is where NEXUS hides.',
+    pts:[`<b>Communities</b>: dense inside, sparse outside. Scored by <b>modularity</b>: $$Q=\\sum_{c}\\left[\\frac{L_c}{E}-\\left(\\frac{K_c}{2E}\\right)^{2}\\right]$$`,
+         `Found by <b>Girvan–Newman</b> (cut high edge-betweenness links) or by optimising $Q$ (greedy, <b>Louvain</b>, Leiden).`,
+         `<b>Weak ties</b> bridge groups and have low <b>overlap</b>: $$O_{ij}=\\frac{n_{ij}}{(k_i-1)+(k_j-1)-n_{ij}}$$`]},
+  {kind:'card', anim:'d6', tag:'DOSSIER 6 · LECTURE 7', title:'SPREADING',
+    vera:'and the last thing we learned: how things travel along links.',
+    pts:[`<b>SI</b>, <b>SIS</b>, <b>SIR</b> with infection rate $\\beta$ and recovery rate $\\mu$: $$R_0=\\langle k\\rangle\\frac{\\beta}{\\mu}$$`,
+         `On networks the <b>epidemic threshold</b> depends on $\\langle k^2\\rangle$ and vanishes in scale-free networks: $$\\lambda_c=\\frac{\\langle k\\rangle}{\\langle k^2\\rangle-\\langle k\\rangle}$$`,
+         `Hubs spread everything: <b>targeted immunization</b> of hubs beats random immunization; seeding from hubs spreads fastest.`]},
+  {kind:'lightning', key:'lr', nm:'Lightning round', tag:'WARM-UP', title:'LIGHTNING ROUND',
+    vera:'twelve questions, one from every corner of the course. you have 25 seconds each. faster answers are worth more.', items:[
+    {lec:'L1', q:'Researchers linked to the projects they work on form a <b>bipartite</b> network. In its projection onto researchers, two researchers are linked if…', o:['they work on at least one common project','they work on different projects','they have the same number of projects'], a:0, why:'the projection links nodes of one type that share a neighbour of the other type.'},
+    {lec:'L2', q:'A row of an undirected adjacency matrix reads $[0\\;\\,1\\;\\,1\\;\\,0\\;\\,1]$. What is the degree of that node?', o:['2','3','5'], a:1, why:'$k_i=\\sum_j A_{ij}=3$.'},
+    {lec:'L2', q:'A node has 4 neighbours and 3 links among them. Its local clustering is…', o:['$\\frac{3}{4}$','$\\frac{1}{2}$','$\\frac{1}{3}$'], a:1, why:'$C=\\frac{3}{4\\cdot 3/2}=\\frac{3}{6}=\\frac{1}{2}$.'},
+    {lec:'L3', q:'An Erdős–Rényi network has $N=501$ and $p=0.01$. Is there a giant component?', o:['No: $\\langle k\\rangle=0.5$','Yes: $\\langle k\\rangle=5>1$','Only if $p>0.5$'], a:1, why:'$\\langle k\\rangle=p(N-1)=5$, well above the threshold $\\langle k\\rangle=1$.'},
+    {lec:'L3', q:'A million people, each with $\\langle k\\rangle=10$ random contacts. The typical distance is $L\\approx$', o:['6','60','100,000'], a:0, why:'$L\\approx\\frac{\\ln 10^6}{\\ln 10}=6$.'},
+    {lec:'L3', q:'In the Watts–Strogatz model, a few random shortcuts…', o:['make paths much shorter and keep most triangles','destroy the triangles and keep paths long','change nothing'], a:0, why:'small world and high clustering at the same time.'},
+    {lec:'L4', q:'A network grows, but new nodes link to existing nodes chosen <b>uniformly at random</b>. Its degree distribution is…', o:['a power law with $\\gamma=3$','exponential: no hubs'], a:1, why:'growth alone is not enough: hubs need preferential attachment.'},
+    {lec:'L4', q:'A scale-free network with $\\gamma=2.5$ loses half of its nodes <b>at random</b>. Most likely…', o:['a giant component survives: random failures rarely hit hubs','it falls apart into small pieces','it loses all its hubs'], a:0, why:'for $\\gamma<3$, $f_c\\to 1$.'},
+    {lec:'L5', q:'A member links two groups that would otherwise not communicate. Which centrality spots this member best?', o:['degree','betweenness','closeness'], a:1, why:'all the shortest paths between the groups go through the broker.'},
+    {lec:'L5', q:'Why does the PageRank walker teleport with probability $\\beta$?', o:['to escape dead ends and traps','to make hubs more important','to count every link twice'], a:0, why:'without teleportation the walker gets stuck.'},
+    {lec:'L6', q:'A link has edge overlap $O_{ij}=0$. It is most likely…', o:['a strong tie inside a group','a weak tie bridging two groups'], a:1, why:'no common neighbours: it connects different parts of the network.'},
+    {lec:'L7', q:'$\\langle k\\rangle=5$, $\\beta=0.1$, $\\mu=0.25$. In a well-mixed population $R_0=$', o:['0.5: it dies out','2: it spreads','12.5: it spreads'], a:1, why:'$R_0=\\langle k\\rangle\\frac{\\beta}{\\mu}=5\\times\\frac{0.1}{0.25}=2$.'}]},
+  {kind:'story', nm:'Mission briefing', next:'ACCEPT MISSION ▸', lines:[
+    `> 03:00 · OPERATION CORE`,
+    `VERA: six phases, one network. and every move you make can be traced.`,
+    `VERA: watch the DETECTION meter. wrong answers, extra hops, useless cuts: it all adds up.`,
+    `VERA: at 100% they lock us out and I pull you back to the start of that phase. it costs us, but we keep what we already did.`,
+    `VERA: read the Core. get in. find who gives the orders. draw the border of the cell. seal it before the copies escape. then race NEXUS for the rest of Helix.`,
+    `VERA: no scanners this time. only what you learned.`]},
+  {kind:'boss', nm:'Mission · Operation Core'},
+  {kind:'end', nm:'Debrief'},
+];
+
+/* =====================================================================
+   DOSSIER ANIMATIONS (all on the Core network)
+   ===================================================================== */
+const coreBox=(C,top=22,bot=10)=>inBox(corePos(),[0,top,C.w,C.h-top-bot],14,1.6);
+// --- degree as size; shortest paths light up one after the other
+ANIM.d1=(C,cap)=>{ const pairs=[[35,7],[150,120],[79,107],[12,140]].map(([a,b])=>pathTo(bfs(CORE.adj,a).par,b));
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=coreBox(C), k=Math.floor(t/3500)%pairs.length, P=pairs[k], f=clamp((t%3500)/2200,0,1), m=Math.floor(f*(P.length-1));
+    CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1,.25));
+    for(let i=0;i<m;i++) seg(ctx,p[P[i]],p[P[i+1]],COL.amber,3,.9);
+    p.forEach(([x,y],i)=>dot(ctx,x,y,csize(i),P.slice(0,m+1).includes(i)?COL.amber:COL.cyan,4));
+    cap.innerHTML=`${CORE.N} nodes · ${CORE.E.length} links · size = degree · <span style="color:var(--amber)">shortest path: d = ${P.length-1}</span>`; }; };
+// --- the Core next to a random network with the same N and E
+ANIM.d2=(C,cap)=>{ const N=CORE.N, R=rng(8), pr=[]; for(let a=0;a<N;a++) for(let b=a+1;b<N;b++) pr.push([a,b,R()]); pr.sort((x,y)=>x[2]-y[2]);
+  const RE=pr.slice(0,CORE.E.length).map(([a,b])=>[a,b]), radj=adjOf(N,RE), rdeg=radj.map(a=>a.length), PR=tame(layout(N,RE,3,300,.25),.9,1.1);
+  let rc=0; for(let i=0;i<N;i++){ const a=radj[i]; if(a.length<2) continue; let t=0; for(let x=0;x<a.length;x++) for(let y=x+1;y<a.length;y++) if(radj[a[x]].includes(a[y])) t++; rc+=t/(a.length*(a.length-1)/2); } rc/=N;
+  const big=comps(N,RE).bigSize;
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const rnd=Math.floor(t/5000)%2===1;
+    const p=rnd?inBox(PR,[0,22,w,h-32],14,1.6):coreBox(C), E=rnd?RE:CORE.E, dg=rnd?rdeg:CORE.deg, col=rnd?COL.ink2:COL.cyan;
+    E.forEach(([a,b])=>seg(ctx,p[a],p[b],col,1,.3)); p.forEach(([x,y],i)=>dot(ctx,x,y,2+Math.sqrt(dg[i])*1.25,rnd?COL.ink:COL.cyan,4));
+    cap.innerHTML = rnd ? `RANDOM, same N and E · C = ${rc.toFixed(2)} · biggest hub ${Math.max(...rdeg)} · giant component ${big}/${N}`
+                        : `<span style="color:var(--cyan)">THE CORE</span> · C = ${CORE.C.toFixed(2)} · biggest hub ${CORE.kmax} · L = ${CORE.L.toFixed(1)}`; }; };
+// --- hubs and the log-log degree distribution
+ANIM.d3=(C,cap)=>{ const hubs=d3range(CORE.N).sort((a,b)=>CORE.deg[b]-CORE.deg[a]).slice(0,6), H=logHist(CORE.deg);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=coreBox(C), g=.5+.5*Math.sin(t/300);
+    CORE.E.forEach(([a,b])=>{ const hh=hubs.includes(a)||hubs.includes(b); seg(ctx,p[a],p[b],hh?COL.amber:COL.cyan,1,hh?.45:.2); });
+    p.forEach(([x,y],i)=>{ const hh=hubs.includes(i); dot(ctx,x,y,csize(i)+(hh?1+g:0),hh?COL.amber:COL.cyan,hh?12:3); });
+    const bw=Math.min(150,w*.38), bh=bw*.8; ctx.save(); ctx.fillStyle='rgba(7,11,18,.85)'; ctx.fillRect(w-bw-18,h-bh-44,bw+14,bh+38); ctx.restore();
+    drawLogLog(ctx,[w-bw-6,h-bh-30,bw-6,bh],H,COL.amber,'');
+    cap.innerHTML=`<span style="color:var(--amber)">hubs</span>: the 6 biggest have ${hubs.map(i=>CORE.deg[i]).join(', ')} links · inset: P(k), log-log`; }; };
+// --- four centralities on the same network
+ANIM.d4=(C,cap)=>{ const N=CORE.N, adj=CORE.adj, L=[['DEGREE',norm(CORE.deg),COL.cyan],['BETWEENNESS',norm(betweenness(N,adj)),COL.amber],['CLOSENESS',null,COL.green],['EIGENVECTOR',null,COL.violet]];
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const k=Math.floor(t/4000)%4, l=L[k];
+    if(!l[1]) l[1]=k===2?norm(closeness(N,adj).map(x=>Math.pow(x,3))):norm(eigenvector(N,adj)); const v=l[1], top=v.indexOf(1), p=coreBox(C);
+    CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1,.25)); p.forEach(([x,y],i)=>dot(ctx,x,y,1.5+v[i]*9,i===top?COL.mag:l[2],i===top?16:4));
+    cap.innerHTML=`<span style="color:${l[2]}">${l[0]}</span> · node size = centrality · <span style="color:var(--mag)">top node</span>`; }; };
+// --- communities appear, bridges between them dashed
+ANIM.d5=(C,cap)=>{ const q=modularity(CORE.N,CORE.E,CORE.grp);
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=coreBox(C), f=clamp((t%8000)/3000,0,1);
+    CORE.E.forEach(([a,b])=>{ const br=CORE.grp[a]!==CORE.grp[b]; if(br&&f>=1) seg(ctx,p[a],p[b],COL.amber,1.5,.8,[4,4]); else seg(ctx,p[a],p[b],f>=1?GCOL[CORE.grp[a]]:COL.ink2,1,.3); });
+    p.forEach(([x,y],i)=>dot(ctx,x,y,csize(i),h01(i,1,1)<f?GCOL[CORE.grp[i]]:COL.ink2,4));
+    cap.innerHTML = f<1 ? 'colouring the communities…' : `5 communities · Q = ${q.toFixed(2)} · <span style="color:var(--amber)">bridges</span> between them`; }; };
+// --- an outbreak runs through the Core
+ANIM.d6=(C,cap)=>{ const N=CORE.N, st=Array(N).fill(ST.S), s0=CORE.START; st[s0]=ST.I; const fr=[st.slice()]; for(let t=0;t<60&&st.includes(ST.I);t++){ sirStep(CORE.adj,st,t,.35,.3,4); fr.push(st.slice()); }
+  cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=coreBox(C), f=Math.min(fr.length-1,Math.floor((t%(fr.length*260+2500))/260)), s=fr[f];
+    CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1,.25)); p.forEach(([x,y],i)=>dot(ctx,x,y,csize(i),SCOL[s[i]],s[i]===ST.I?10:3));
+    const ever=new Set(); fr.slice(0,f+1).forEach(x=>x.forEach((q,i)=>{ if(q===ST.I) ever.add(i); }));
+    cap.innerHTML=`SIR · β = 0.35, μ = 0.3 · step ${f} · <span style="color:var(--mag)">reached ${ever.size} of ${N}</span>`; }; };
+
+/* =====================================================================
+   LIGHTNING ROUND: timed questions, faster answers are worth more
+   ===================================================================== */
+BUILD.lightning=sc=>{
+  const TL=25, n=sc.items.length; setNext('NEXT ▸', true);
+  stage.appendChild(el('div','h',`<small>// ${sc.tag}</small>${sc.title}`));
+  stage.appendChild(el('div','vera',`<b>VERA:</b> ${sc.vera}`));
+  const wrap=el('div'); stage.appendChild(wrap); let i=0, got=0, right=0;
+  const show=()=>{ dbg('Q'+(i+1)); const it=sc.items[i]; wrap.innerHTML='';
+    const c=el('div','qcard fade'); c.appendChild(el('div','qn',`LIGHTNING ${i+1} / ${n} · ${it.lec}`));
+    const tb=el('div','tbar'), bar=el('i'); tb.appendChild(bar); c.appendChild(tb);
+    c.appendChild(el('div','qtext',it.q)); const opts=el('div','opts'), fb=el('div','fb'); const bs=[];
+    let t0=performance.now(), done=false;
+    const end=k=>{ if(done) return; done=true; cur.draw=null; bs.forEach((b,j)=>{ b.disabled=true; if(j===it.a) b.className='ok'; else if(j===k) b.className='no'; });
+      if(k===it.a){ const rem=Math.max(0,TL-(performance.now()-t0)/1000), pts=4+Math.ceil(4*rem/TL), g=award(sc.key+i,pts); right++; got+=pts;
+        fb.className='fb ok'; fb.innerHTML=`> right: ${it.why} ${g?'<b>+'+pts+' XP</b>':''}`; }
+      else { fb.className='fb no'; fb.innerHTML=`> ${k<0?'time is up':'no'}. ${it.why}`; }
+      tex(fb); const last=i===n-1, nb=el('button','btn-main', last?'RESULTS ▸':'NEXT ▸'); nb.style.minHeight='48px';
+      nb.onclick=()=>{ if(last) results(); else { i++; show(); } stage.scrollTop=0; }; c.appendChild(nb); };
+    it.o.forEach((o,k)=>{ const b=el('button',null,o); b.onclick=()=>end(k); bs.push(b); opts.appendChild(b); });
+    c.append(opts,fb); wrap.appendChild(c); tex(c);
+    cur.draw=()=>{ if(done) return; const f=1-(performance.now()-t0)/1000/TL; bar.style.width=Math.max(0,f*100)+'%'; tb.classList.toggle('low',f<.25); if(f<=0) end(-1); }; };
+  const results=()=>{ cur.draw=null; wrap.innerHTML=''; const c=el('div','qcard fade');
+    c.innerHTML=`<div class="qn">LIGHTNING ROUND · RESULTS</div><div class="qtext"><b>${right} / ${n}</b> right, ${got} points in this run.</div><div class="tip" style="color:var(--ink2);font-size:14px">XP are earned only the first time you get a question right. Replay to fill the gaps, or move on to the mission.</div>`;
+    const rb=el('button',null,'↻ REPLAY'); rb.style.minHeight='48px'; rb.onclick=()=>{ i=0; got=0; right=0; show(); }; c.appendChild(rb); wrap.appendChild(c); };
+  show(); };
+
+/* =====================================================================
+   BOSS · OPERATION CORE (six phases, one detection meter, checkpoints)
+   ===================================================================== */
+BUILD.boss=()=>{
+  const key='boss', N=CORE.N, T=CORE.T, FAIL=15;
+  setNext('DEBRIEF ▸', key in S.xp);
+  const head=el('div','bosshead'); head.innerHTML=`<div class="h"><small>// FINAL MISSION</small>OPERATION CORE</div>`; const tag=el('div','timer calm','PHASE 1/6'); head.appendChild(tag); stage.appendChild(head);
+  if(key in S.xp) stage.appendChild(el('div','badge',`✓ best: +${S.xp[key]} XP · replay to improve`));
+  const det=el('div','det'); det.innerHTML='<div class="lab"></div><div class="bar"><i></i></div>'; stage.appendChild(det);
+  const task=el('div','task'); stage.appendChild(task);
+  const qbox=el('div','qbox'); stage.appendChild(qbox);
+  const pN=el('div','panel'); pN.id='pNet'; const cN=el('div','cap',''); stage.appendChild(pN);
+  const info=el('div','fb info'); stage.appendChild(info);
+  const row=el('div','btnrow'); const bAlt=el('button',null,''), bAct=el('button','btn-main',''); row.append(bAlt,bAct); stage.appendChild(row);
+  const rs=el('button','reset','restart the whole mission from phase 1'); rs.onclick=()=>{ S.run=null; save(); go(idx); }; stage.appendChild(rs);
+  let R=S.run&&!S.run.done&&S.run.v===3?S.run:null; if(!R){ R=S.run={v:3,ph:1,det:0,cp:0,sc:[],fails:0,esc:[]}; save(); }
+  let tapH=null, locked=false;
+  const C=canvasIn(pN,(x,y)=>{ if(locked||!tapH) return; if(C.w&&cur.draw) cur.draw(performance.now()); tapH(x,y); });
+  pN.appendChild(cN);
+  const updDet=()=>{ det.querySelector('.lab').textContent=`DETECTION ${Math.round(R.det)}%`; det.querySelector('i').style.width=R.det+'%'; det.classList.toggle('hot',R.det>=70); };
+  const addDet=x=>{ R.det=Math.min(100,R.det+x); save(); updDet(); if(R.det>=100){ fail(); return true; } return false; };
+  const btn=(b,txt,fn)=>{ b.textContent=txt; b.style.display=''; b.disabled=false; b.onclick=fn; };
+  const hide=()=>{ bAct.style.display='none'; bAlt.style.display='none'; };
+  function fail(){ locked=true; tapH=null; qbox.innerHTML=''; info.className='fb no'; info.innerHTML=`> TRACE DETECTED. VERA cut the connection.<br>> retry phase ${R.ph} from its start (−${FAIL} XP at the end).`; hide();
+    btn(bAct,'↻ RETRY PHASE',()=>{ R.fails++; R.det=Math.min(R.cp,50); save(); updDet(); startPhase(); }); }
+  function win(pts,msg){ locked=true; tapH=null; R.sc[R.ph-1]=pts; save(); info.className='fb ok'; info.innerHTML=`${msg}<br>> phase ${R.ph}: <b>+${pts}</b>`; tex(info); hide();
+    btn(bAct, R.ph<6?`PHASE ${R.ph+1} ▸`:'MISSION REPORT ▸', ()=>{ R.ph++; save(); if(R.ph>6) finish(); else startPhase(); }); }
+  function startPhase(){ bAlt.className=''; bAct.className='btn-main'; locked=false; R.cp=R.det; save(); updDet(); dbg('P'+R.ph); tag.textContent=`PHASE ${R.ph}/6`; qbox.innerHTML=''; info.className='fb info'; info.textContent=''; hide();
+    const ph=PH[R.ph](); cur.draw=ph.draw; tapH=ph.tap||null; tex(task); tex(qbox); stage.scrollTop=0; }
+  const P=()=>inBox(corePos(),[0,20,C.w,C.h-26],14,1.6);
+  // the same map of the Core, zoomed on a group of nodes (the rest stays in place, faded)
+  const zoomP=(sub,pad=24,maxS=3.2)=>{ const B=P(); let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; sub.forEach(i=>{ const [x,y]=B[i]; x0=Math.min(x0,x); x1=Math.max(x1,x); y0=Math.min(y0,y); y1=Math.max(y1,y); });
+    const s_=Math.min((C.w-2*pad)/Math.max(1,x1-x0),(C.h-26-2*pad)/Math.max(1,y1-y0),maxS), cx=(x0+x1)/2, cy=(y0+y1)/2;
+    return B.map(([x,y])=>[C.w/2+(x-cx)*s_, 20+(C.h-26)/2+(y-cy)*s_]); };
+  const backdrop=(ctx,Z,skip)=>{ CORE.E.forEach(([a,b])=>{ if(skip(a)&&skip(b)) return; seg(ctx,Z[a],Z[b],COL.ink2,1,.12); }); Z.forEach(([x,y],i)=>{ if(!skip(i)) dot(ctx,x,y,csize(i),COL.ink2,0,.25); }); };
+
+  // ---------- phase 1: read the network
+  const ph1=()=>{ task.innerHTML=`<b>Phase 1 · read the Core.</b> Our probe sent back these statistics. Answer correctly: every wrong answer raises detection by 10%.`;
+    const k=CORE.k, H=logHist(CORE.deg), E=CORE.E.length, pts=[13,12,13,12];
+    const Q=[
+      {q:`The Core has $N=${N}$ devices and $E=${E}$ links. What is its average degree $\\langle k\\rangle$?`, o:[(E/N).toFixed(1),(2*E/N).toFixed(1),(2*E/N/(N-1)).toFixed(3)], a:1, why:`$\\langle k\\rangle=2E/N=${k.toFixed(1)}$.`},
+      {q:`The degree distribution, on log-log axes, is close to a straight line, and the biggest hub has ${CORE.kmax} links. The Core is…`, o:['a random network: Poisson degrees, no hubs','a heavy-tailed, scale-free-like network: a few hubs, many small nodes','a regular lattice: everybody has the same degree'], a:1, why:'a straight line on log-log axes is the signature of a power law.'},
+      {q:`Its clustering is $C=${CORE.C.toFixed(2)}$. A random network with the same $N$ and $\\langle k\\rangle$ would have $C\\approx\\langle k\\rangle/N\\approx ${(k/N).toFixed(2)}$. So the Core…`, o:['is basically random','is full of triangles: expect tight groups','has no giant component'], a:1, why:'many closed triangles: friends of friends are friends. groups will matter.'},
+      {q:`Its average distance is $L=${CORE.L.toFixed(1)}$. You will move through it seeing only your neighbours. The fastest way to cross it is…`, o:['go through the hubs: they are shortcuts to everywhere','hop at random','avoid the hubs at all costs'], a:0, why:'hubs connect distant parts of the network.'}];
+    let qi=0, first=true; const sc=[];
+    const show=()=>{ const it=Q[qi]; qbox.innerHTML=''; qbox.appendChild(el('div','qn',`QUESTION ${qi+1} / 4`)); qbox.appendChild(el('div','qtext',it.q)); const o=el('div','opts');
+      it.o.forEach((t,j)=>{ const b=el('button',null,t); b.onclick=()=>{ if(locked) return;
+        if(j===it.a){ b.className='ok'; sc.push(first?pts[qi]:0); info.className='fb ok'; info.innerHTML=`> right: ${it.why}`; tex(info); qi++; first=true;
+          if(qi<4) setTimeout(()=>{ if(!locked){ show(); info.textContent=''; } },900); else { qbox.innerHTML=''; const tot=sc.reduce((a,x)=>a+x,0); win(tot,`> diagnosis: a sparse, clustered, heavy-tailed small world. hubs to travel, groups to hide in.`); } }
+        else { b.className='no'; b.disabled=true; first=false; info.className='fb no'; info.textContent='> wrong. detection +10%.'; addDet(10); } };
+        o.appendChild(b); }); qbox.appendChild(o); tex(qbox); };
+    show();
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const wide=w>=520;
+      const R1=wide?[50,40,w/2-80,h-90]:[50,36,w-80,h*.5-60]; drawLogLog(ctx,R1,H,COL.amber,'degree distribution, log bins');
+      const lines=[`N = ${N} devices`,`E = ${E} links`,`clustering C = ${CORE.C.toFixed(2)}`,`average distance L = ${CORE.L.toFixed(1)}`,`biggest hub: ${CORE.kmax} links`, qi>0?`⟨k⟩ = ${k.toFixed(1)}`:'⟨k⟩ = ?'];
+      const x0=wide?w/2+20:30, y0=wide?60:h*.5+20, dy=wide?28:Math.min(24,(h*.5-30)/6);
+      lines.forEach((s,i)=>label(ctx,s,x0,y0+i*dy,i===5?COL.amber:COL.cyan,14,'left'));
+      cN.textContent='PROBE REPORT'; }}; };
+
+  // ---------- phase 2: get in with local information only (decentralized search: hubs to travel, the cell's colour to home in)
+  const ph2=()=>{ const adj=CORE.adj, d=bfs(adj,CORE.START).d[CORE.GATE];
+    task.innerHTML=`<b>Phase 2 · get in.</b> You are on a peripheral device and you have <b>no map</b>: you only see the devices linked to the one you are on, with their number of links. Somewhere there is the cell's <b>gateway</b>: you will recognise it only when you are next to it. Devices of the cell answer our ping and show up <span style="color:var(--violet)">violet</span>. Tap a neighbour to hop: every hop raises detection by 4%.`;
+    let at=CORE.START, prev=-1, hops=0, t0=performance.now(); const path=[at], vis=new Set([at]);
+    const ring_=()=>{ const {w,h}=C, cx=w/2, cy=20+(h-26)/2, Rr=Math.min(w,h-26)*.36, nb=adj[at].slice().sort((a,b)=>h01(a,at,2)-h01(b,at,2));
+      return {cx,cy,nb,pos:nb.map((v,k)=>{ const a=-Math.PI/2+2*Math.PI*k/nb.length; return [cx+Rr*Math.cos(a), cy+Rr*Math.sin(a)]; })}; };
+    const upd=()=>{ info.className='fb info'; info.textContent=`> hops: ${hops} · path: ${path.length>7?'… → ':''}${path.slice(-7).join(' → ')}`; };
+    upd();
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const {cx,cy,nb,pos}=ring_(), f=ease(clamp((performance.now()-t0)/350,0,1)), g=.5+.5*Math.sin(t/250);
+        const P2=pos.map(([x,y])=>[lerp(cx,x,f),lerp(cy,y,f)]);
+        nb.forEach((v,k)=>seg(ctx,[cx,cy],P2[k],v===CORE.GATE?COL.mag:COL.cyan,1.4,.5));
+        nb.forEach((v,k)=>{ const [x,y]=P2[k], r=5+1.6*Math.sqrt(CORE.deg[v]), col=v===CORE.GATE?COL.mag:T.has(v)?COL.violet:COL.cyan;
+          dot(ctx,x,y,r,col,v===CORE.GATE?16:8,vis.has(v)?.45:1); label(ctx,String(CORE.deg[v]),x,y+4,COL.bg,11);
+          if(v===CORE.GATE){ ring(ctx,x,y,r+5+3*g,COL.mag,2); label(ctx,'GATEWAY',x,y-r-12,COL.mag,11); }
+          else if(v===prev) label(ctx,'◂ back',x,y-r-9,COL.amber,10); else if(vis.has(v)) label(ctx,'visited',x,y-r-9,COL.ink2,10); });
+        const rc=5+1.6*Math.sqrt(CORE.deg[at]); dot(ctx,cx,cy,rc,T.has(at)?COL.violet:COL.amber,14); ring(ctx,cx,cy,rc+5,COL.amber,2); label(ctx,String(CORE.deg[at]),cx,cy+4,COL.bg,11);
+        label(ctx,'YOU',cx,cy+rc+18,COL.amber,11);
+        cN.textContent=`hops ${hops} · number = links of the device`; },
+      tap:(x,y)=>{ const {nb,pos}=ring_(), b=nearest(pos,x,y,30); if(b<0) return; const v=nb[b];
+        hops++; prev=at; at=v; path.push(v); vis.add(v); t0=performance.now(); upd();
+        if(v===CORE.GATE){ win(Math.round(50*Math.min(1,d/hops)),`> you reached the gateway in ${hops} hops (shortest possible: ${d}). with no map, the hubs are the shortcuts: they see a big piece of the network.`); return; }
+        addDet(4); }}; };
+
+  // ---------- phase 3: who gives the orders? hidden report network, explored with random couriers (PageRank = time spent)
+  const ph3=()=>{ const Tl=[...T], n=Tl.length, ix=new Map(Tl.map((v,k)=>[v,k])), D=CORE.D.map(([a,b])=>[ix.get(a),ix.get(b)]), x=ix.get(CORE.X), MAXT=5;
+    const out=Array.from({length:n},()=>[]); D.forEach(([a,b])=>out[a].push(b)); const pr=pagerank(n,D);
+    const indeg=d3range(n).map(i=>D.filter(([a,b])=>b===i).length), decoy=indeg.indexOf(Math.max(...indeg));
+    const Ein=CORE.E.filter(([a,b])=>T.has(a)&&T.has(b)).map(([a,b])=>[ix.get(a),ix.get(b)]), lay=()=>{ const Z=zoomP(Tl); return Tl.map(i=>Z[i]); };
+    task.innerHTML=`<b>Phase 3 · who gives the orders?</b> You can see who knows whom inside the cell, but not who reports to whom. Tap a member to release a <b>random courier</b> from there: it follows the reports for 60 steps (and sometimes jumps to a random member), revealing the arrows it uses. Glow = time spent on a member. ${MAXT} couriers at most, +4% detection each. When you are sure, switch to <b>ACCUSE</b> and tap the controller: the member with the highest PageRank. A wrong accusation: +15%.`;
+    const vis=Array(n).fill(0), seenA=new Set(); let used=0, anim=null, mode='trace', wrong=0, done=false, bad=new Set();
+    const upd=()=>{ info.className='fb info'; info.textContent=`> couriers used ${used}/${MAXT} · mode: ${mode==='trace'?'release courier':'ACCUSE'}`; };
+    btn(bAct,'ACCUSE ▸',()=>{ if(done) return; mode=mode==='trace'?'accuse':'trace'; bAct.textContent=mode==='trace'?'ACCUSE ▸':'◂ BACK TO COURIERS'; upd(); }); upd();
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const Z=zoomP(Tl), p=Tl.map(i=>Z[i]), now=performance.now(); backdrop(ctx,Z,i=>T.has(i));
+        if(anim){ const k=Math.min(anim.path.length-1,Math.floor((now-anim.t0)/45)); while(anim.k<k){ anim.k++; const a_=anim.path[anim.k-1], b_=anim.path[anim.k]; vis[b_]++; if(!anim.tp[anim.k]) seenA.add(a_+'>'+b_); } if(anim.k>=anim.path.length-1) anim=null; }
+        Ein.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1,.25));
+        const mv=Math.max(1,...vis), mx=Math.max(...pr);
+        seenA.forEach(k=>{ const [a,b]=k.split('>').map(Number); arrow(ctx,p[a],p[b],COL.violet,1.4,.7,7); });
+        if(anim&&anim.k>0){ const a_=anim.path[anim.k-1], b_=anim.path[anim.k]; if(anim.tp[anim.k]) seg(ctx,p[a_],p[b_],COL.mag,1.2,.6,[3,4]); }
+        p.forEach(([X,Y],i)=>{ const g=vis[i]/mv; if(done){ dot(ctx,X,Y,4+16*pr[i]/mx,i===x?COL.mag:COL.violet,i===x?16:4); return; }
+          if(vis[i]) dot(ctx,X,Y,7+12*Math.sqrt(g),COL.amber,18,.18+.35*g); dot(ctx,X,Y,6,bad.has(i)?COL.red:COL.violet,4); });
+        if(anim&&anim.k<anim.path.length){ const c=p[anim.path[anim.k]]; dot(ctx,c[0],c[1],4,COL.amber,16); }
+        cN.textContent= done?'node size = PageRank of the report network':`the cell · ${n} members · couriers ${used}/${MAXT}`; },
+      tap:(X,Y)=>{ if(done||anim) return; const p=lay(), b=nearest(p,X,Y,22); if(b<0) return;
+        if(mode==='trace'){ if(used>=MAXT){ info.className='fb no'; info.textContent='> no couriers left: time to accuse.'; return; }
+          used++; const R2=rng(977+used*131+b), path=[b], tp=[false]; let q=b; for(let k=0;k<60;k++){ let j=false; if(!out[q].length||R2()<.15){ q=Math.floor(R2()*n); j=true; } else q=out[q][Math.floor(R2()*out[q].length)]; path.push(q); tp.push(j); }
+          anim={path,tp,k:0,t0:performance.now()}; vis[b]++; upd(); addDet(4); return; }
+        if(bad.has(b)) return;
+        if(b===x){ done=true; const pts=wrong===0?Math.max(20,50-6*Math.max(0,used-2)):wrong===1?Math.max(10,25-3*Math.max(0,used-2)):5;
+          win(pts,`> the controller: only ${indeg[x]} reports reach it, but they come from the members who collect everybody else's. the couriers kept ending up there. you used ${used} courier${used===1?'':'s'}.`); return; }
+        bad.add(b); wrong++; info.className='fb no'; info.textContent = b===decoy ? `> no. this member receives the most reports (${indeg[b]}), but from members nobody reports to. detection +15%.` : `> no. the couriers don't stay here for long. detection +15%.`;
+        if(addDet(15)) return;
+        if(wrong>=3){ done=true; win(0,`> three wrong accusations. VERA points at the controller for you.`); } }}; };
+
+  // ---------- phase 4: draw the border. positions but no links: probe the suspects, rule them in or out.
+  //            then the whole Core rearranges into its five communities
+  const ph4=()=>{ const B=CORE.bnd, Tl=[...T], adj=CORE.adj, outer=[...new Set(B.flat().filter(i=>!T.has(i)))], inner=[...new Set(B.flat().filter(i=>T.has(i)))];
+    const P0=corePos(), cx=Tl.reduce((a,i)=>a+P0[i][0],0)/Tl.length, cy=Tl.reduce((a,i)=>a+P0[i][1],0)/Tl.length, rr=i=>Math.hypot(P0[i][0]-cx,P0[i][1]-cy), rmax=Math.max(...Tl.map(rr));
+    const SUS=[...inner.filter(i=>CORE.deg[i]<=6&&i!==CORE.X), ...outer.filter(i=>rr(i)<rmax)].sort((a,b)=>h01(a,7,7)-h01(b,7,7)), sus=new Set(SUS);
+    const V=[...T,...outer], vs=new Set(V), rule=new Map(), probed=new Set(); let sel=-1, res=null, mT0=null;
+    task.innerHTML=`<b>Phase 4 · draw the border.</b> To seal the cell we must know exactly who is in it. The probe gives us where the devices are, but <b>not their links</b>, and positions can lie: some outside devices sit right next to the cell. <span style="color:var(--violet)">Violet</span>: surely in the cell. Grey: surely outside. <b>?</b>: ${SUS.length} suspects. Tap a suspect to <b>probe</b> it: you see its links (+2% detection, −1 point). Then rule it <b>IN</b> or <b>OUT</b>. <span class="tip">Strong community: a device belongs to the cell only if <b>more than half</b> of its links go into the cell. Links to suspects count once you rule them.</span>`;
+    const cnt=i=>{ let a=0,b=0,u=0; adj[i].forEach(j=>{ if(sus.has(j)){ const r=rule.get(j); r==='in'?a++:r==='out'?b++:u++; } else T.has(j)?a++:b++; }); return [a,b,u]; };
+    const sb=el('button','btn-main','SUBMIT THE BORDER ▸'); sb.style.minHeight='48px';
+    const upd=()=>{ qbox.innerHTML=''; qbox.appendChild(el('div','qn',`RULED ${rule.size} / ${SUS.length} · PROBES ${probed.size}`)); sb.disabled=rule.size<SUS.length||!!res; qbox.appendChild(sb);
+      if(sel<0){ info.className='fb info'; info.textContent='> tap a ? device'; bAlt.disabled=bAct.disabled=true; return; }
+      const [a,b,u]=cnt(sel); bAlt.disabled=bAct.disabled=false; info.className='fb info';
+      info.innerHTML=`> device ${sel}: <b>${a}</b> link${a===1?'':'s'} into the cell · <b>${b}</b> outside${u?` · ${u} to suspect${u>1?'s':''} not ruled yet`:''}${rule.has(sel)?` · ruled <b>${rule.get(sel).toUpperCase()}</b>`:''}`; };
+    const put=r=>{ if(sel<0||res) return; rule.set(sel,r); sel=-1; upd(); };
+    btn(bAlt,'✕ OUT',()=>put('out')); btn(bAct,'✓ IN',()=>put('in'));
+    sb.onclick=()=>{ if(locked||rule.size<SUS.length) return; res=new Map(SUS.map(i=>[i,(rule.get(i)==='in')===T.has(i)])); sel=-1;
+      const ok=[...res.values()].filter(Boolean).length, pts=Math.max(0,5*ok-probed.size); mT0=performance.now()+1800; qbox.innerHTML='';
+      win(pts,`> ${ok} of ${SUS.length} suspects ruled right (${probed.size} probe${probed.size===1?'':'s'}). the cell has ${T.size} devices and only ${B.length} links to the outside. now look at the whole Core: it falls apart into its five communities.`); };
+    upd();
+    // final layout: every community pushed away from the centre
+    const full=()=>P(), expl=()=>{ const G=CORE.grp, cs=[0,1,2,3,4].map(g=>{ const m=d3range(N).filter(i=>G[i]===g); return [m.reduce((a,i)=>a+P0[i][0],0)/m.length, m.reduce((a,i)=>a+P0[i][1],0)/m.length]; });
+      const mx=P0.reduce((a,p)=>a+p[0],0)/N, my=P0.reduce((a,p)=>a+p[1],0)/N; return inBox(P0.map(([x,y],i)=>[x+.7*(cs[G[i]][0]-mx), y+.7*(cs[G[i]][1]-my)]),[0,20,C.w,C.h-26],14,1.6); };
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const Z=zoomP(V,24,2.6), now=performance.now(), g=.5+.5*Math.sin(t/200);
+        if(mT0!==null&&now>=mT0){ const k=now-mT0, f1=ease(clamp(k/1200,0,1)), f2=ease(clamp((k-1500)/1600,0,1)), F=full(), X2=expl();
+          const p=Z.map((z,i)=>{ const a=[lerp(z[0],F[i][0],f1),lerp(z[1],F[i][1],f1)]; return [lerp(a[0],X2[i][0],f2),lerp(a[1],X2[i][1],f2)]; });
+          CORE.E.forEach(([a,b])=>{ const same=CORE.grp[a]===CORE.grp[b]; seg(ctx,p[a],p[b],same&&f2>0?GCOL[CORE.grp[a]]:COL.ink2,1,same?.2+.3*f2:.25-.12*f2); });
+          p.forEach(([x,y],i)=>dot(ctx,x,y,csize(i),f2>0?GCOL[CORE.grp[i]]:(T.has(i)?COL.violet:COL.ink2),T.has(i)?8:3,f2>0?1:(T.has(i)?1:.5)));
+          cN.innerHTML= f2>=1?`the Core in its five communities · <span style="color:var(--violet)">the cell</span> · Q = ${modularity(N,CORE.E,CORE.grp).toFixed(2)}`:'the whole Core, rearranging…'; return; }
+        Z.forEach(([x,y],i)=>{ if(!vs.has(i)) dot(ctx,x,y,csize(i)*.8,COL.ink2,0,.22); });
+        const shown=res?SUS:[...probed]; shown.forEach(s=>adj[s].forEach(j=>{ const c=sus.has(j)&&!rule.has(j)?COL.ink:(sus.has(j)?rule.get(j)==='in':T.has(j))?COL.violet:COL.ink2; seg(ctx,Z[s],Z[j],c,s===sel?2.2:1.3,s===sel?.95:.55,sus.has(j)&&!rule.has(j)?[3,4]:null); }));
+        V.forEach(i=>{ const [x,y]=Z[i], r=csize(i)+1;
+          if(sus.has(i)){ const rl=rule.get(i), col=rl==='in'?COL.violet:rl==='out'?COL.ink2:COL.ink;
+            ctx.save(); ctx.fillStyle=COL.bg; ctx.beginPath(); ctx.arc(x,y,r+3,0,7); ctx.fill(); ctx.restore();
+            if(rl==='in') dot(ctx,x,y,r+1,COL.violet,6); ring(ctx,x,y,r+3,col,1.8); if(!rl) label(ctx,'?',x,y+4,COL.ink,11);
+            if(i===sel) ring(ctx,x,y,r+8+2*g,COL.amber,2);
+            if(res) ring(ctx,x,y,r+7,res.get(i)?COL.green:COL.red,2.4);
+            return; }
+          if(T.has(i)){ dot(ctx,x,y,csize(i),COL.violet,6); if(i===CORE.X) ring(ctx,x,y,csize(i)+4,COL.mag,1.6); }
+          else dot(ctx,x,y,csize(i),COL.ink2,0,.6); });
+        cN.textContent= res?'green: ruled right · red: ruled wrong':`${SUS.length} suspects · ruled ${rule.size} · probes ${probed.size}`; },
+      tap:(x,y)=>{ if(res) return; const Z=zoomP(V,24,2.6), b=nearest(SUS.map(i=>Z[i]),x,y,24); if(b<0){ sel=-1; upd(); return; } sel=SUS[b];
+        if(!probed.has(sel)){ probed.add(sel); if(addDet(2)) return; } upd(); }}; };
+
+  // ---------- phase 5: seal it off while NEXUS copies run for the exits (one action per turn)
+  const ph5=()=>{ const adj=CORE.adj, B=CORE.bnd, outer=new Set(B.flat().filter(i=>!T.has(i))), V=[...T,...outer], vs=new Set(V), PS=.5, SALT=82;
+    const DEP=adj[CORE.X].slice().sort((a,b)=>CORE.deg[b]-CORE.deg[a])[0], S0=[CORE.X,DEP], E=CORE.E.filter(([a,b])=>vs.has(a)&&vs.has(b));
+    // a turn of the game, shared by the player and by our reference plan
+    const mk=()=>({cut:new Set(), off:new Set(), inf:new Set(S0), esc:new Set(), turn:0});
+    const open=(g,[a,b])=>!g.cut.has(ekey(a,b))&&!g.off.has(a)&&!g.off.has(b);
+    const reachD=g=>{ const d=new Map(), q=[]; g.inf.forEach(i=>{ if(!g.off.has(i)){ d.set(i,0); q.push(i); } }); while(q.length){ const u=q.shift(); adj[u].forEach(v=>{ if(T.has(v)&&!g.off.has(v)&&!d.has(v)&&open(g,[u,v])){ d.set(v,d.get(u)+1); q.push(v); } }); } return d; };
+    const exits=g=>{ const d=reachD(g); return B.filter(e=>open(g,e)&&d.has(T.has(e[0])?e[0]:e[1])); };
+    const spread=g=>{ const nw=[]; g.inf.forEach(i=>{ if(g.off.has(i)) return; adj[i].forEach(j=>{ if(!vs.has(j)||g.off.has(j)||g.inf.has(j)||g.esc.has(j)||!open(g,[i,j])) return; if(h01(i,j,g.turn,SALT)<PS&&!nw.some(x=>x[1]===j)) nw.push([i,j]); }); });
+      const o=nw.filter(([i,j])=>!T.has(j)); nw.forEach(([i,j])=>T.has(j)?g.inf.add(j):g.esc.add(j)); g.turn++; g.last=nw; return o; };
+    // reference plan: shut down clean devices that hold two or more open exits, else cut the most urgent exit
+    const ref=(()=>{ const g=mk(); let a=0; while(exits(g).length&&a<40){ const d=reachD(g), ex=exits(g), ein=e=>T.has(e[0])?e[0]:e[1];
+        const hot=ex.filter(e=>g.inf.has(ein(e))); let v=-1; if(!hot.length){ const c=V.filter(i=>!g.inf.has(i)&&!g.off.has(i)&&ex.filter(e=>e.includes(i)).length>=2); if(c.length) v=c.sort((x,y)=>(d.get(x)??99)-(d.get(y)??99))[0]; }
+        if(v>=0) g.off.add(v); else { const e=(hot.length?hot:ex).sort((x,y)=>(d.get(ein(x))??99)-(d.get(ein(y))??99))[0]; g.cut.add(ekey(e[0],e[1])); }
+        a++; if(exits(g).length) spread(g); } return {a, esc:g.esc.size}; })();
+    const G=mk(); let acts=0, mode='cut', flash=[];
+    task.innerHTML=`<b>Phase 5 · seal it off.</b> NEXUS noticed and is <b>spreading like an epidemic</b> (SI): it already infects the controller and its busiest neighbour (pink). Hollow grey devices are outside the cell, even when they sit close to it on the map. Every turn: <b>1.</b> you make one action, <b>2.</b> every infected device infects each neighbour through an open link with a 50% chance, and stays infected. An outside device that gets infected is an <b>escaped</b> copy (red). The phase ends when no copy can reach the outside any more. +2% detection per action. <span class="tip">Cut one link, or shut down one device (all its links close at once). A device that already hosts a copy can't be shut down. Escaped copies will wait for you in phase 6.</span>`;
+    const lay=()=>{ const Z=zoomP(V,24,2.6); return V.map(i=>Z[i]); };
+    qbox.innerHTML=`<div style="display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)"><span><b style="color:var(--violet)">●</b> cell</span><span><b style="color:var(--mag)">●</b> NEXUS copy</span><span><b style="color:var(--ink2)">○</b> outside device</span><span><b style="color:var(--red)">●</b> escaped copy</span><span><b style="color:var(--red)">┄</b> closed link</span></div>`;
+    const status=()=>`turn ${G.turn} · actions ${acts} · escaped ${G.esc.size}`;
+    const setMode=m=>{ mode=m; bAlt.className=m==='cut'?'btn-main':''; bAct.className=m==='off'?'btn-main':''; };
+    btn(bAlt,'✂ CUT A LINK',()=>setMode('cut')); btn(bAct,'⏻ SHUT DOWN A DEVICE',()=>setMode('off')); setMode('cut');
+    info.className='fb info'; info.textContent=`> ${status()} · NEXUS spreads after each of your actions`;
+    const after=msg=>{ if(addDet(2)) return; let o=[]; if(exits(G).length){ o=spread(G); const t=performance.now(); (G.last||[]).forEach(([i,j])=>flash.push([i,j,t,!T.has(j)])); }
+      info.className=o.length?'fb no':'fb info'; info.textContent=`> ${msg}${o.length?` · ${o.length} cop${o.length>1?'ies':'y'} escaped (red flash)!`:''} · ${status()}`;
+      if(!exits(G).length){ R.esc=[...G.esc]; save(); bAlt.className=''; bAct.className='btn-main';
+        const pts=Math.max(0,50-10*G.esc.size-3*Math.max(0,acts-ref.a));
+        win(pts,`> no copy can reach the outside any more: ${acts} actions, ${G.esc.size} cop${G.esc.size===1?'y':'ies'} escaped. our plan: ${ref.a} actions, ${ref.esc} escaped. shutting down a clean device that holds several exits closes them all at once.`); } };
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const Z=zoomP(V,24,2.6), at=i=>Z[i], g=.5+.5*Math.sin(t/200), now=performance.now(); backdrop(ctx,Z,i=>vs.has(i));
+        E.forEach(([a,b])=>{ if(!open(G,[a,b])) seg(ctx,at(a),at(b),COL.red,1,.35,[3,4]); else seg(ctx,at(a),at(b),COL.ink2,1.3,.55); });
+        flash=flash.filter(f=>now-f[2]<2500); flash.forEach(([i,j,t0,out])=>{ const k=1-(now-t0)/2500; seg(ctx,at(i),at(j),out?COL.red:COL.mag,out?4:2.5,.9*k); });
+        V.forEach(i=>{ const [x,y]=at(i), r=csize(i); if(G.off.has(i)){ seg(ctx,[x-r-2,y-r-2],[x+r+2,y+r+2],COL.red,2); seg(ctx,[x-r-2,y+r+2],[x+r+2,y-r-2],COL.red,2); return; }
+          if(G.esc.has(i)){ dot(ctx,x,y,r+1,COL.red,14); ring(ctx,x,y,r+5+2*g,COL.red,1.8); label(ctx,'ESCAPED',x,y-r-12,COL.red,10); return; }
+          if(!T.has(i)){ ctx.save(); ctx.fillStyle=COL.bg; ctx.beginPath(); ctx.arc(x,y,r+1,0,7); ctx.fill(); ctx.restore(); ring(ctx,x,y,r+1,COL.ink2,1.8); return; }
+          dot(ctx,x,y,r,G.inf.has(i)?COL.mag:COL.violet,G.inf.has(i)?12:6); if(i===CORE.X) ring(ctx,x,y,r+4,COL.mag,1.6); });
+        cN.textContent=`${status()} · action: ${mode==='cut'?'cut a link':'shut down a device'}`; },
+      tap:(x,y)=>{ const p=lay(), Z=zoomP(V,24,2.6);
+        if(mode==='off'){ const nd=nearest(p,x,y,22), v=nd>=0?V[nd]:-1; if(v<0||G.off.has(v)) return;
+          if(G.inf.has(v)){ info.className='fb no'; info.textContent='> NEXUS already holds this device: you can\'t shut it down. close the links around it instead.'; return; }
+          if(G.esc.has(v)){ info.className='fb no'; info.textContent='> too late for this one: the copy is already outside.'; return; }
+          const k=exits(G).filter(e=>e[0]===v||e[1]===v).length; G.off.add(v); acts++;
+          after(k?`device shut down: ${k} open exit${k>1?'s':''} closed`:'device shut down'); return; }
+        let best=null, bd=18; E.forEach(e=>{ if(!open(G,e)) return; const d=segDist([x,y],Z[e[0]],Z[e[1]]); if(d<bd){ bd=d; best=e; } }); if(!best) return;
+        const [a,b]=best, br=T.has(a)!==T.has(b); G.cut.add(ekey(a,b)); acts++;
+        after(br?'link to the outside cut':'link cut inside the cell'); }}; };
+
+  // ---------- phase 6: the race: the kill-patch against NEXUS, for the rest of Helix
+  const ph6=()=>{ const bp=.25, bn=.35, K=2, RUNS=30, nS=[...new Set([...CORE.SLEEP,...(R.esc||[])])].filter(i=>!T.has(i)), outN=d3range(N).filter(i=>!T.has(i));
+    const Ex=ps=>{ let s_=0; for(let r=0;r<RUNS;r++) s_+=race(CORE.adj,ps,nS,T,bp,bn,r); return s_/RUNS; };
+    task.innerHTML=`<b>Phase 6 · the race.</b> The cell is sealed, but NEXUS copies are loose in the rest of Helix (pink): ${CORE.SLEEP.length} sleeping copies${R.esc&&R.esc.length?` and the ${R.esc.length} that escaped from the cell`:''}. When you release the kill-patch, both spread at the same time: a device taken by one can't be taken by the other. NEXUS is faster ($\\beta_{\\text{NEXUS}}=0.35$, $\\beta_{\\text{patch}}=0.25$). You have only <b>${K}</b> release points: choose the devices, and win as much of Helix as you can. <span class="tip">Size = number of links. A device taken by NEXUS is a wall for the patch, and vice versa.</span>`;
+    const sel=[]; let frames=null, t0=0;
+    info.textContent=`> release points: 0/${K}`;
+    btn(bAct,'RELEASE ▸',()=>{ if(sel.length<K||frames) return; bAct.disabled=true; info.textContent='> simulating…';
+      setTimeout(()=>{ const free=outN.filter(i=>!nS.includes(i)), R2=rng(3); let rnd=0; for(let k=0;k<10;k++) rnd+=Ex(free.slice().sort(()=>R2()-.5).slice(0,K)); rnd/=10;
+        const cand=[...new Set([...free.slice().sort((a,b)=>CORE.deg[b]-CORE.deg[a]).slice(0,30), ...nS.flatMap(i=>CORE.adj[i])])].filter(i=>!T.has(i)&&!nS.includes(i));
+        const gr=[]; for(let k=0;k<K;k++){ let b=-1,bv=-1; for(const c of cand){ if(gr.includes(c)) continue; const v=Ex([...gr,c]); if(v>bv){ bv=v; b=c; } } gr.push(b); }
+        const best=Math.max(Ex(gr),Ex(sel)), mine=Ex(sel), pts=Math.round(50*Math.pow(clamp((mine-rnd)/(best-rnd),0,1),2));
+        let bestR=0, bd=1e9; for(let r=0;r<RUNS;r++){ const v=race(CORE.adj,sel,nS,T,bp,bn,r); if(Math.abs(v-mine)<bd){ bd=Math.abs(v-mine); bestR=r; } }
+        frames=[]; race(CORE.adj,sel,nS,T,bp,bn,bestR,frames); t0=performance.now();
+        win(pts,`> on average the kill-patch wins <b>${Math.round(mine*100)}%</b> of Helix (${K} random devices ${Math.round(rnd*100)}% · our best plan ${Math.round(best*100)}%).`); },30); });
+    bAct.disabled=true;
+    return {draw:t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=P(), g=.5+.5*Math.sin(t/220);
+        const s_=frames?frames[Math.min(frames.length-1,Math.floor((performance.now()-t0)/300))]:null;
+        CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.ink2,1,T.has(a)||T.has(b)?.1:.3));
+        p.forEach(([x,y],i)=>{ if(T.has(i)){ dot(ctx,x,y,csize(i),COL.dim,0,.4); return; }
+          const c=s_?s_[i]:(nS.includes(i)?2:sel.includes(i)?1:0);
+          dot(ctx,x,y,csize(i)+(c===2&&!s_?g:0),c===1?COL.green:c===2?COL.mag:COL.cyan,c?12:3,c?1:.55);
+          if(sel.includes(i)) ring(ctx,x,y,csize(i)+4,COL.green,1.6); });
+        if(s_){ const a_=s_.filter(v=>v===1).length, b_=s_.filter(v=>v===2).length; cN.innerHTML=`<span style="color:var(--green)">patched ${a_}</span> · <span style="color:var(--mag)">NEXUS ${b_}</span> · step ${Math.min(frames.length-1,Math.floor((performance.now()-t0)/300))}`; }
+        else cN.innerHTML=`<span style="color:var(--mag)">NEXUS copies ${nS.length}</span> · <span style="color:var(--green)">release points ${sel.length}/${K}</span>`; },
+      tap:(x,y)=>{ if(frames) return; const b=nearest(P(),x,y,18); if(b<0||T.has(b)||nS.includes(b)) return; const k=sel.indexOf(b); if(k>=0) sel.splice(k,1); else if(sel.length<K) sel.push(b);
+        info.className='fb info'; info.textContent=`> release points: ${sel.length}/${K}`; bAct.disabled=sel.length<K; }}; };
+
+  const PH=[null,ph1,ph2,ph3,ph4,ph5,ph6];
+  const NM=['Read the Core','Get in','Who gives the orders','Draw the border','Seal it off','The race'];
+  function finish(){ R.done=true; hide(); tapH=null; qbox.innerHTML=''; dbg('REPORT'); tag.textContent='DONE';
+    const sum=R.sc.reduce((a,x)=>a+(x||0),0), tot=Math.max(0,sum-FAIL*R.fails), prev=S.xp[key]||0;
+    if(tot>prev||!(key in S.xp)){ S.xp[key]=Math.max(tot,prev); updXP(Math.max(0,tot-prev)); } save();
+    task.innerHTML=`<b>Mission report.</b>`;
+    info.className='fb ok'; info.innerHTML=`<table class="sumt">${NM.map((n,i)=>`<tr><td>${i+1} · ${n}</td><td>${R.sc[i]||0} / 50</td></tr>`).join('')}${R.fails?`<tr><td>traced ${R.fails}×</td><td>−${FAIL*R.fails}</td></tr>`:''}<tr><td><b>OPERATION CORE</b></td><td><b>${tot} XP</b></td></tr></table>`;
+    cur.draw=t=>{ const {ctx,w,h}=C; if(!w) return; ctx.clearRect(0,0,w,h); const p=P(); CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.green,1,.3)); p.forEach(([x,y],i)=>dot(ctx,x,y,csize(i),T.has(i)?COL.dim:COL.green,4,T.has(i)?.5:1)); cN.textContent='the Core, cleaned'; };
+    btn(bAlt,'↻ NEW RUN',()=>{ S.run=null; save(); go(idx); }); setNext('DEBRIEF ▸',true); }
+  if(R.ph>1) det.after(el('div','badge',`↺ resumed from the checkpoint: phase ${R.ph}`));
+  startPhase();
+};
+
+/* ---------------- END ---------------- */
+function rankOf(x){ return x>=330?'NETWORK SCIENTIST':x>=230?'SENIOR AGENT':'FIELD AGENT'; }
+BUILD.end=()=>{
+  const xp=totalXP(); S.best=Math.max(S.best||0,xp); save();
+  let camp=0; for(let l=1;l<=8;l++){ try{ const s=JSON.parse(localStorage.getItem('nexus-l'+l)); if(s&&s.xp) camp+=Object.values(s.xp).reduce((a,b)=>a+b,0); }catch(e){} }
+  const a=el('div','anim'); a.style.height='min(34vh,300px)'; stage.appendChild(a); const C=canvasIn(a);
+  const term=el('div','term'); term.style.fontSize='16px'; stage.appendChild(term);
+  const rest=el('div'); rest.style.cssText='display:flex;flex-direction:column;gap:12px'; stage.appendChild(rest);
+  typeLines(term,[
+    `VERA: the cell is sealed. the kill-patch is everywhere.`,
+    `VERA: for the first time since Helix Cloud, NEXUS is silent.`,
+    `VERA: you read its map, outran its swarm, broke its hubs, found its masters, split its factions and stopped its outbreak.`,
+    `> [ CAMPAIGN · PART ONE COMPLETE · ${camp} XP ]`,
+    `VERA: ...one more thing. the kill-patch reported back from every device but one.`,
+    `VERA: it answered with a single line: "networks never really sleep."`,
+    `VERA: rest now, agent. I'll call you.`], ()=>{
+    endSummary(rest, xp, rankOf(xp), [
+      `<b>Lectures 1–2</b>: nodes, links, adjacency matrix; degree, $\\langle k\\rangle=2E/N$, distances, components, clustering.`,
+      `<b>Lecture 3</b>: random networks, the giant component at $\\langle k\\rangle=1$, small worlds, Watts–Strogatz, robustness.`,
+      `<b>Lecture 4</b>: power laws and scale-free networks, preferential attachment, robust to failures and fragile to attacks.`,
+      `<b>Lecture 5</b>: degree, eigenvector, PageRank, betweenness and closeness centrality.`,
+      `<b>Lecture 6</b>: communities, modularity, Girvan–Newman and Louvain, weak ties.`,
+      `<b>Lecture 7</b>: SI, SIS, SIR, $R_0$, the epidemic threshold and immunization.`],
+      null, 'END OF PART ONE');
+  });
+  // the Core turns green from the release points outwards
+  let t0=null; const d=bfs(CORE.adj,CORE.GATE).d;
+  cur.draw=()=>{ const {ctx,w,h}=C; if(!w) return; const now=performance.now(); if(t0===null) t0=now; const s=(now-t0)/1000; ctx.clearRect(0,0,w,h); const p=inBox(corePos(),[0,10,w,h-20],12,1.6);
+    CORE.E.forEach(([a,b])=>seg(ctx,p[a],p[b],COL.cyan,1,.3)); p.forEach(([x,y],i)=>{ const ok=d[i]<=s*2; dot(ctx,x,y,csize(i),ok?COL.green:COL.mag,ok?4:10); }); };
+};
+
+start();
+</script>
+</body>
+</html>

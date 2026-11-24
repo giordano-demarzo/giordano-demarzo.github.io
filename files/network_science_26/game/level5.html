@@ -271,10 +271,11 @@ ANIM.target=(C,cap)=>{
 /* =====================================================================
    BOSS · OPERATION CIRCLE
    ===================================================================== */
-const ORG=(()=>{ // 4 cells (leaders 0,10,20,30) + brokers 40–43 + mastermind 44 (seed chosen offline)
-  const G=cellNet(4,3); G.add(44,40); G.add(44,42);
+const ORG=(()=>{ // 4 cells (leaders 0,10,20,30) + brokers 40–43 + mastermind 44, hidden at the edge of cell 2 (seed chosen offline)
+  const G=cellNet(4,3); G.add(44,23); G.add(44,26);
   const D=[]; for(let c=0;c<4;c++) for(let i=1;i<10;i++) D.push([c*10+i,c*10]);
   D.push([0,40],[10,40],[20,42],[30,42],[40,44],[42,44],[41,10],[43,30]);
+  [0,1,2,3].forEach(c=>D.push([c*10+3,41],[c*10+6,41])); D.push([41,20]); // decoy: a central gossip who hears a lot
   const N=45, MEET=[[0,25],[13,36]], pr=pagerank(N,D);
   const names=(()=>{ const R=rng(55); return d3range(N).map(()=>String.fromCharCode(65+Math.floor(R()*26))+'-'+String(Math.floor(R()*90)+10)); })();
   return {N, E:G.E, D, MEET, pr, boss:argmax(pr), names, P:layout(N,G.E,7,500,.3)};
@@ -299,8 +300,8 @@ BUILD.boss=()=>{
   LENS.forEach(([nm],k)=>{ const b=el('button',null,nm); b.onclick=()=>{ lensK=lensK===k?-1:k; [...lens.children].forEach((c,j)=>c.classList.toggle('on',j===lensK)); recompute(); }; lens.appendChild(b); });
   const lay=()=>{ const {w,h}=C; if(w&&C.v!==v){ v=C.v; pos=inBox(ORG.P,[0,18,w,h-18],18,1.6); } };
   const C=canvasIn(pO,(x,y)=>{ lay(); if(!pos||done) return; const b=nearest(pos,x,y,22); if(b<0) return;
-    if(phase===1){ tries++; if(b===ORG.boss){ p1=tries===1?30:tries===2?15:5; info.className='fb ok'; info.innerHTML=`> ${ORG.names[b]}: only 2 reports, but from the two people every cell reports to. highest PageRank. <b>+${p1}</b>`; bAct.textContent='STEP 2 ▸'; bAct.style.display=''; phase=1.5; }
-      else { bad=b; const nin=ORG.D.filter(e=>e[1]===b).length; info.className='fb no'; info.textContent=`> ${ORG.names[b]} receives ${nin} report${nin===1?'':'s'}, but ${nin>3?'from people nobody reports to':'not the important ones'}. ${tries>=3?'':'try again.'}`;
+    if(phase===1){ tries++; if(b===ORG.boss){ p1=tries===1?30:tries===2?15:5; info.className='fb ok'; info.innerHTML=`> ${ORG.names[b]}: only 2 reports, but from the two brokers all the cell leaders report to. hidden at the edge of a cell, far from the centre: position is not importance. highest PageRank. <b>+${p1}</b>`; bAct.textContent='STEP 2 ▸'; bAct.style.display=''; phase=1.5; }
+      else { bad=b; const nin=ORG.D.filter(e=>e[1]===b).length; info.className='fb no'; info.textContent=`> ${ORG.names[b]} receives ${nin} report${nin===1?'':'s'}, but ${b===41?'from ordinary members, and it passes everything to a single leader':nin>3?'from people nobody reports to':'not the important ones'}. ${tries>=3?'':'try again.'}`;
         if(tries>=3){ p1=0; info.textContent+=` the mastermind is highlighted.`; bAct.textContent='STEP 2 ▸'; bAct.style.display=''; phase=1.5; } } }
     else if(phase===2){ if(cut.includes(b)) return; sel=sel===b?-1:b; bAct.textContent=sel<0?'':`CUT OFF ${ORG.names[sel]} ▸`; bAct.style.display=sel<0?'none':''; } });
   pO.appendChild(cO);
