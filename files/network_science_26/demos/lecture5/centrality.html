@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>Centrality Measures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --node:#3a7db8; --edge:rgba(90,105,125,.5); --arrow:#7c8898; --new:#e08a2c; --theory:#111418;
+  --lo:#d3deea; --hi:#1f5f99; --bar:#5bc8f0;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --node:#5fa3dc; --edge:rgba(170,185,205,.45); --arrow:#93a0b2; --new:#f0a04b; --theory:#eef1f5;
+  --lo:#2c3a4a; --hi:#7dbcf2;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:14px 32px 6px;border-left:6px solid var(--bar)}
+h1{margin:0;font-size:clamp(22px,2.4vw,36px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+main{flex:1;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:1fr 1fr auto;gap:12px;padding:6px 32px 14px;min-height:0}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;display:flex;flex-direction:column;padding:10px 14px 8px}
+.netp{grid-row:1 / span 3}
+.ptitle{font-size:clamp(14px,1.2vw,18px);font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ptitle .st{font-weight:500;color:var(--ink2)}
+.cvw{flex:1;position:relative;min-height:0}
+.cvw svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+svg.chart{flex:1;width:100%;min-height:150px;display:block}
+.legend{display:flex;gap:6px 14px;font-size:12px;color:var(--ink2);flex-wrap:wrap;padding-top:2px;min-height:38px;align-content:flex-start}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend b{color:var(--ink)}
+.legend .grad{display:inline-block;width:54px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--lo),var(--hi))}
+.ctl{gap:8px;padding-top:8px}
+.row{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+button{font-family:inherit;font-size:13px;font-weight:500;border:1px solid var(--grid);background:var(--bg);color:var(--ink);border-radius:9px;padding:5px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.group .lab{font-size:13px;color:var(--ink2);margin-right:2px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:var(--bg);border-radius:10px;padding:5px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.stat .v{font-size:clamp(15px,1.3vw,20px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .l{font-size:12px;color:var(--ink2)}
+.keys{font-size:11px;color:var(--muted)}
+svg text{font-family:Poppins,system-ui,sans-serif}
+.nd{cursor:pointer}
+@media (max-width:820px){
+  html,body{height:auto}
+  header,main{padding-left:16px;padding-right:16px}
+  main{grid-template-columns:1fr;grid-template-rows:auto}
+  .netp{grid-row:auto}
+  .cvw{flex:none;height:90vw;max-height:460px}
+  svg.chart{flex:none;height:250px}
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header><h1>Centrality <span class="hl">Measures</span></h1></header>
+<main>
+  <div class="panel netp">
+    <div class="ptitle"><span id="netTitle">Who is the most important node?</span><span class="st" id="netSub"></span></div>
+    <div class="cvw"><svg id="net"></svg></div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>Top 10 nodes <span class="st" id="barSub"></span></span></div>
+    <svg class="chart" id="bars"></svg>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span id="scTitle">Is it just the degree?</span><span class="st" id="scSub"></span></div>
+    <svg class="chart" id="sc"></svg>
+  </div>
+  <div class="panel ctl">
+    <div class="row">
+      <div class="group"><span class="lab">centrality</span>
+        <button data-m="deg">in-degree</button><button data-m="eig">eigenvector</button><button data-m="pr">PageRank</button><button data-m="btw">betweenness</button><button data-m="clo">closeness</button></div>
+    </div>
+    <div class="row">
+      <div class="group"><span class="lab">network</span><button data-net="groups">groups</button><button data-net="ba">scale-free</button><button data-net="er">random</button></div>
+      <button id="attack">✂ Remove top node</button><button id="restore">↻ Restore</button><button id="fresh">New</button>
+      <button id="theme">◐</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="l">nodes removed</span><span class="v" id="sR">–</span></div>
+      <div class="stat"><span class="l">largest component</span><span class="v" id="sG">–</span></div>
+    </div>
+    <div class="keys">1–5 centrality · X remove top node · click a node to remove it · R restore · N new network · D dark</div>
+  </div>
+</main>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const MEAS={deg:'in-degree', eig:'eigenvector', pr:'PageRank', btw:'betweenness', clo:'closeness'}, MK=Object.keys(MEAS);
+let NET='groups', M='deg', seed=7, N0=0;
+let nodes=[], links=[], sim=null, removed=0, hover=-1;
+let alive=[], C={}, rank={};        // alive node ids; C[m][id] = value; rank[m][id] = 1-based rank
+
+// ---------------- networks (directed: [a,b] is a link a → b)
+function genEdges(){
+  const R=rng(seed), E=[], key=new Set();
+  const add=(a,b)=>{ if(a===b) return; const k=a+'>'+b; if(key.has(k)) return; key.add(k); E.push([a,b]); };
+  const both=(a,b)=>{ add(a,b); add(b,a); };
+  const some=(a,b)=>{ const x=R(); if(x<.3) both(a,b); else if(x<.65) add(a,b); else add(b,a); };   // 30% of the ties are reciprocated
+  let n=0;
+  if(NET==='groups'){
+    // four groups; a broker is the only connection between the first three; many leaves point to a hub attached to the last one
+    const sizes=[14,12,12,10], ps=[.42,.3,.3,.32], G=[];
+    sizes.forEach((s,g)=>{ const ids=d3.range(n,n+s); n+=s; G.push(ids);
+      for(let i=0;i<s;i++){ add(ids[i],ids[(i+1)%s]); for(let j=i+2;j<s;j++) if(R()<ps[g]) some(ids[i],ids[j]); } });
+    const pick=g=>G[g][Math.floor(R()*G[g].length)];
+    const broker=n++; both(broker,pick(0)); both(broker,pick(1)); both(broker,pick(2));
+    both(pick(2),pick(3));
+    const hub=n++; both(hub,pick(3)); for(let i=0;i<10;i++) add(n++,hub);
+  } else if(NET==='ba'){
+    // new nodes link to popular (highly linked-to) old nodes; one link in four is returned
+    n=70; const rep=[0,1,2,0,1,2]; add(0,1); add(1,2); add(2,0);
+    for(let v=3;v<n;v++){ const t=new Set(); while(t.size<2) t.add(rep[Math.floor(R()*rep.length)]); for(const u of t){ add(v,u); rep.push(u,u,v); if(R()<.25) add(u,v); } }
+  } else {
+    n=70; const p=2.6/(n-1); for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(i!==j&&R()<p) add(i,j);
+  }
+  // keep the largest (weakly) connected component and relabel 0..n-1
+  const adj=Array.from({length:n},()=>[]); for(const [a,b] of E){ adj[a].push(b); adj[b].push(a); }
+  const comp=new Int32Array(n).fill(-1); let best=-1, bs=0, c=0;
+  for(let s=0;s<n;s++){ if(comp[s]>=0) continue; const Q=[s]; comp[s]=c; for(let q=0;q<Q.length;q++) for(const w of adj[Q[q]]) if(comp[w]<0){ comp[w]=c; Q.push(w); } if(Q.length>bs){ bs=Q.length; best=c; } c++; }
+  const id=new Map(); for(let i=0;i<n;i++) if(comp[i]===best) id.set(i,id.size);
+  return {n:id.size, E:E.filter(([a])=>comp[a]===best).map(([a,b])=>[id.get(a),id.get(b)])};
+}
+function init(){
+  const g=genEdges(), R=rng(seed+1); N0=g.n; removed=0; hover=-1;
+  nodes=d3.range(N0).map(i=>({i, alive:true, x:(R()-.5)*200, y:(R()-.5)*200}));
+  links=g.E.map(([a,b])=>({source:nodes[a],target:nodes[b]}));
+  if(sim) sim.stop();
+  sim=d3.forceSimulation(nodes).randomSource(rng(seed+2))
+    .force('charge',d3.forceManyBody().strength(-110).distanceMax(300))
+    .force('link',d3.forceLink(links).distance(34).strength(.4))
+    .force('x',d3.forceX(0).strength(.035)).force('y',d3.forceY(0).strength(.035))
+    .alphaDecay(0.025).velocityDecay(0.45).on('tick',tick);
+  for(let i=0;i<220;i++) sim.tick();
+  compute(); buildNet();
+}
+
+// ---------------- centralities (on the surviving nodes)
+function compute(){
+  alive=nodes.filter(d=>d.alive).map(d=>d.i);
+  const n=alive.length, ix=new Map(alive.map((id,k)=>[id,k])), out=Array.from({length:n},()=>[]), inn=Array.from({length:n},()=>[]);
+  for(const l of links){ if(!l.source.alive||!l.target.alive) continue; const a=ix.get(l.source.i), b=ix.get(l.target.i); out[a].push(b); inn[b].push(a); }
+  const v={};
+  v.deg=inn.map(a=>n>1?a.length/(n-1):0);                         // in-degree: how many nodes point to me
+  // eigenvector: I am important if important nodes point to me (power iteration on A + I, the shift avoids oscillations)
+  let x=new Float64Array(n).fill(1);
+  for(let t=0;t<400;t++){ const y=Float64Array.from(x); for(let i=0;i<n;i++) for(const j of inn[i]) y[i]+=x[j]; let s=0; for(let i=0;i<n;i++) s+=y[i]*y[i]; s=Math.sqrt(s)||1; for(let i=0;i<n;i++) y[i]/=s; x=y; }
+  v.eig=Array.from(x);
+  // PageRank with teleport probability 0.15 (nodes without out-links always teleport)
+  let p=new Float64Array(n).fill(1/n);
+  for(let t=0;t<200;t++){ const q=new Float64Array(n); let tele=0; for(let j=0;j<n;j++){ if(!out[j].length){ tele+=p[j]; continue; } tele+=.15*p[j]; const w=.85*p[j]/out[j].length; for(const i of out[j]) q[i]+=w; } for(let i=0;i<n;i++) q[i]+=tele/n; p=q; }
+  v.pr=Array.from(p);
+  // betweenness (Brandes, directed shortest paths) and closeness (how quickly the others reach me, following the links)
+  const cb=new Float64Array(n), cc=new Float64Array(n);
+  for(let s=0;s<n;s++){
+    const Pd=Array.from({length:n},()=>[]), sig=new Float64Array(n), d=new Int32Array(n).fill(-1), Q=[s]; sig[s]=1; d[s]=0;
+    for(let q=0;q<Q.length;q++){ const u=Q[q]; for(const w of out[u]){ if(d[w]<0){ d[w]=d[u]+1; Q.push(w); } if(d[w]===d[u]+1){ sig[w]+=sig[u]; Pd[w].push(u); } } }
+    const del=new Float64Array(n);
+    for(let q=Q.length-1;q>0;q--){ const w=Q[q]; for(const u of Pd[w]) del[u]+=sig[u]/sig[w]*(1+del[w]); cb[w]+=del[w]; }
+    const e=new Int32Array(n).fill(-1), B=[s]; e[s]=0; let tot=0;
+    for(let q=0;q<B.length;q++){ const u=B[q]; tot+=e[u]; for(const w of inn[u]) if(e[w]<0){ e[w]=e[u]+1; B.push(w); } }
+    const r=B.length; cc[s]=tot>0?(r-1)/tot*(r-1)/(n-1):0;        // scaled by the fraction of nodes that can reach me
+  }
+  const nb=n>2?1/((n-1)*(n-2)):0;
+  v.btw=Array.from(cb,x=>x*nb); v.clo=Array.from(cc);
+  const adj=out.map((o,i)=>o.concat(inn[i]));                     // ignoring directions, for the connected components
+  C={}; rank={};
+  for(const m of MK){
+    C[m]={}; rank[m]={}; alive.forEach((id,k)=>C[m][id]=v[m][k]);
+    [...alive].sort((a,b)=>(C[m][b]-C[m][a])||(a-b)).forEach((id,k)=>rank[m][id]=k+1);
+  }
+  // largest (weakly) connected component
+  const seen=new Uint8Array(n); let gc=0;
+  for(let s=0;s<n;s++){ if(seen[s]) continue; const Q=[s]; seen[s]=1; for(let q=0;q<Q.length;q++) for(const w of adj[Q[q]]) if(!seen[w]){ seen[w]=1; Q.push(w); } gc=Math.max(gc,Q.length); }
+  document.getElementById('sR').textContent=`${removed} / ${N0}`;
+  document.getElementById('sG').textContent=`${gc} nodes (${(100*gc/N0).toFixed(0)}%)`;
+}
+const topN=k=>[...alive].sort((a,b)=>rank[M][a]-rank[M][b]).slice(0,k);
+// value rescaled between the lowest and the highest node, used for size and colour
+const rel=id=>{ const [mn,mx]=d3.extent(alive,a=>C[M][a]); return mx>mn?(C[M][id]-mn)/(mx-mn):.5; };
+
+// ---------------- network drawing (auto-fit to the panel)
+const net=d3.select('#net'); let W=0,H=0, view={s:1,x:0,y:0,init:false}, G={};
+const rad=v=>4+13*Math.sqrt(Math.max(0,v));
+function buildNet(){
+  const r=net.node().getBoundingClientRect(); W=r.width; H=r.height; if(!W) return;
+  net.selectAll('*').remove(); view.init=false;
+  G.links=net.append('g'); G.heads=net.append('g'); G.nodes=net.append('g'); G.labels=net.append('g');
+  G.hov=net.append('circle').attr('fill','none').attr('stroke','var(--new)').attr('stroke-width',3.5).attr('pointer-events','none').attr('opacity',0);
+  style(false); tick();
+}
+function style(animate){
+  if(!G.nodes) return;
+  const col=d3.interpolateRgb(css('--lo'),css('--hi')), L=links.filter(l=>l.source.alive&&l.target.alive), A=nodes.filter(d=>d.alive);
+  A.forEach(d=>d.r=rad(rel(d.i)));
+  G.links.selectAll('line').data(L).join('line').attr('stroke-width',1.3);
+  G.heads.selectAll('path').data(L).join('path').attr('pointer-events','none');
+  paintLinks();
+  const c=G.nodes.selectAll('circle').data(A,d=>d.i).join(en=>en.append('circle').attr('class','nd').attr('stroke','var(--panel)').attr('stroke-width',1.5).attr('r',d=>rad(rel(d.i))).attr('fill',d=>col(rel(d.i)))
+    .on('mouseenter',(e,d)=>setHover(d.i)).on('mouseleave',()=>setHover(-1)).on('click',(e,d)=>removeNode(d.i)));
+  (animate?c.transition().duration(450):c).attr('r',d=>rad(rel(d.i))).attr('fill',d=>col(rel(d.i)));
+  G.labels.selectAll('text').data(topN(5).map(id=>nodes[id]),d=>d.i).join('text').attr('text-anchor','middle').attr('font-size',12).attr('font-weight',700).attr('fill','#fff').attr('pointer-events','none').text(d=>rank[M][d.i]);
+  tick();
+}
+// links pointing to the hovered node are highlighted
+function paintLinks(){
+  if(!G.links) return;
+  G.links.selectAll('line').attr('stroke',l=>l.target.i===hover?'var(--new)':'var(--edge)').attr('stroke-width',l=>l.target.i===hover?2.2:1.3);
+  G.heads.selectAll('path').attr('fill',l=>l.target.i===hover?'var(--new)':'var(--arrow)');
+}
+function tick(){
+  if(!G.nodes||!W) return;
+  const A=nodes.filter(d=>d.alive); if(!A.length) return;
+  const x0=d3.min(A,d=>d.x), x1=d3.max(A,d=>d.x), y0=d3.min(A,d=>d.y), y1=d3.max(A,d=>d.y), pad=26;
+  const s=Math.min((W-2*pad)/Math.max(60,x1-x0),(H-2*pad)/Math.max(60,y1-y0)), f=view.init?.15:1; view.init=true;
+  view.s+=(s-view.s)*f; view.x+=((x0+x1)/2-view.x)*f; view.y+=((y0+y1)/2-view.y)*f;
+  const X=d=>W/2+(d.x-view.x)*view.s, Y=d=>H/2+(d.y-view.y)*view.s;
+  // each link stops at the border of its target, where the arrowhead is drawn
+  const hl=9, hw=3.8;
+  G.links.selectAll('line').each(function(l){
+    const x1=X(l.source), y1=Y(l.source), x2=X(l.target), y2=Y(l.target), dx=x2-x1, dy=y2-y1, D=Math.hypot(dx,dy)||1, ux=dx/D, uy=dy/D;
+    const tx=x2-ux*(l.target.r+1.5), ty=y2-uy*(l.target.r+1.5), bx=tx-ux*hl, by=ty-uy*hl;
+    l.h=`M${tx},${ty}L${bx-uy*hw},${by+ux*hw}L${bx+uy*hw},${by-ux*hw}Z`;
+    d3.select(this).attr('x1',x1+ux*l.source.r).attr('y1',y1+uy*l.source.r).attr('x2',bx).attr('y2',by); });
+  G.heads.selectAll('path').attr('d',l=>l.h);
+  G.nodes.selectAll('circle').attr('cx',X).attr('cy',Y);
+  G.labels.selectAll('text').attr('x',X).attr('y',d=>Y(d)+4.2);
+  if(hover>=0&&nodes[hover].alive) G.hov.attr('cx',X(nodes[hover])).attr('cy',Y(nodes[hover])).attr('r',rad(rel(hover))+4).attr('opacity',1); else G.hov.attr('opacity',0);
+}
+function setHover(id){
+  hover=id; paintLinks(); tick();
+  d3.selectAll('#bars g.row').attr('opacity',d=>hover<0||d===hover?1:.45);
+  d3.selectAll('#sc circle.pt').attr('stroke',d=>d===hover?'var(--new)':'var(--panel)').attr('stroke-width',d=>d===hover?3:1.2).filter(d=>d===hover).raise();
+  const el=document.getElementById('legend');
+  if(id<0||!nodes[id].alive){ el.innerHTML=`<span><i class="grad"></i>size and colour ∝ ${MEAS[M]} centrality</span><span>A → B: A points to B</span><span style="color:var(--muted)">numbers: the top 5 · hover a node to see its ranks and who points to it</span>`; return; }
+  el.innerHTML=`<span><b>node ${id+1}</b> ranks</span>`+MK.map(m=>`<span>${m===M?'<b>':''}#${rank[m][id]} ${MEAS[m]}${m===M?'</b>':''}</span>`).join('');
+}
+
+// ---------------- top-10 bars
+const bars=d3.select('#bars');
+function drawBars(){
+  const r=bars.node().getBoundingClientRect(); if(!r.width) return;
+  bars.selectAll('*').remove();
+  const m={l:96,r:58,t:6,b:6}, w=r.width, h=r.height, T=topN(10);
+  const X=d3.scaleLinear([0,d3.max(T,id=>C[M][id])||1],[m.l,w-m.r]), Y=d3.scaleBand(d3.range(10),[m.t,h-m.b]).padding(.24), bh=Y.bandwidth();
+  const g=bars.selectAll('g.row').data(T).join('g').attr('class','row').attr('transform',(d,k)=>`translate(0,${Y(k)})`).style('cursor','pointer')
+    .on('mouseenter',(e,d)=>setHover(d)).on('mouseleave',()=>setHover(-1));
+  g.append('rect').attr('x',0).attr('width',w).attr('height',bh).attr('fill','transparent');
+  g.append('text').attr('x',m.l-8).attr('y',bh/2+4).attr('text-anchor','end').attr('font-size',12).attr('fill','var(--ink2)').text((d,k)=>`${k+1} · node ${d+1}`);
+  g.append('rect').attr('x',m.l).attr('width',w-m.r-m.l).attr('height',bh).attr('fill','var(--bg)').attr('rx',3);
+  g.append('rect').attr('x',m.l).attr('width',d=>Math.max(0,X(C[M][d])-m.l)).attr('height',bh).attr('fill','var(--node)').attr('rx',3);
+  g.append('text').attr('x',w-m.r+8).attr('y',bh/2+4).attr('font-size',12).attr('font-weight',700).attr('fill','var(--ink)').style('font-variant-numeric','tabular-nums').text(d=>C[M][d].toFixed(3));
+  document.getElementById('barSub').textContent=`· ${MEAS[M]} centrality`;
+}
+
+// ---------------- scatter: selected centrality vs number of links
+const sc=d3.select('#sc');
+function spearman(a,b){
+  const rk=v=>{ const o=d3.range(v.length).sort((i,j)=>v[i]-v[j]), r=new Array(v.length); for(let i=0;i<o.length;){ let j=i; while(j+1<o.length&&v[o[j+1]]===v[o[i]]) j++; for(let k=i;k<=j;k++) r[o[k]]=(i+j)/2; i=j+1; } return r; };
+  const x=rk(a), y=rk(b), mx=d3.mean(x), my=d3.mean(y); let sxy=0,sxx=0,syy=0;
+  for(let i=0;i<x.length;i++){ sxy+=(x[i]-mx)*(y[i]-my); sxx+=(x[i]-mx)**2; syy+=(y[i]-my)**2; }
+  return sxx&&syy?sxy/Math.sqrt(sxx*syy):1;
+}
+function drawSc(){
+  const r=sc.node().getBoundingClientRect(); if(!r.width) return;
+  sc.selectAll('*').remove();
+  const m={l:52,r:16,t:12,b:34}, w=r.width, h=r.height, n=alive.length, k=id=>Math.round(C.deg[id]*(n-1));
+  const X=d3.scaleLinear([0,(d3.max(alive,k)||1)+.5],[m.l,w-m.r]), Y=d3.scaleLinear([0,(d3.max(alive,a=>C[M][a])||1)*1.08],[h-m.b,m.t]);
+  sc.append('g').selectAll('line').data(Y.ticks(4)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  const ax=sc.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).ticks(Math.min(8,d3.max(alive,k)||1)).tickFormat(d3.format('d')).tickSize(0).tickPadding(6));
+  const ay=sc.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(4).tickSize(0).tickPadding(6));
+  [ax,ay].forEach(a=>{ a.select('.domain').remove(); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',13); });
+  sc.append('text').attr('x',w-m.r).attr('y',h-4).attr('text-anchor','end').attr('font-size',12).attr('fill','var(--ink2)').text('incoming links k_in').call(t=>t.text('')).call(t=>{ t.append('tspan').text('number of incoming links k'); t.append('tspan').attr('dy',4).attr('font-size',9).text('in'); });
+  sc.append('text').attr('transform',`translate(12,${(m.t+h-m.b)/2}) rotate(-90)`).attr('text-anchor','middle').attr('font-size',12).attr('fill','var(--ink2)').text(MEAS[M]);
+  const col=d3.interpolateRgb(css('--lo'),css('--hi'));
+  sc.append('g').selectAll('circle').data([...alive].sort((a,b)=>rank[M][b]-rank[M][a])).join('circle').attr('class','pt').attr('r',6).attr('cx',d=>X(k(d))).attr('cy',d=>Y(C[M][d]))
+    .attr('fill',d=>col(rel(d))).attr('stroke','var(--panel)').attr('stroke-width',1.2).style('cursor','pointer')
+    .on('mouseenter',(e,d)=>setHover(d)).on('mouseleave',()=>setHover(-1));
+  // labels for the top 3, pushed apart when two of them would overlap
+  const labs=topN(3).map(d=>({d, x:X(k(d)), y:Y(C[M][d])})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<labs.length;i++) for(let j=0;j<i;j++) if(Math.abs(labs[i].x-labs[j].x)<110&&labs[i].y-labs[j].y<15) labs[i].y=labs[j].y+15;
+  sc.append('g').selectAll('text').data(labs).join('text').attr('x',l=>l.x+(l.x>w-m.r-110?-10:10)).attr('y',l=>l.y+4).attr('text-anchor',l=>l.x>w-m.r-110?'end':'start')
+    .attr('font-size',12).attr('font-weight',700).attr('fill','var(--ink)').attr('pointer-events','none').text(l=>`#${rank[M][l.d]} node ${l.d+1}`);
+  const rho=spearman(alive.map(k),alive.map(a=>C[M][a]));
+  document.getElementById('scTitle').textContent= M==='deg' ? 'In-degree centrality is the in-degree' : `Is ${MEAS[M]} just the in-degree?`;
+  document.getElementById('scSub').textContent=`rank correlation ρ = ${rho.toFixed(2)}`;
+}
+
+// ---------------- controls
+function refresh(animate){ style(animate); drawBars(); drawSc(); setHover(-1);
+  document.getElementById('netSub').textContent=`by ${MEAS[M]}: node ${topN(1)[0]+1}`; }
+function removeNode(id){
+  if(!nodes[id].alive||alive.length<=3) return;
+  nodes[id].alive=false; removed++; hover=-1;
+  const A=nodes.filter(d=>d.alive), L=links.filter(l=>l.source.alive&&l.target.alive);
+  sim.nodes(A); sim.force('link').links(L); sim.alpha(.35).restart();
+  compute(); refresh(true);
+}
+function setM(m){ M=m; marks(); refresh(true); }
+function restore(){ init(); refresh(false); }
+function marks(){
+  document.querySelectorAll('[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===M));
+  document.querySelectorAll('[data-net]').forEach(b=>b.classList.toggle('on',b.dataset.net===NET));
+}
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>setM(b.dataset.m));
+document.querySelectorAll('[data-net]').forEach(b=>b.onclick=()=>{ NET=b.dataset.net; marks(); restore(); });
+document.getElementById('attack').onclick=()=>removeNode(topN(1)[0]);
+document.getElementById('restore').onclick=restore;
+function fresh(){ seed=(seed*7919+13)%100003; restore(); }
+document.getElementById('fresh').onclick=fresh;
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{localStorage.setItem('ns-theme',r.dataset.theme);}catch(e){} refresh(false); }
+document.getElementById('theme').onclick=toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown',e=>{
+  if(['1','2','3','4','5'].includes(e.key)) setM(MK[+e.key-1]);
+  else if(e.key==='x'||e.key==='X') removeNode(topN(1)[0]);
+  else if(e.key==='r'||e.key==='R') restore();
+  else if(e.key==='n'||e.key==='N') fresh();
+  else if(e.key==='d'||e.key==='D') toggleTheme();
+});
+let rzT; const ro=new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ buildNet(); drawBars(); drawSc(); },60); });
+['main','#net','#bars','#sc'].forEach(q=>ro.observe(document.querySelector(q)));
+
+// init: ?net=groups|ba|er&m=deg|eig|pr|btw|clo&remove=3  (remove = start with that many top nodes already removed)
+const qs=new URLSearchParams(location.search);
+if(qs.has('net')&&['groups','ba','er'].includes(qs.get('net'))) NET=qs.get('net');
+if(qs.has('m')&&MEAS[qs.get('m')]) M=qs.get('m');
+marks(); init(); refresh(false);
+if(qs.has('remove')){ const k=Math.min(N0-3,+qs.get('remove')||0); for(let i=0;i<k;i++) removeNode(topN(1)[0]); }
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/logo_new.png" type="image/png">
+<title>PageRank as a Random Walk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --panel:#f6f8fb; --ink:#111418; --ink2:#4a5360; --muted:#8a93a0;
+  --grid:#e3e7ee; --accent:#3a7db8; --node:#3a7db8; --edge:rgba(90,105,125,.45); --new:#e08a2c; --theory:#111418;
+  --t1:#d0453b; --t2:#7b5cc4; --t3:#3f9a5a; --t4:#e08a2c; --bar:#5bc8f0;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#eef1f5; --ink2:#b3bcc8; --muted:#7c8695;
+  --grid:#2a313b; --accent:#5fa3dc; --node:#5fa3dc; --edge:rgba(170,185,205,.4); --new:#f0a04b; --theory:#eef1f5;
+  --t1:#ec6a5f; --t2:#a58bea; --t3:#5fbf7a; --t4:#f0a04b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;display:flex;flex-direction:column;overflow-x:hidden}
+header{padding:14px 32px 6px;border-left:6px solid var(--bar)}
+h1{margin:0;font-size:clamp(22px,2.4vw,36px);font-weight:700;letter-spacing:-.01em}
+h1 .hl{color:var(--accent)}
+main{flex:1;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:1.15fr 1fr auto;gap:12px;padding:6px 32px 14px;min-height:0}
+.panel{background:var(--panel);border-radius:14px;position:relative;min-height:0;display:flex;flex-direction:column;padding:10px 14px 8px}
+.netp{grid-row:1 / span 3}
+.ptitle{font-size:clamp(14px,1.2vw,18px);font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ptitle .st{font-weight:500;color:var(--ink2)}
+.cvw{flex:1;position:relative;min-height:0}
+.cvw svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+svg.chart{flex:1;width:100%;min-height:150px;display:block}
+.legend{display:flex;gap:6px 14px;font-size:12px;color:var(--ink2);flex-wrap:wrap;padding-top:2px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:20px;height:0;border-top:3px solid}
+.legend .dot{width:11px;height:11px;border-radius:50%;border:0}
+.legend .ring{width:12px;height:12px;border-radius:50%;border:2px dashed var(--theory)}
+.ctl{gap:8px;padding-top:8px}
+.row{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+button{font-family:inherit;font-size:13px;font-weight:500;border:1px solid var(--grid);background:var(--bg);color:var(--ink);border-radius:9px;padding:5px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.group{display:flex;gap:6px;align-items:center}
+.group .lab{font-size:13px;color:var(--ink2);margin-right:2px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:var(--bg);border-radius:10px;padding:5px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.stat .v{font-size:clamp(15px,1.3vw,20px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat .l{font-size:12px;color:var(--ink2)}
+.keys{font-size:11px;color:var(--muted)}
+svg text{font-family:Poppins,system-ui,sans-serif}
+.nd{cursor:pointer}
+body.noexact .exact{display:none}
+@media (max-width:820px){
+  html,body{height:auto}
+  header,main{padding-left:16px;padding-right:16px}
+  main{grid-template-columns:1fr;grid-template-rows:auto}
+  .netp{grid-row:auto}
+  .cvw{flex:none;height:90vw;max-height:460px}
+  svg.chart{flex:none;height:260px}
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header><h1>PageRank as a <span class="hl">Random Walk</span></h1></header>
+<main>
+  <div class="panel netp">
+    <div class="ptitle"><span id="netTitle">A small web</span><span class="st" id="netSub"></span></div>
+    <div class="cvw"><svg id="net"></svg></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--new)"></i>random surfer</span>
+      <span><i class="dot" style="background:var(--node)"></i>disc area ∝ share of visits</span>
+      <span class="exact"><i class="ring"></i>exact PageRank</span>
+      <span style="color:var(--muted)">click a page, then another, to add or remove a link</span>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>Where the surfer spends its time <span class="st">· share of visits per page</span></span></div>
+    <svg class="chart" id="bars"></svg>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><span>Convergence <span class="st">· share of visits as the walk gets longer</span></span></div>
+    <svg class="chart" id="conv"></svg>
+  </div>
+  <div class="panel ctl">
+    <div class="row">
+      <button id="play">▶ Surf</button><button id="step">+1 step</button><button id="reset">↻ Restart</button>
+      <div class="group"><span class="lab">speed</span><button data-s="1">×1</button><button data-s="10">×10</button><button data-s="1000">×1000</button></div>
+      <button id="exact">show exact</button>
+      <button id="theme">◐</button>
+    </div>
+    <div class="row">
+      <div class="group"><span class="lab">network</span><button data-net="web">web</button><button data-net="dead">dead end</button><button data-net="trap">spider trap</button></div>
+      <div class="group"><span class="lab">teleport β</span><button data-b="0">0</button><button data-b="0.15">0.15</button><button data-b="0.5">0.5</button><button data-b="1">1</button></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="l">steps</span><span class="v" id="sN">–</span></div>
+      <div class="stat"><span class="l">teleports</span><span class="v" id="sT">–</span></div>
+    </div>
+    <div class="keys">Space surf / pause · → one step · R restart · 1 2 3 network · E exact PageRank · D dark</div>
+  </div>
+</main>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function rng(s){ return function(){ s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+// ---------------- networks (directed links, pages numbered from 1)
+const WEB=[[1,2],[1,3],[2,3],[2,4],[3,1],[4,3],[4,5],[5,3],[5,6],[6,1],[6,7],[7,3],[7,8],[8,7],[8,9],[9,3],[9,10],[10,9],[10,1]];
+const NETS={
+  web:  {n:10, e:WEB, title:'A small web'},
+  dead: {n:11, e:[...WEB,[5,11],[9,11]], title:'A web with a dead end'},                 // page 11 has no out-links
+  trap: {n:12, e:[...WEB,[5,11],[9,12],[11,12],[12,11]], title:'A web with a spider trap'} // pages 11 ⇄ 12, no way out
+};
+let NET='web', BETA=0.15, SPEED=1, seed=5, R;
+let N=0, out=[], pos=[], exact=[];
+let cur=0, prev=0, lastTp=false, stuck=false, visits=[], steps=0, teleports=0, hist=[], nextRec=1;
+let sel=-1, playing=false, anim=null, raf=null;
+
+function loadNet(){
+  const d=NETS[NET]; N=d.n; out=Array.from({length:N},()=>[]);
+  for(const [a,b] of d.e) out[a-1].push(b-1);
+  // deterministic force layout, computed once per network
+  const nodes=d3.range(N).map(i=>({i})), links=d.e.map(([a,b])=>({source:a-1,target:b-1}));
+  const sim=d3.forceSimulation(nodes).randomSource(rng(3))
+    .force('charge',d3.forceManyBody().strength(-400))
+    .force('link',d3.forceLink(links).distance(60).strength(.5))
+    .force('x',d3.forceX(0).strength(.06)).force('y',d3.forceY(0).strength(.06)).stop();
+  for(let i=0;i<400;i++) sim.tick();
+  const x0=d3.min(nodes,d=>d.x), x1=d3.max(nodes,d=>d.x), y0=d3.min(nodes,d=>d.y), y1=d3.max(nodes,d=>d.y);
+  pos=nodes.map(d=>({u:(d.x-x0)/(x1-x0), v:(d.y-y0)/(y1-y0)}));
+  sel=-1; computeExact(); resetWalk();
+}
+// stationary distribution of the surfer's chain (Cesàro average of the power iteration, so periodic chains are fine)
+function computeExact(){
+  let p=new Float64Array(N).fill(1/N); const acc=new Float64Array(N), IT=6000;
+  for(let t=0;t<IT;t++){
+    const q=new Float64Array(N); let tele=0;
+    for(let j=0;j<N;j++){
+      const o=out[j];
+      if(!o.length){ if(BETA>0) tele+=p[j]; else q[j]+=p[j]; continue; }   // dead end: always teleport (or stay stuck if β = 0)
+      tele+=BETA*p[j]; const w=(1-BETA)*p[j]/o.length; for(const i of o) q[i]+=w;
+    }
+    for(let i=0;i<N;i++) q[i]+=tele/N;
+    p=q; if(t>=IT/2) for(let i=0;i<N;i++) acc[i]+=p[i];
+  }
+  exact=Array.from(acc,x=>x/(IT/2));
+}
+function resetWalk(){
+  R=rng(seed); visits=new Array(N).fill(0); steps=0; teleports=0; hist=[]; nextRec=1; stuck=false; lastTp=false; anim=null;
+  cur=prev=Math.floor(R()*N);
+}
+function walk(){
+  const o=out[cur]; let nx, tp=false;
+  if(!o.length){ if(BETA>0){ nx=Math.floor(R()*N); tp=true; } else { nx=cur; stuck=true; } }
+  else if(R()<BETA){ nx=Math.floor(R()*N); tp=true; }
+  else nx=o[Math.floor(R()*o.length)];
+  prev=cur; cur=nx; lastTp=tp; visits[cur]++; steps++; if(tp) teleports++;
+  if(steps>=nextRec){ hist.push({t:steps, s:visits.map(v=>v/steps)}); nextRec=Math.max(steps+1, Math.ceil(steps*1.07)); }
+}
+const share=i=>steps?visits[i]/steps:0;
+
+// ---------------- network drawing
+const net=d3.select('#net'); let W=0,H=0, G={};
+const rad=v=>7+38*Math.sqrt(v);
+function P(i){ const pad=62; return [pad+pos[i].u*(W-2*pad), pad+pos[i].v*(H-2*pad)]; }
+function buildNet(){
+  const r=net.node().getBoundingClientRect(); W=r.width; H=r.height; if(!W) return;
+  net.selectAll('*').remove();
+  const defs=net.append('defs');
+  [['a0','--edge'],['a1','--accent']].forEach(([id,c])=>defs.append('marker').attr('id',id).attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5).attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto-start-reverse')
+    .append('path').attr('d','M0,0L10,5L0,10z').attr('style',`fill:var(${c})`));
+  net.append('rect').attr('width',W).attr('height',H).attr('fill','transparent').on('click',()=>{ sel=-1; drawNet(); });
+  G.edges=net.append('g'); G.tp=net.append('path').attr('fill','none').attr('stroke','var(--new)').attr('stroke-width',2.5).attr('stroke-dasharray','3 7').attr('stroke-linecap','round').attr('opacity',0);
+  G.rings=net.append('g').attr('class','exact'); G.nodes=net.append('g'); G.labels=net.append('g');
+  G.surfer=net.append('circle').attr('r',8).attr('fill','var(--new)').attr('stroke','var(--panel)').attr('stroke-width',2.5).attr('pointer-events','none');
+  drawNet();
+}
+// curved link from a to b, trimmed at the two circles
+function edgeGeom(a,b){
+  const [x1,y1]=P(a), [x2,y2]=P(b), dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy)||1;
+  const cx=(x1+x2)/2-dy/L*L*.14, cy=(y1+y2)/2+dx/L*L*.14;
+  const ra=Math.max(rad(share(a)),rad(exact[a]))+3, rb=Math.max(rad(share(b)),rad(exact[b]))+5;
+  const l1=Math.hypot(cx-x1,cy-y1)||1, l2=Math.hypot(cx-x2,cy-y2)||1;
+  return {sx:x1+(cx-x1)/l1*ra, sy:y1+(cy-y1)/l1*ra, cx, cy, ex:x2+(cx-x2)/l2*rb, ey:y2+(cy-y2)/l2*rb};
+}
+function drawNet(){
+  if(!G.edges) return;
+  const E=[]; for(let a=0;a<N;a++) for(const b of out[a]) E.push({a,b,g:edgeGeom(a,b)});
+  G.edges.selectAll('path').data(E).join('path').attr('fill','none')
+    .attr('d',e=>`M${e.g.sx},${e.g.sy}Q${e.g.cx},${e.g.cy} ${e.g.ex},${e.g.ey}`)
+    .attr('stroke',e=>e.a===cur?'var(--accent)':'var(--edge)').attr('stroke-width',e=>e.a===cur?2.4:1.5)
+    .attr('marker-end',e=>`url(#${e.a===cur?'a1':'a0'})`);
+  const ids=d3.range(N);
+  G.rings.selectAll('circle').data(ids).join('circle').attr('fill','none').attr('stroke','var(--theory)').attr('stroke-width',1.6).attr('stroke-dasharray','5 4').attr('pointer-events','none')
+    .attr('cx',i=>P(i)[0]).attr('cy',i=>P(i)[1]).attr('r',i=>rad(exact[i]));
+  G.nodes.selectAll('circle').data(ids).join('circle').attr('class','nd')
+    .attr('cx',i=>P(i)[0]).attr('cy',i=>P(i)[1]).attr('r',i=>Math.max(11,rad(share(i))))
+    .attr('fill','var(--node)').attr('fill-opacity',.92)
+    .attr('stroke',i=>i===sel?'var(--new)':'var(--panel)').attr('stroke-width',i=>i===sel?4:2)
+    .on('click',(ev,i)=>{ ev.stopPropagation(); clickNode(i); });
+  G.labels.selectAll('text').data(ids).join('text').attr('text-anchor','middle').attr('font-size',13).attr('font-weight',700).attr('fill','#fff').attr('pointer-events','none')
+    .attr('x',i=>P(i)[0]).attr('y',i=>P(i)[1]+4.5).text(i=>i+1);
+  if(!anim){ const [x,y]=P(cur); G.surfer.attr('cx',x).attr('cy',y-Math.max(11,rad(share(cur)))-2); G.tp.attr('opacity',0); }
+  const where = stuck ? `stuck on page ${cur+1}: no way out` : `surfer on page ${cur+1}`;
+  document.getElementById('netSub').textContent=`β = ${BETA} · ${where}`;
+}
+function clickNode(i){
+  if(sel<0){ sel=i; drawNet(); return; }
+  if(sel!==i){ const k=out[sel].indexOf(i); if(k>=0) out[sel].splice(k,1); else out[sel].push(i); computeExact(); stopPlay(); resetWalk(); }
+  sel=-1; refresh();
+}
+// surfer position during a move (along the link, or along a straight dashed jump when teleporting)
+function drawSurfer(f){
+  const a=anim.from, b=anim.to; let x,y;
+  if(anim.tp || a===b){
+    const [x1,y1]=P(a), [x2,y2]=P(b); x=x1+(x2-x1)*f; y=y1+(y2-y1)*f;
+    G.tp.attr('d',`M${x1},${y1}L${x2},${y2}`).attr('opacity',anim.tp?1:0);
+  } else {
+    const g=edgeGeom(a,b), u=1-f; x=u*u*g.sx+2*u*f*g.cx+f*f*g.ex; y=u*u*g.sy+2*u*f*g.cy+f*f*g.ey; G.tp.attr('opacity',0);
+  }
+  G.surfer.attr('cx',x).attr('cy',y);
+}
+
+// ---------------- bars: share of visits vs exact PageRank
+const bars=d3.select('#bars'); let showExact=true;
+function drawBars(){
+  const r=bars.node().getBoundingClientRect(); if(!r.width) return;
+  const m={l:64,r:58,t:6,b:6}, w=r.width, h=r.height;
+  const order=d3.range(N).sort((a,b)=>showExact?(exact[b]-exact[a])||(a-b):a-b);
+  const top=Math.max(.3,d3.max(exact)*1.25,d3.max(order,share)), X=d3.scaleLinear([0,Math.min(1,top)],[m.l,w-m.r]).clamp(true);
+  const Y=d3.scaleBand(order,[m.t,h-m.b]).padding(.24);
+  const g=bars.selectAll('g.row').data(order,d=>d).join(en=>{
+    const g=en.append('g').attr('class','row');
+    g.append('text').attr('class','nm').attr('text-anchor','end').attr('font-size',12).attr('fill','var(--ink2)');
+    g.append('rect').attr('class','bg').attr('fill','var(--bg)').attr('rx',3);
+    g.append('rect').attr('class','fg').attr('fill','var(--node)').attr('rx',3);
+    g.append('line').attr('class','exact').attr('stroke','var(--theory)').attr('stroke-width',2.5);
+    g.append('text').attr('class','val').attr('font-size',12).attr('font-weight',700).attr('fill','var(--ink)').style('font-variant-numeric','tabular-nums');
+    return g; });
+  g.attr('transform',d=>`translate(0,${Y(d)})`);
+  const bh=Y.bandwidth();
+  g.select('.nm').attr('x',m.l-8).attr('y',bh/2+4).text(d=>`page ${d+1}`).attr('font-weight',d=>d===cur?700:400).attr('fill',d=>d===cur?'var(--new)':'var(--ink2)');
+  g.select('.bg').attr('x',m.l).attr('width',w-m.r-m.l).attr('height',bh);
+  g.select('.fg').attr('x',m.l).attr('width',d=>X(share(d))-m.l).attr('height',bh);
+  g.select('.exact').attr('x1',d=>X(exact[d])).attr('x2',d=>X(exact[d])).attr('y1',-2).attr('y2',bh+2);
+  g.select('.val').attr('x',w-m.r+8).attr('y',bh/2+4).text(d=>steps?share(d).toFixed(3):'–');
+}
+
+// ---------------- convergence: share of visits vs number of steps
+const conv=d3.select('#conv'), TC=['--t1','--t2','--t3'];
+function drawConv(){
+  const r=conv.node().getBoundingClientRect(); if(!r.width) return;
+  conv.selectAll('*').remove();
+  const m={l:46,r:74,t:10,b:32}, w=r.width, h=r.height;
+  const tmax=Math.pow(10,Math.max(2,Math.ceil(Math.log10(Math.max(1,steps))))), ymax=Math.min(1,Math.max(.3,d3.max(exact)*1.7));
+  const X=d3.scaleLog([1,tmax],[m.l,w-m.r]), Y=d3.scaleLinear([0,ymax],[h-m.b,m.t]).clamp(true);
+  conv.append('g').selectAll('line').data(Y.ticks(4)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',Y).attr('y2',Y).attr('stroke','var(--grid)');
+  const xt=d3.range(0,Math.log10(tmax)+.5).map(e=>Math.pow(10,e));
+  const ax=conv.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(X).tickValues(xt).tickFormat(d3.format(',d')).tickSize(0).tickPadding(6));
+  const ay=conv.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(Y).ticks(4).tickSize(0).tickPadding(6));
+  [ax,ay].forEach(a=>{ a.select('.domain').remove(); a.selectAll('text').attr('fill','var(--ink2)').attr('font-size',13); });
+  conv.append('text').attr('x',w-m.r).attr('y',h-4).attr('text-anchor','end').attr('font-size',12).attr('fill','var(--ink2)').text('steps of the random walk');
+  // the three pages with the highest PageRank are coloured, the others stay grey
+  const topIds=d3.range(N).sort((a,b)=>(exact[b]-exact[a])||(a-b)).slice(0,3), col=i=>{ const k=topIds.indexOf(i); return k<0?'var(--muted)':`var(${TC[k]})`; };
+  const line=i=>d3.line().x(p=>X(p.t)).y(p=>Y(p.s[i]))(hist);
+  const ids=d3.range(N).sort((a,b)=>(topIds.includes(a)?1:0)-(topIds.includes(b)?1:0));
+  conv.append('g').attr('class','exact').selectAll('line').data(topIds).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',i=>Y(exact[i])).attr('y2',i=>Y(exact[i]))
+    .attr('stroke',col).attr('stroke-width',1.4).attr('stroke-dasharray','5 4').attr('opacity',.75);
+  conv.append('g').selectAll('path').data(ids).join('path').attr('fill','none').attr('stroke',col).attr('stroke-width',i=>topIds.includes(i)?2.6:1.2).attr('opacity',i=>topIds.includes(i)?1:.55).attr('d',line);
+  const labs=topIds.map(i=>({i,y:Y(showExact||!hist.length?exact[i]:hist[hist.length-1].s[i])})).sort((a,b)=>a.y-b.y);
+  for(let k=1;k<labs.length;k++) if(labs[k].y-labs[k-1].y<16) labs[k].y=labs[k-1].y+16;
+  conv.append('g').attr('class','exact').selectAll('text').data(labs).join('text').attr('x',w-m.r+8).attr('y',l=>l.y+4).attr('font-size',13).attr('font-weight',700).attr('fill',l=>col(l.i)).text(l=>`page ${l.i+1}`);
+}
+
+// ---------------- stats & loop
+function stats(){
+  document.getElementById('sN').textContent=d3.format(',d')(steps);
+  document.getElementById('sT').textContent=steps?`${d3.format(',d')(teleports)} (${(100*teleports/steps).toFixed(0)}%)`:'0';
+  document.getElementById('netTitle').textContent=NETS[NET].title;
+}
+function refresh(){ drawNet(); drawBars(); drawConv(); stats(); }
+const playBtn=document.getElementById('play');
+function frame(ts){
+  if(!playing){ raf=null; return; }
+  if(SPEED>=1000){ anim=null; const k=steps<2000?40:steps<50000?400:2500; for(let i=0;i<k;i++) walk(); refresh(); }
+  else {
+    if(!anim){ walk(); anim={from:prev,to:cur,tp:lastTp,t0:ts,dur:SPEED===1?700:110}; refresh(); }
+    const f=Math.min(1,(ts-anim.t0)/anim.dur); drawSurfer(d3.easeCubicInOut(f));
+    if(f>=1) anim=null;
+  }
+  if(steps>=2e6) stopPlay();
+  raf=requestAnimationFrame(frame);
+}
+function stopPlay(){ playing=false; anim=null; playBtn.textContent='▶ Surf'; playBtn.classList.remove('on'); if(G.edges) drawNet(); }
+function play(){
+  if(playing){ stopPlay(); return; }
+  playing=true; playBtn.textContent='❚❚ Pause'; playBtn.classList.add('on'); if(!raf) raf=requestAnimationFrame(frame);
+}
+playBtn.onclick=play;
+document.getElementById('step').onclick=()=>{ stopPlay(); walk(); refresh(); };
+function restart(){ stopPlay(); seed=(seed*7919+13)%100003; resetWalk(); refresh(); }
+document.getElementById('reset').onclick=restart;
+function marks(){
+  document.querySelectorAll('[data-net]').forEach(b=>b.classList.toggle('on',b.dataset.net===NET));
+  document.querySelectorAll('[data-b]').forEach(b=>b.classList.toggle('on',+b.dataset.b===BETA));
+  document.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',+b.dataset.s===SPEED));
+  document.getElementById('exact').classList.toggle('on',showExact); document.body.classList.toggle('noexact',!showExact);
+}
+function setNet(k){ NET=k; stopPlay(); loadNet(); marks(); refresh(); }
+function toggleExact(){ showExact=!showExact; marks(); refresh(); }
+document.querySelectorAll('[data-net]').forEach(b=>b.onclick=()=>setNet(b.dataset.net));
+document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ BETA=+b.dataset.b; computeExact(); stopPlay(); resetWalk(); marks(); refresh(); });
+document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ SPEED=+b.dataset.s; anim=null; marks(); });
+document.getElementById('exact').onclick=toggleExact;
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{localStorage.setItem('ns-theme',r.dataset.theme);}catch(e){} refresh(); }
+document.getElementById('theme').onclick=toggleTheme;
+try{ const t=localStorage.getItem('ns-theme'); if(t) document.documentElement.dataset.theme=t; }catch(e){}
+document.addEventListener('keydown',e=>{
+  if(e.key===' '){ e.preventDefault(); play(); }
+  else if(e.key==='ArrowRight'){ stopPlay(); walk(); refresh(); }
+  else if(e.key==='r'||e.key==='R') restart();
+  else if(['1','2','3'].includes(e.key)) setNet(['web','dead','trap'][+e.key-1]);
+  else if(e.key==='e'||e.key==='E') toggleExact();
+  else if(e.key==='d'||e.key==='D') toggleTheme();
+});
+let rzT; const ro=new ResizeObserver(()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ buildNet(); drawBars(); drawConv(); },60); });
+['main','#net','#bars','#conv'].forEach(q=>ro.observe(document.querySelector(q)));
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(()=>{ buildNet(); drawBars(); drawConv(); },30));
+
+// init: ?net=web|dead|trap&beta=0.15&steps=5000&exact=0  (steps = start with a walk of that length already done)
+const qs=new URLSearchParams(location.search);
+if(qs.has('net')&&NETS[qs.get('net')]) NET=qs.get('net');
+if(qs.has('beta')&&[0,0.15,0.5,1].includes(+qs.get('beta'))) BETA=+qs.get('beta');
+if(qs.get('exact')==='0') showExact=false;
+loadNet();
+if(qs.has('steps')){ const k=Math.min(2e6,+qs.get('steps')||0); for(let i=0;i<k;i++) walk(); }
+marks(); buildNet(); refresh();
+</script>
+</body>
+</html>

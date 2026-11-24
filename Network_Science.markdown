@@ -177,7 +177,6 @@ permalink: /teaching/network-science/
                    </ul>
            </div>
        </div>
-       <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 5 &#9662;</button>
            <div class="nested-accordion-content">
@@ -193,7 +192,6 @@ permalink: /teaching/network-science/
                    </ul>
            </div>
        </div>
-       -->
        <!--
        <div class="nested-accordion">
            <button class="nested-accordion-button">Seminar 6 &#9662;</button>
